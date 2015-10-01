@@ -42,7 +42,7 @@ Reset_Handler:
 #
 # PART 1: USING ARM CODE
 #
-           BL        ARM_copy_10            /* FUNCTION CALL */
+        BL        ARM_copy_10            /* FUNCTION CALL */
 #
 # PART 2: USING THUMB CODE
 #
@@ -82,6 +82,8 @@ ARM_copy_10:
         # Recordad que puede modificar r0, r1, r2 y r3 sin guardarlos previamente
         STMFD   sp!, {r4-r11}
         # Poned el código aquí: sólo hacen falta dos instrucciones
+        LDM		r0, {r2-r11}
+        STM		r1, {r2-r11}
         # restore the original registers
         LDMFD   sp!, {r4-r11}
         # return to the instruccion that called the rutine and to arm mode
@@ -95,6 +97,10 @@ ARM_copy_10:
 .thumb
 th_copy_10:
         PUSH    {r4-r7}
+        LDMIA   r0!, {r2-r6}
+        STMIA   r1!, {r2-r6}
+        LDMIA   r0, {r2-r6}
+        STMIA   r1, {r2-r6}
         # poned aquí el código, como no podemos leer y escribir 10 palabras de golpe lo haremos en dos veces
         POP     {r4-r7} /* restores the registers */
         BX      r14     /* this is the return instrucction */
