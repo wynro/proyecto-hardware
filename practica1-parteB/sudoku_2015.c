@@ -11,7 +11,9 @@ typedef uint16_t CELDA;
 // con el siguiente formato (empezando en el bit más significativo):
 // 4 MSB VALOR
 // 1 bit PISTA
+#define CELDA_PISTA(c) (c & 0b0000100000000000)
 // 1 bit ERROR
+#define CELDA_ERROR(c) (c & 0b0000010000000000)
 // 1 bit no usado
 // 9 LSB CANDIDATOS
 
@@ -29,6 +31,15 @@ extern int sudoku_recalcular_arm(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]);
 extern int sudoku_recalcular_thumb(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]);   
 
 
+
+inline uint8_t next_line(int ) {
+
+}
+
+inline uint8_t next_column(int ) {
+
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // dada una determinada celda encuentra los posibles valores candidatos
 // y guarda el mapa de bits en la celda
@@ -36,8 +47,19 @@ extern int sudoku_recalcular_thumb(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]);
 int sudoku_candidatos_c(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS],
                         uint8_t fila, uint8_t columna) {
     //iniciar candidatos
+	*cuadricula[fila][columna] = (*cuadricula[fila][columna] | 0x01FF);
     //recorrer fila recalculando candidatos
+	for(int i=(fila & 0xFFF0); i<(fila & 0xFFF0)+18; i+=2) {
+		if(celda_leer_valor(*i)!=0) {
+			*cuadricula[fila][columna] = *cuadricula[fila][columna] & ~(1<<(celda_leer_valor(*i)-1));
+		}
+	}
     //recorer columna recalculando candidatos
+	for(int i=0; i<NUM_FILAS; i+=NUM_COLUMNAS*2) {
+		if(celda_leer_valor(*i)!=0) {
+			*cuadricula[fila][columna] = *cuadricula[fila][columna] & ~(1<<(celda_leer_valor(*i)-1));
+		}
+	}
     //recorrer region recalculando candidatos
     //retornar indicando si la celda tiene un valor o esta vacia
     if ((cuadricula[fila][columna] & 0xF000) != 0) return TRUE;
