@@ -105,7 +105,6 @@ int sudoku_recalcular_c(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]) {
 		}
 		fila += 1;
 	}
-
 	//retornar el numero de celdas vacias
 	return celdas_vacias;
 }
