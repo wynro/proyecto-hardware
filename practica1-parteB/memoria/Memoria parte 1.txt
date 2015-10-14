@@ -1,0 +1,57 @@
+* 1. Resumen
+  *- Es un apartado fundamental. Es lo primero que se lee y muchas*
+    veces lo único que lee. Es la síntesis de todo el trabajo
+    realizado, qué, cómo y por qué hemos hecho el trabajo. Debe ser
+    auto contenido y debemos esbozar nuestras conclusiones.*
+
+* 2. Introducción
+  *- Enmarca y sitúa el trabajo a realizar.*
+  - Sudoku es un puzle desarrollado en 1970, muy pupular en Japón
+  desde 1986 y conocido mundialmente desde 2005.
+  El objetivo del sudoku es rellenar una cuadrícula de 9 × 9 celdas
+  (81 casillas) dividida en subcuadrículas de 3 × 3 (también llamadas
+  "cajas" o "regiones")con las cifras del 1 al 9 partiendo de algunos
+  números ya dispuestos en algunas de las celdas. Aunque se podrían usar
+  colores, letras, figuras, se conviene en usar números para mayor
+  claridad, lo que importa, es que sean nueve elementos diferenciados,
+  que no se deben repetir en una misma fila, columna o subcuadrícula.
+  Por el propio diseño del puzle es parte primordial de su resolución 
+  conocer qué números pueden ser candidatos de ocupar una casilla concreta
+  y, por extensión, todas las demás casillas.
+  Por eso nuestro proyecto es desarrollar un asistente electrónico que
+  de forma automática sugiera los candidatos para cada celda dado un puzle concreto.
+
+* 3. Objetivos
+  *- Explica qué se quiere conseguir.*
+
+  - Aunque el objetivo principal del proyecto sea la creación de un sencillo
+    programa de ayuda a la resolución del popular puzzle. Desde un punto de 
+    vista pedagógico existen otros objetivos no estrictamente relacionados 
+    con el objetivo principal:
+    - Aprender a desarrollar codigo para microcontroladores en
+      múltiples lenguajes (tanto de alto como de bajo nivel), y
+      conocer las tecnicas que existen para la interacción y compilado
+      conjunto de un programa realizado en múltiples lenguajes.
+    - Comparar a nivel puramente técnico múltiples lenguajes y
+      combinaciones de los mismos, principalmente mediante la métrica
+      'nº de instrucciones de procesador para terminar una tarea'
+* 4. Metodología
+  *- Describe los pasos realizados para llegar hasta los
+    resultados. Todas aquellas decisiones de diseño tomadas en el
+    proceso deben incluirse.En la asignatura de Proyecto Hardware se
+    debe explicar en este apartado el esquema del proyecto (ficheros y
+    funciones que lo componen), número total de líneas de código y
+    horas de dedicación. Así cómo el código desarrollado comentado.*
+
+
+    4j32min
+* 5. Resultado(s)
+  - Hay que presentar los resultados, explicarlos y analizarlos.
+* 6. Conclusiones
+  - Es lo último que se lee, por tanto es una sección muy importante
+    que se debe utilizar para remarcar los mensajes que queremos que
+    el lector reciba. Por ejemplo, si estamos evaluando un producto
+    podemos enfatizar sus puntos fuertes y sus puntos débiles, y
+    señalar posibilidades de mejora. Normalmente al final se incluyen
+    referencias, bibliografía, índice de expresiones técnicas y
+    anexos.
