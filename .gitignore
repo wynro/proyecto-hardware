@@ -1,6 +1,14 @@
 # Ignoramos todo el Build
 */**/Debug/
+# Excepto el ejecutable
 !*/**/Debug/*.elf
+# Ignoramos el directorio que contiene Manuales y programas
 PH/
-*/**/*~
+# Ignoramos los backup
 *~
+*/*~
+*/**/*~
+# Ignoramos los temp
+#*#
+*/#*#
+*/**/#*#
