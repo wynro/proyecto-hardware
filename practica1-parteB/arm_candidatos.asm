@@ -1,5 +1,5 @@
 #######################################################################################################
-# Función ARM: Dada una cuadricula y una celda, busca en la fila, en la
+# Funcion ARM: Dada una cuadricula y una celda, busca en la fila, en la
 # columna y en la region de dicha celda y ajusta las pistas de la celda
 # en consonancia
 # Params:
