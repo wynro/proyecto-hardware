@@ -63,7 +63,7 @@ int sudoku_candidatos_c(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS], uint8_t fila,
 
 		//recorrer region recalculando candidatos
 		uint8_t fila2 = fila - fila % TAM_REGION; // Obtenemos la fila inicial de la región
-		uint8_t columna2 = columna - fila % TAM_REGION; // Obtenemos la fila inicial de la región
+		uint8_t columna2 = columna - columna % TAM_REGION; // Obtenemos la fila inicial de la región
 		// Recorrido por columnas
 		// Posibilidad de quitar los *0xF, en esta situación es indistinto (asumiendo que almacenamos NUM_COLUMNAS*0xF),
 		// dado que se realizan de todas formas 3 productos, en caso de regiones más grandes merece aún más la pena,
@@ -187,15 +187,14 @@ void sudoku9x9(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS], char *ready) {
 	c_a_bien = memcmp(cuadricula_c_a, cuadricula, sizeof(cuadricula_c_a));
 	celdas_vacias_c_t = sudoku_recalcular_c_t(cuadricula_c_t);
 	c_t_bien = memcmp(cuadricula_c_t, cuadricula, sizeof(cuadricula_c_t));
-
-
+//
+//
 	celdas_vacias_a_c = sudoku_recalcular_a_c(cuadricula_a_c);
 	a_c_bien = memcmp(cuadricula_a_c, cuadricula, sizeof(cuadricula_a_c));
 	celdas_vacias_a_a = sudoku_recalcular_a_a(cuadricula_a_a);
 	a_a_bien = memcmp(cuadricula_a_a, cuadricula, sizeof(cuadricula_a_a));
 	celdas_vacias_a_t = sudoku_recalcular_a_t(cuadricula_a_t);
 	a_t_bien = memcmp(cuadricula_a_t, cuadricula, sizeof(cuadricula_a_t));
-
 
 //	unsigned int celdas_vacias; //numero de celdas aun vacias
 //	celdas_vacias = sudoku_recalcular_c(cuadricula);
