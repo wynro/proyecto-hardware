@@ -35,11 +35,15 @@ inline void celda_cambiar_pista(uint8_t valor_celda,
 			& ~(1 << (valor_celda - 1));
 }
 // funcion a implementar en ARM
-extern int sudoku_recalcular_arm(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]);
+//extern int sudoku_recalcular_arm(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]);
 
 // funcion a implementar en Thumb
-extern int sudoku_candidatos_thumb(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS],
-		uint8_t fila, uint8_t columna);
+//extern int sudoku_candidatos_thumb(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS], uint8_t fila, uint8_t columna);
+
+
+
+extern int sudoku_candidatos_arm(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS], uint8_t fila, uint8_t columna);
+extern int sudoku_candidatos_thumb_prologo(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS], uint8_t fila, uint8_t columna);
 
 ////////////////////////////////////////////////////////////////////////////////
 // dada una determinada celda encuentra los posibles valores candidatos
@@ -87,7 +91,7 @@ int sudoku_candidatos_c(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS], uint8_t fila,
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-// recalcula todo el tablero (9x9)
+// recalcula el tablero (9x9)
 // retorna el numero de celdas vacias
 int sudoku_recalcular_c_c(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]) {
 	int celdas_vacias = 0;

@@ -44,7 +44,7 @@ Reset_Handler:
 
 
 # USING A ARM FUNCTION
-# Parameters in r0-r1
+# Parameter in r0
 		LDR		r0, =cuadriculaCorrecta // Cargamos los argumentos de la funcion
 		ldr 	r5, =sudoku9x9 // Cargamos los parametros de la función
 		mov		lr, pc // Guardamos la dirección de retorno

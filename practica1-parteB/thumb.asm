@@ -8,7 +8,10 @@
 # 2: coordenada fila de la celda a analizar
 # 3: coordenada columna de la celda a analizar
 sudoku_candidatos_thumb_prologo:
-	PUSH {r5,lr}
+	mov ip, sp
+	STMDB   sp!, {r5,fp,ip,lr,pc} // Guardamos los parametros a tocar
+	sub fp, ip, #4
+
 	LDR r5, =sudoku_candidatos_thumb
 	add r5, r5, #1
 
@@ -16,8 +19,7 @@ sudoku_candidatos_thumb_prologo:
 	add lr, lr, #4 // Le sumamos para obtener la dirección de vuelta correcta
 	bx	r5 // Saltamos a la rutina
 
-	POP {r5,lr}
-	bx lr
+	LDMDB   fp, {r5,fp,sp,pc} // Recargamos los registros almacenados al inicio
 
 ######################################################################################################
 # Función Thumb: Modifica las pistas de la tabla de sudoku pasada en la

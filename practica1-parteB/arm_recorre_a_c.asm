@@ -11,7 +11,9 @@ sudoku_recalcular_a_c:
 	# r4: contador de filas
 	# r5: contador de columnas
 	# r6: test
-	STMFD   sp!, {r4-r11,lr} // Almacenamos los registros que podemos modificar
+	mov ip, sp	// Para evitar el problema de apilar sp mientras lo cambiamos
+	STMDB   sp!, {r4-r10,fp,ip,lr,pc} // Guardamos los parametros a tocar
+	sub fp, ip, #4 // Colocamos el fp apuntando a su lugar
 	# r4: contador de filas
 	# r5: contador de columnas
 	# r6: Almacen de la direccion inical
@@ -46,5 +48,4 @@ sudoku_recalcular_arm_columnas:
 
 
 	mov     r0, r7 // Movemos el numero de celdas contadas para devolverlo como respuesta
-	LDMFD   sp!, {r4-r11,lr} // Recargamos los registros almacenados al inicio
-	BX		lr // Retornamos al lugar de invocación, en modo ARM
+	LDMDB   fp, {r4-r10,fp,sp,pc} // Recargamos los registros almacenados al inicio

@@ -12,7 +12,9 @@
 sudoku_candidatos_arm:
 	# r3: direccion de la celda siendo modificada
 	# r4: valor de la celda modificada
+	// Prologo
 	STMFD   sp!, {r4-r11,lr} // Guardamos los parametros a tocar
+
 	// Calculamos la direccion de la celda siendo modificada
 	mov r3, r0 // Movemos la direccion inicial para poder modificarla
 	add r3, r3, r1, LSL #5 // Le sumamos el offset de fila
@@ -118,6 +120,9 @@ sudoku_candidatos_arm_fin:
 				        // vacía, y devolvemos falso, si no devolvemos cualquier valor que
 				        // contenga que se interpretará como cierto
 
-	LDMFD   sp!, {r4-r11,lr} // Recargamos los registros almacenados al inicio
+	// Epilogo
+	LDMFD   sp!, {r4-r11,lr}
 	BX      lr // Retornamos al lugar de invocación
+//	LDMDB   fp, {r4-r10,fp,sp,pc} // Recargamos los registros almacenados al inicio
+//
 #################################################################################################################
