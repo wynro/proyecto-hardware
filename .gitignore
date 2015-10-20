@@ -12,3 +12,7 @@ PH/
 #*#
 */#*#
 */**/#*#
+# Ignoramos los test
+*.test
+*/*.test
+*/**/*.test
