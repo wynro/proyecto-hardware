@@ -2,7 +2,9 @@
  * Coleccion de las distintas cuadriculas usadas para comprobar las funciones
  * realizadas, consisten en la cuadricula de prueba dada y otras 2 cuadriculas
  * adicionales generadas aleatoriamente
-*/
+ *
+ * Autor: Guillermo Robles Gonzalez (604409), Sergio Martin Segura (622612)
+ */
 
 .data
 .ltorg /*guarantees the alignment*/

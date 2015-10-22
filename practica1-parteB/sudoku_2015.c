@@ -1,3 +1,9 @@
+/**
+ * Fichero que contiene las funciones C del sistema
+ *
+ * Autor: Guillermo Robles Gonzalez (604409), Sergio Martin Segura (622612)
+ */
+
 #include <inttypes.h>
 #include <string.h> // Para memcmp()
 // Tamaños de la cuadricula
@@ -21,19 +27,39 @@ typedef uint16_t CELDA;
 // 1 bit no usado
 // 9 LSB CANDIDATOS
 
+/**
+ * Funcion que actualiza el valor en la casilla pasada
+ *
+ * @param celdaptr	Puntero a la celda a modificar
+ * @param val		Nuevo valor que se le pondra a la celda
+ */
 inline void celda_poner_valor(CELDA *celdaptr, uint8_t val) {
 	*celdaptr = (*celdaptr & 0x0FFF) | ((val & 0x000F) << 12);
 }
+
+/**
+ * Funcion que extraera el valor de una celda
+ *
+ * @param celda		Celda a leer
+ * @return			Valor numerico de la celda (0 si es vacia)
+ */
 inline uint8_t celda_leer_valor(CELDA celda) {
 	return celda >> 12;
 }
 
-// todo: nombre a celda_cambiar_candidatos
-inline void celda_cambiar_pista(uint8_t valor_celda,
+/**
+ * Funcion que modifica los posibles candidatos de una celda, eliminando una
+ * pista dada
+ *
+ * @param	valor		Pista que se eliminara
+ * @param	cuadricula	Cuadricula a modificar
+ * @param	fila		Coordenada fila de la casilla a modificar
+ * @param	columna		Coordenada columna de la casilla a modificar
+ */
+inline void celda_cambiar_candidatos(uint8_t valor,
 		CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS], uint8_t fila,
 		uint8_t columna) {
-	cuadricula[fila][columna] = cuadricula[fila][columna]
-			& ~(1 << (valor_celda - 1));
+	cuadricula[fila][columna] = cuadricula[fila][columna] & ~(1 << (valor - 1));
 }
 // funcion a implementar en ARM
 //extern int sudoku_recalcular_arm(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]);
@@ -41,16 +67,40 @@ inline void celda_cambiar_pista(uint8_t valor_celda,
 // funcion a implementar en Thumb
 //extern int sudoku_candidatos_thumb(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS], uint8_t fila, uint8_t columna);
 
+/**
+ * Funcion que dado una casilla en una cuadricula, actualiza sus candidatos
+ *
+ * @param	cuadricula	Cuadricula a modificar
+ * @param	fila		Coordenada fila de la casilla a modificar
+ * @param	columna		Coordenada columna de la casilla a modificar
+ *
+ * @return	0 en caso de que la casilla este vacia, !=0 en caso contrario
+ */
 extern int sudoku_candidatos_arm(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS],
 		uint8_t fila, uint8_t columna);
+
+/**
+ * Funcion que dado una casilla en una cuadricula, actualiza sus candidatos
+ *
+ * @param	cuadricula	Cuadricula a modificar
+ * @param	fila		Coordenada fila de la casilla a modificar
+ * @param	columna		Coordenada columna de la casilla a modificar
+ *
+ * @return	0 en caso de que la casilla este vacia, !=0 en caso contrario
+ */
 extern int sudoku_candidatos_thumb_prologo(
 		CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS], uint8_t fila,
 		uint8_t columna);
 
-////////////////////////////////////////////////////////////////////////////////
-// dada una determinada celda encuentra los posibles valores candidatos
-// y guarda el mapa de bits en la celda
-// retorna false si la celda esta vacia, true si contiene un valor
+/**
+ * Funcion que dado una casilla en una cuadricula, actualiza sus candidatos
+ *
+ * @param	cuadricula	Cuadricula a modificar
+ * @param	fila		Coordenada fila de la casilla a modificar
+ * @param	columna		Coordenada columna de la casilla a modificar
+ *
+ * @return	0 en caso de que la casilla este vacia, !=0 en caso contrario
+ */
 int sudoku_candidatos_c(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS], uint8_t fila,
 		uint8_t columna) {
 	//iniciar candidatos
@@ -64,13 +114,15 @@ int sudoku_candidatos_c(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS], uint8_t fila,
 		while (i < 9) {
 			uint8_t valor_celda_fila = celda_leer_valor(cuadricula[i][columna]);
 			uint8_t valor_celda_columna = celda_leer_valor(cuadricula[fila][i]);
-			celda_cambiar_pista(valor_celda_fila, cuadricula, fila, columna);
-			celda_cambiar_pista(valor_celda_columna, cuadricula, fila, columna);
+			celda_cambiar_candidatos(valor_celda_fila, cuadricula, fila,
+					columna);
+			celda_cambiar_candidatos(valor_celda_columna, cuadricula, fila,
+					columna);
 			i += 1;
 		}
 
 		//recorrer region recalculando candidatos
-		// TODO:
+		// FIXME:
 		// fila2 = (fila/3)*3
 		uint8_t fila2 = fila - fila % TAM_REGION; // Obtenemos la fila inicial de la región
 		uint8_t columna2 = columna - columna % TAM_REGION; // Obtenemos la fila inicial de la región
@@ -84,7 +136,8 @@ int sudoku_candidatos_c(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS], uint8_t fila,
 			while (recorre_columna < columna2 + TAM_REGION) {
 				uint8_t valor_celda = celda_leer_valor(
 						cuadricula[recorre_fila][recorre_columna]);
-				celda_cambiar_pista(valor_celda, cuadricula, fila, columna);
+				celda_cambiar_candidatos(valor_celda, cuadricula, fila,
+						columna);
 				recorre_columna += 1;
 			}
 			recorre_fila += 1;
@@ -97,9 +150,13 @@ int sudoku_candidatos_c(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS], uint8_t fila,
 
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// recalcula el tablero (9x9)
-// retorna el numero de celdas vacias
+/**
+ * Funcion que dado una cuadricula, actualiza todos sus candidatos, usando
+ * como hoja una funcion C
+ * @param	cuadricula	Cuadricula a modificar
+ *
+ * @return	Numero de casillas vacias
+ */
 int sudoku_recalcular_c_c(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]) {
 	int celdas_vacias = 0;
 	// Para cada fila
@@ -119,6 +176,13 @@ int sudoku_recalcular_c_c(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]) {
 	return celdas_vacias;
 }
 
+/**
+ * Funcion que dado una cuadricula, actualiza todos sus candidatos, usando
+ * como hoja una funcion ARM
+ * @param	cuadricula	Cuadricula a modificar
+ *
+ * @return	Numero de casillas vacias
+ */
 int sudoku_recalcular_c_a(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]) {
 	int celdas_vacias = 0;
 	// Para cada fila
@@ -138,6 +202,13 @@ int sudoku_recalcular_c_a(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]) {
 	return celdas_vacias;
 }
 
+/**
+ * Funcion que dado una cuadricula, actualiza todos sus candidatos, usando
+ * como hoja una funcion THUMB
+ * @param	cuadricula	Cuadricula a modificar
+ *
+ * @return	Numero de casillas vacias
+ */
 int sudoku_recalcular_c_t(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]) {
 	int celdas_vacias = 0;
 	// Para cada fila
@@ -192,7 +263,7 @@ void sudoku9x9(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS], char *ready) {
 	unsigned int celdas_vacias_a_a; //numero de celdas aun vacias
 	unsigned int celdas_vacias_a_t; //numero de celdas aun vacias
 	// C-C
-	#define NUM_TEST 1
+#define NUM_TEST 1
 	int i = 0;
 	int f = 0;
 	for (i = 0; i < NUM_TEST; i++) {

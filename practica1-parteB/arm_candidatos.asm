@@ -1,3 +1,10 @@
+/**
+ * Fichero que guarda la funcion arm_candidatos, que analiza una casilla
+ * de nuestro sudoku.
+ *
+ * Autor: Guillermo Robles Gonzalez (604409), Sergio Martin Segura (622612)
+ */
+
 #######################################################################################################
 # Funcion ARM: Dada una cuadricula y una celda, busca en la fila, en la
 # columna y en la region de dicha celda y ajusta las pistas de la celda

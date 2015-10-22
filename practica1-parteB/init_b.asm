@@ -1,3 +1,9 @@
+/**
+ * Fichero que continene el codigo que inicializa el procesador
+ *
+ * Autor: Guillermo Robles Gonzalez (604409), Sergio Martin Segura (622612)
+ */
+
 .text
 #        ENTRY                  /*  mark the first instruction to call */
 .global start

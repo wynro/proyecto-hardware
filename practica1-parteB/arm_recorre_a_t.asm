@@ -1,3 +1,10 @@
+/**
+ * Fichero que guarda la funcion arm_recorre_a_a, que recorre el sudoku usando
+ * una funcion ARM y analizando las casillas con una funcion THUMB
+ *
+ * Autor: Guillermo Robles Gonzalez (604409), Sergio Martin Segura (622612)
+ */
+
 #######################################################################################################
 # Función ARM: Modifica las pistas de la tabla de sudoku pasada
 # Params:
