@@ -81,8 +81,8 @@ ARM_copy_10:
         #  saves the working registers
         # Recordad que puede modificar r0, r1, r2 y r3 sin guardarlos previamente
         STMFD   sp!, {r4-r11}
-        LDM		r0, {r2-r11} # Load the 10 values from MEM into the free register
-        STM		r1, {r2-r11} # Store the previously read values into MEM again
+        LDM		r0, {r2-r11} // Load the 10 values from MEM into the free register
+        STM		r1, {r2-r11} // Store the previously read values into MEM again
         # restore the original registers
         LDMFD   sp!, {r4-r11}
         # return to the instruccion that called the rutine and to arm mode
@@ -96,10 +96,10 @@ ARM_copy_10:
 .thumb
 th_copy_10:
         PUSH    {r4-r7}
-        LDMIA   r0!, {r2-r6} # Load the first 5 values into registers, and update the pointer
-        STMIA   r1!, {r2-r6} # Store the previously read values into MEM again, and update the pointer
-        LDMIA   r0, {r2-r6} # Load the second half
-        STMIA   r1, {r2-r6} # Store the second half
+        LDMIA   r0!, {r2-r6} // Load the first 5 values into registers, and update the pointer
+        STMIA   r1!, {r2-r6} // Store the previously read values into MEM again, and update the pointer
+        LDMIA   r0, {r2-r6} // Load the second half
+        STMIA   r1, {r2-r6} // Store the second half
         POP     {r4-r7} /* restores the registers */
         BX      r14     /* this is the return instrucction */
 
