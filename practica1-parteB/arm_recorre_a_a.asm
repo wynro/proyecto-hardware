@@ -45,7 +45,6 @@ sudoku_recalcular_arm_columnas:
 	cmp 	r4, #9 // Comprobamos si hemos llegado al limite
 	blt		sudoku_recalcular_arm_filas // En caso de no haber llegado, volvemos al principio del bucle
 
-
 	mov     r0, r7 // Movemos el numero de celdas contadas para devolverlo como respuesta
 
 
