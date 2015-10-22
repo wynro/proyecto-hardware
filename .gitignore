@@ -1,7 +1,7 @@
-# Ignoramos todo el Build
-*/**/Debug/
-# Excepto el ejecutable
-!*/**/Debug/*.elf
+# Ignoramos todo los builds
+practica0/Debug/
+practica1-parteA/Debug/
+practica1-parteB/Debug/
 # Ignoramos el directorio que contiene Manuales y programas
 PH/
 # Ignoramos los backup
@@ -16,3 +16,7 @@ PH/
 *.tst
 */*.tst
 */**/*.tst
+# Ignoramos los metadatos de Eclipse
+.metadata/
+# Ignoramos proyectos erroneos
+RemoteSystemsTempFiles/
