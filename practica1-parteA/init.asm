@@ -1,6 +1,5 @@
-
-    .extern main
-    .equ STACK, 0x0c7ff000
+.extern main
+.equ STACK, 0x0c7ff000
 .text
 .equ    num, 10  /* this is used to indicate the number of words to copy */
 #        ENTRY                    /*  mark the first instruction to call */
