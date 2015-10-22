@@ -16,6 +16,9 @@ enum {
 	FALSE = 0, TRUE = 1
 };
 
+// Numero de repeticiones que hara en las pruebas
+#define NUM_TEST 1
+
 typedef uint16_t CELDA;
 // La información de cada celda está codificada en 16 bits
 // con el siguiente formato (empezando en el bit más significativo):
@@ -262,43 +265,35 @@ void sudoku9x9(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS], char *ready) {
 	unsigned int celdas_vacias_a_c; //numero de celdas aun vacias
 	unsigned int celdas_vacias_a_a; //numero de celdas aun vacias
 	unsigned int celdas_vacias_a_t; //numero de celdas aun vacias
-	// C-C
-#define NUM_TEST 1
+
+
 	int i = 0;
-	int f = 0;
 	for (i = 0; i < NUM_TEST; i++) {
 		celdas_vacias_c_c = sudoku_recalcular_c_c(cuadricula_c_c);
 	}
 	c_c_bien = memcmp(cuadricula_c_c, cuadricula, sizeof(cuadricula_c_c));
-	f = 2;
 	for (i = 0; i < NUM_TEST; i++) {
 		celdas_vacias_c_a = sudoku_recalcular_c_a(cuadricula_c_a);
 	}
-	// c_a_bien = memcmp(cuadricula_c_a, cuadricula, sizeof(cuadricula_c_a));
-	f = 3;
+	c_a_bien = memcmp(cuadricula_c_a, cuadricula, sizeof(cuadricula_c_a));
 	for (i = 0; i < NUM_TEST; i++) {
 		celdas_vacias_c_t = sudoku_recalcular_c_t(cuadricula_c_t);
 	}
-	f = 4;
-	// c_t_bien = memcmp(cuadricula_c_t, cuadricula, sizeof(cuadricula_c_t));
-
+	c_t_bien = memcmp(cuadricula_c_t, cuadricula, sizeof(cuadricula_c_t));
 	for (i = 0; i < NUM_TEST; i++) {
 		celdas_vacias_a_c = sudoku_recalcular_a_c(cuadricula_a_c);
 	}
-	//a_c_bien = memcmp(cuadricula_a_c, cuadricula, sizeof(cuadricula_a_c));
-	f = 6;
+	a_c_bien = memcmp(cuadricula_a_c, cuadricula, sizeof(cuadricula_a_c));
 	for (i = 0; i < NUM_TEST; i++) {
 		celdas_vacias_a_a = sudoku_recalcular_a_a(cuadricula_a_a);
 	}
-	//a_a_bien = memcmp(cuadricula_a_a, cuadricula, sizeof(cuadricula_a_a));
-	f = 7;
+	a_a_bien = memcmp(cuadricula_a_a, cuadricula, sizeof(cuadricula_a_a));
 	for (i = 0; i < NUM_TEST; i++) {
 		celdas_vacias_a_t = sudoku_recalcular_a_t(cuadricula_a_t);
 	}
-	//a_t_bien = memcmp(cuadricula_a_t, cuadricula, sizeof(cuadricula_a_t));
-	f = 8;
-//	unsigned int celdas_vacias; //numero de celdas aun vacias
-//	celdas_vacias = sudoku_recalcular_c(cuadricula);
+	a_t_bien = memcmp(cuadricula_a_t, cuadricula, sizeof(cuadricula_a_t));
+	// unsigned int celdas_vacias; //numero de celdas aun vacias
+	// celdas_vacias = sudoku_recalcular_c(cuadricula);
 	// Mandamos la señal de ready
 }
 
