@@ -40,10 +40,11 @@ inline void celda_cambiar_pista(uint8_t valor_celda,
 // funcion a implementar en Thumb
 //extern int sudoku_candidatos_thumb(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS], uint8_t fila, uint8_t columna);
 
-
-
-extern int sudoku_candidatos_arm(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS], uint8_t fila, uint8_t columna);
-extern int sudoku_candidatos_thumb_prologo(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS], uint8_t fila, uint8_t columna);
+extern int sudoku_candidatos_arm(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS],
+		uint8_t fila, uint8_t columna);
+extern int sudoku_candidatos_thumb_prologo(
+		CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS], uint8_t fila,
+		uint8_t columna);
 
 ////////////////////////////////////////////////////////////////////////////////
 // dada una determinada celda encuentra los posibles valores candidatos
@@ -185,21 +186,40 @@ void sudoku9x9(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS], char *ready) {
 	unsigned int celdas_vacias_a_a; //numero de celdas aun vacias
 	unsigned int celdas_vacias_a_t; //numero de celdas aun vacias
 	// C-C
-	celdas_vacias_c_c = sudoku_recalcular_c_c(cuadricula_c_c);
-	c_c_bien = memcmp(cuadricula_c_c, cuadricula, sizeof(cuadricula_c_c));
-	celdas_vacias_c_a = sudoku_recalcular_c_a(cuadricula_c_a);
-	c_a_bien = memcmp(cuadricula_c_a, cuadricula, sizeof(cuadricula_c_a));
-	celdas_vacias_c_t = sudoku_recalcular_c_t(cuadricula_c_t);
-	c_t_bien = memcmp(cuadricula_c_t, cuadricula, sizeof(cuadricula_c_t));
-//
-//
-	celdas_vacias_a_c = sudoku_recalcular_a_c(cuadricula_a_c);
-	a_c_bien = memcmp(cuadricula_a_c, cuadricula, sizeof(cuadricula_a_c));
-	celdas_vacias_a_a = sudoku_recalcular_a_a(cuadricula_a_a);
-	a_a_bien = memcmp(cuadricula_a_a, cuadricula, sizeof(cuadricula_a_a));
-	celdas_vacias_a_t = sudoku_recalcular_a_t(cuadricula_a_t);
-	a_t_bien = memcmp(cuadricula_a_t, cuadricula, sizeof(cuadricula_a_t));
+	#define NUM_TEST 10000
+	int i = 0;
+	int f = 0;
+//	for (i = 0; i < NUM_TEST; i++) {
+//		celdas_vacias_c_c = sudoku_recalcular_c_c(cuadricula_c_c);
+//	}
+//	c_c_bien = memcmp(cuadricula_c_c, cuadricula, sizeof(cuadricula_c_c));
+	f = 2;
+	for (i = 0; i < NUM_TEST; i++) {
+		celdas_vacias_c_a = sudoku_recalcular_c_a(cuadricula_c_a);
+	}
+	// c_a_bien = memcmp(cuadricula_c_a, cuadricula, sizeof(cuadricula_c_a));
+	f = 3;
+	for (i = 0; i < NUM_TEST; i++) {
+		celdas_vacias_c_t = sudoku_recalcular_c_t(cuadricula_c_t);
+	}
+	f = 4;
+	// c_t_bien = memcmp(cuadricula_c_t, cuadricula, sizeof(cuadricula_c_t));
 
+//	for (i = 0; i < NUM_TEST; i++) {
+//		celdas_vacias_a_c = sudoku_recalcular_a_c(cuadricula_a_c);
+//	}
+	//a_c_bien = memcmp(cuadricula_a_c, cuadricula, sizeof(cuadricula_a_c));
+	f = 6;
+	for (i = 0; i < NUM_TEST; i++) {
+		celdas_vacias_a_a = sudoku_recalcular_a_a(cuadricula_a_a);
+	}
+	//a_a_bien = memcmp(cuadricula_a_a, cuadricula, sizeof(cuadricula_a_a));
+	f = 7;
+	for (i = 0; i < NUM_TEST; i++) {
+		celdas_vacias_a_t = sudoku_recalcular_a_t(cuadricula_a_t);
+	}
+	//a_t_bien = memcmp(cuadricula_a_t, cuadricula, sizeof(cuadricula_a_t));
+	f = 8;
 //	unsigned int celdas_vacias; //numero de celdas aun vacias
 //	celdas_vacias = sudoku_recalcular_c(cuadricula);
 	// Mandamos la señal de ready
