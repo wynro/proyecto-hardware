@@ -6,12 +6,12 @@ Trabajo e información de la asignatura Proyecto Hardware
 
 ## Progreso del trabajo
 
-- Practica1:
+* Practica1:
 
-* ParteA: Terminado
+..* ParteA: Terminado
 
-* ParteB: Entregado-memoria
+..* ParteB: Entregado-memoria
 
-- Practica2:
-* ParteA: Draft
-* ParteB: \-
+* Practica2:
+..* ParteA: Draft
+..* ParteB: \-
