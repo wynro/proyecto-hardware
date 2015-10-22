@@ -1,21 +1,17 @@
 # Ignoramos todo los builds
-practica0/Debug/
-practica1-parteA/Debug/
-practica1-parteB/Debug/
+**/Debug/*
+!**/Debug/*.elf
 # Ignoramos el directorio que contiene Manuales y programas
 PH/
 # Ignoramos los backup
 *~
-*/*~
-*/**/*~
+**/*~
 # Ignoramos los temp
 #*#
-*/#*#
-*/**/#*#
+**/#*#
 # Ignoramos los test
 *.tst
-*/*.tst
-*/**/*.tst
+**/*.tst
 # Ignoramos los metadatos de Eclipse
 .metadata/
 # Ignoramos proyectos erroneos
