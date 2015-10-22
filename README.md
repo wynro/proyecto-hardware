@@ -8,10 +8,10 @@ Trabajo e información de la asignatura Proyecto Hardware
 
 * Practica1:
 
-..* ParteA: Terminado
+··* ParteA: Terminado
 
-..* ParteB: Entregado-memoria
+··* ParteB: Entregado-memoria
 
 * Practica2:
-..* ParteA: Draft
-..* ParteB: \-
+··* ParteA: Draft
+··* ParteB: \-
