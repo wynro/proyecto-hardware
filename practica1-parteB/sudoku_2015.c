@@ -266,6 +266,17 @@ void sudoku9x9(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS], char *ready) {
 	unsigned int celdas_vacias_a_a; //numero de celdas aun vacias
 	unsigned int celdas_vacias_a_t; //numero de celdas aun vacias
 
+	int isdg = 0;
+	//isdg = sudoku_candidatos_c(cuadricula_c_c, 0, 2);
+	//isdg = sudoku_candidatos_arm(cuadricula_c_a, 0, 2);
+	//isdg = sudoku_candidatos_thumb_prologo(cuadricula_c_t, 0, 2);
+	//isdg = sudoku_recalcular_c_c(cuadricula_c_c);
+	isdg = sudoku_recalcular_c_a(cuadricula_c_a);
+	isdg = sudoku_recalcular_c_t(cuadricula_c_t);
+	//isdg = sudoku_recalcular_a_c(cuadricula_a_c);
+	isdg = sudoku_recalcular_a_a(cuadricula_a_a);
+	isdg = sudoku_recalcular_a_t(cuadricula_a_t);
+
 
 	int i = 0;
 	for (i = 0; i < NUM_TEST; i++) {

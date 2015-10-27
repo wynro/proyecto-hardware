@@ -11,7 +11,7 @@ start:
 .arm /*indicates that we are using the ARM instruction set */
 #------standard initial code
 # --- Setup interrupt / exception vectors
-      B       Reset_Handler // Jump to the handler of the reset event (In our case the sudoku program)
+       B       Reset_Handler // Jump to the handler of the reset event (In our case the sudoku program)
 /* In this version we do not use the following handlers */
 #######################################################################################################
 #-----------Undefined_Handler:
