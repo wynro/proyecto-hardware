@@ -16,3 +16,6 @@ PH/
 .metadata/
 # Ignoramos proyectos erroneos
 RemoteSystemsTempFiles/
+# Ignoramos archivos de compilacion de Latex
+**/.#*.tex
+**/.fuse_hidden*
