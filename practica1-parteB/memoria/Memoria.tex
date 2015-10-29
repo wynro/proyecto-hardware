@@ -14,9 +14,10 @@
 \pagenumbering{arabic}
 
 % Titulo Antiguo, para la posteridad, como no se usa...
-\title{Proyecto Hardware - Practica 1\\Desarrollo combinado y optimizaci\'on de programas en multiples lenguajes de alto y bajo nivel}
-\author{Guillermo Robles Gonzalez - NIP: 604409\\Sergio Mart\'in Segura - NIP: 622612}
-\date{\today}
+\title{Proyecto Hardware - Practica 1\\Desarrollo combinado y
+  optimizaci\'on de programas en multiples lenguajes de alto y bajo
+  nivel} \author{Guillermo Robles Gonzalez - NIP: 604409\\Sergio
+  Mart\'in Segura - NIP: 622612} \date{\today}
 
 
 
@@ -44,8 +45,8 @@
   Enrique Torres Moreno\\
   Jes\'us Alastruey Bened\'e\\
   Dar\'io Su\'arez Gracia\\
-  % Dr.~Emmett \textsc{Doc} Lathrop Brown
-  % Martin \textsc{Marty} Seamus McFly
+  % Dr.~Emmett \textsc{Doc} Lathrop Brown\\
+  % Martin \textsc{Marty} Seamus McFly\\
   % \textbf{Marty:} Un momento, un momento Doc, ¿Quieres decir que has
   % construido una m\'aquina del tiempo...? ¡¡¿En un DeLorean?!!\\
   % \textbf{Doc:} Bueno, siempre he pensado ``si vas a viajar al
@@ -227,14 +228,38 @@ Tiempos de ejecuci\'on:
   \begin{center}
     \begin{tabular}{ l | r | r }
       % TODO: terminar
-      Funci\'on                                 & Tamaño est\'atico & Tamaño din\'amico \\ \hline
-      sudoku\_candidatos\_c                   &                 &                 \\
-      sudoku\_candidatos\_arm                 & 288 bytes       &                 \\
-      sudoku\_candidatos\_thumb (Con pr\'ologo) & 254 bytes       &                 \\
-      sudoku\_candidatos\_thumb (Sin pr\'ologo) & 214 bytes       &                 \\ \hline
+      & \multicolumn{2}{|c|}{Tamano} \\
+      Funci\'on                                 & est\'atico (bytes)   & Tamaño din\'amico (instrucciones) \\ \hline
+      sudoku\_candidatos\_c                   & 676                       & 2634                            \\
+      sudoku\_candidatos\_arm                 & 288                       & 349                             \\
+      sudoku\_candidatos\_thumb (Con pr\'ologo) & 254                       & 480                             \\
+      sudoku\_candidatos\_thumb (Sin pr\'ologo) & 214                       & 489                             \\ \hline
     \end{tabular}
   \end{center}
+  En este caso se han medido los tamaños de c\'odigo de las funciones
+  que calculan la tabla de sudoku completa; ha sido imposible la
+  medici\'on del tamaño din\'amico por razones de coste computacional
+  \begin{center}
+    \begin{tabular}{ l | r | r }
+      % TODO: terminar
+      Funci\'on                                   & Tamaño est\'atico (bytes) \\ \hline
+      sudoku\_recalcular\_c\_c                  & 172                       \\
+      sudoku\_recalcular\_c\_a                  & 172                       \\
+      sudoku\_recalcular\_c\_t \footnotemark[1] & 172                       \\
+      sudoku\_recalcular\_a\_c                  & 80                        \\
+      sudoku\_recalcular\_a\_a                  & 80                        \\
+      sudoku\_recalcular\_a\_t                  & 100                       \\
+    \end{tabular}
+  \end{center}
+  \footnotemark{Es de notar que esta funci\'on no llama a
+    sudoku\_candidatos\_thumb, dada la imposibilidad de llamar a
+    funciones en thumb desde C; sino a una funci\'on especial
+    sudoku\_candidatos\_thumb\_prologo, que est\'a escrita en ARM y
+    ejecuta la funci\'on thumb deseada}
 \end{itemize}
+
+% \subsection{Conclusiones de las m\'etricas}
+
 % [ Introducir aqu\'i m\'etricas y conclusi\'on]
 %                               @B@B@
 %                               @@B@B
@@ -312,17 +337,20 @@ Tiempos de ejecuci\'on:
 La primera observaci\'on que se hace es la inmensa diferencia en
 eficiencia entre C y ensamblador, incluso en algoritmos sencillos como
 este, sin embargo la diferencia de dificultad al realizar los
-programas es notable. Es de notar que la principal diferencia es en la
-funci\'on candidatos, que es la que m\'as carga aporta al programa;
+programas es considerable. Es de notar que la principal diferencia es
+en la funci\'on candidatos, que es la que m\'as carga aporta al programa;
 tambi\'en puede verse como el llamador es poco importante, obteni\'endose
 diferencias de apenas unas pocas cienmil\'esimas de segundo entre las
-llamadas a c\_a y a\_a. \\
+llamadas a c\_a y a\_a.\\
 La elecci\'on de C como funci\'on hoja es impensable, dado que se obtienen
-tiempos del orden de 6-7 veces mayores. En la situaci\'on en la que
-estamos (Interacci\'on con un humano) la diferencia de eficiencia entre
-ASM y Thumb es despreciable, por lo tanto el factor que determinar\'a la
-elecci\'on ser\'a el tamaño de la memoria disponible, escogi\'endose Thumb
-en caso de que esta sea baja, y ARM en caso contrario.\\
+tiempos del orden de 6-7 veces mayores, una posibilidad ser\'ia utilizar
+una compilaci\'on mas agresiva en la eficiencia, que aunque dificulta la
+comprensi\'on del c\'odigo generado, generalmente es m\'as eficiente. En la
+situaci\'on en la que estamos (Interacci\'on con un humano) la diferencia
+de eficiencia entre ASM y Thumb es despreciable, por lo tanto el
+factor que determinar\'a la elecci\'on ser\'a el tamaño de la memoria
+disponible, escogi\'endose Thumb en caso de que esta sea baja, y ARM en
+caso contrario.\\
 En conclusi\'on, se observa que la forma que balancea mejor comodidad de
 desarrollo y eficiencia es la programaci\'on del cuerpo principal de la
 aplicaci\'on en un lenguaje de alto nivel (C en nuestro caso), y la

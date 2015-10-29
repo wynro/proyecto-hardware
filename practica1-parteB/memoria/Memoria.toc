@@ -9,5 +9,5 @@
 \contentsline {subsection}{\numberline {4.4}Obtenci\'on de m\'etricas\\ {\relax \fontsize {10.95}{13.6}\selectfont \abovedisplayskip 11\p@ plus3\p@ minus6\p@ \abovedisplayshortskip \z@ plus3\p@ \belowdisplayshortskip 6.5\p@ plus3.5\p@ minus3\p@ \def \leftmargin \leftmargini \parsep 5\p@ plus2.5\p@ minus\p@ \topsep 10\p@ plus4\p@ minus6\p@ \itemsep 5\p@ plus2.5\p@ minus\p@ {\leftmargin \leftmargini \topsep 9\p@ plus3\p@ minus5\p@ \parsep 4.5\p@ plus2\p@ minus\p@ \itemsep \parsep }\belowdisplayskip \abovedisplayskip Dedicaci\'on: aprox 2 horas}}{3}{subsection.4.4}
 \contentsline {section}{\numberline {5}Resultados}{4}{section.5}
 \contentsline {section}{\numberline {6}Conclusiones}{5}{section.6}
-\contentsline {subsection}{\numberline {6.1}Margen de mejora}{5}{subsection.6.1}
-\contentsline {section}{\numberline {7}Bibliograf\'ia}{6}{section.7}
+\contentsline {subsection}{\numberline {6.1}Margen de mejora}{6}{subsection.6.1}
+\contentsline {section}{\numberline {7}Bibliograf\'ia}{7}{section.7}
