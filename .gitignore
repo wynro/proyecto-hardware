@@ -19,3 +19,4 @@ RemoteSystemsTempFiles/
 # Ignoramos archivos de compilacion de Latex
 **/.#*.tex
 **/.fuse_hidden*
+**/_region_*
