@@ -5,15 +5,15 @@
  *      Author: a604409
  */
 
-#ifndef BUTTON_ALT_H_
-#define BUTTON_ALT_H_
+#ifndef BUTTON_H_
+#define BUTTON_H_
 /**
  * Respuesta a la IRQ
  */
 void Button_ISR(void) __attribute__((interrupt("IRQ")));
 
 /**
- * Iniciar el sistema de botones
+ * Iniciar  el sistema de botones
  */
 void Button_init(void);
 

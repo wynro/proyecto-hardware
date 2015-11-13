@@ -15,14 +15,18 @@
 #define TRP 100 // ms
 #define TRD 100 // ms
 #define ESPERA 10 // ms
-#define PREESCALADO 32
+#define PREESCALADO 32 // Na na na na na na na na na na na na na na na na... BATMAN! <DEV>
+
+//typedef enum state {
+//	reposo, espera_trp, desactivado, espera_trd
+//} State;
 
 enum {
 	reposo, espera_trp, desactivado_1, desactivado_2, espera_trd
 };
 /*--- variables globales ---*/
 /* count la utilizamos para sacar un número por el 8led.
- Cuando se pulsa un botón sumamos y con el otro restamos. ¡A veces (siempre) hay rebotes! */
+ Cuando se pulsa un botón sumamos y con el otro restamos. ¡A veces (siempre) hay rebotes!  <DEV>*/
 unsigned int count = 0;
 unsigned int estado = reposo;
 
@@ -37,7 +41,7 @@ void Button_init(void) {
 	rINTMOD = 0x0;		// Configura las linas como de tipo IRQ
 	rINTCON = 0x1;	    // Habilita int. vectorizadas y la linea IRQ (FIQ no)
 	//NOTE: 1 enmascara
-	rINTMSK &= ~BIT_EINT4567; // Enmascara todas las lineas excepto eint4567, el bit global y el timer0
+	rINTMSK &= ~BIT_EINT4567; // Desenmascara nuestro bit de interrupcion
 
 	/* Establece la rutina de servicio para Eint4567 */
 
