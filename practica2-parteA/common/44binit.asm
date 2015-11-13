@@ -417,12 +417,14 @@ SMRDATA:
 	.long 0x20				/* MRSR7                                  */
 
 
-.equ 	UserStack,	_ISR_STARTADDRESS-0xf00    		/* c7ff000 */   	
+.equ 	UserStack,	_ISR_STARTADDRESS-0xf00			/* c7ff000 */
 .equ	SVCStack,	_ISR_STARTADDRESS-0xf00+256    	/* c7ff100 */
 .equ	UndefStack,	_ISR_STARTADDRESS-0xf00+256*2   /* c7ff200 */
 .equ	AbortStack,	_ISR_STARTADDRESS-0xf00+256*3   /* c7ff300 */
 .equ	IRQStack,	_ISR_STARTADDRESS-0xf00+256*4   /* c7ff400 */
 .equ	FIQStack,	_ISR_STARTADDRESS-0xf00+256*5   /* c7ff500 */
+.equ	DebugStack,	_ISR_STARTADDRESS-0xf00+256*6   /* c7ff600 */
+
 
 .equ	HandleReset,	_ISR_STARTADDRESS
 .equ	HandleUndef,	_ISR_STARTADDRESS+4

@@ -27,7 +27,7 @@ void timer_ISR(void)
 
 void timer_init(void)
 {
-	/* Configuraion controlador de interrupciones */
+	/* Configuracion controlador de interrupciones */
 	rINTMOD = 0x0; // Configura las linas como de tipo IRQ
 	rINTCON = 0x1; // Habilita int. vectorizadas y la linea IRQ (FIQ no)
 	rINTMSK = ~(BIT_GLOBAL | BIT_TIMER0); // Emascara todas las lineas excepto Timer0 y el bit global (bits 26 y 13, BIT_GLOBAL y BIT_TIMER0 están definidos en 44b.h)
@@ -38,10 +38,9 @@ void timer_init(void)
 	/* Configura el Timer0 */
 	rTCFG0 = 255; // ajusta el preescalado
 	rTCFG1 = 0x0; // selecciona la entrada del mux que proporciona el reloj. La 00 corresponde a un divisor de 1/2.
-	rTCNTB0 = 7812;// valor inicial de cuenta (la cuenta es descendente)
-	rTCMPB0 = 0;// valor de comparación
-//	rTCNTB0 = 65535;// valor inicial de cuenta (la cuenta es descendente)
-//	rTCMPB0 = 12800;// valor de comparación
+
+	rTCNTB0 = 65535; // valor inicial de cuenta (la cuenta es descendente)
+	rTCMPB0 = 12800; // valor de comparación
 	/* establecer update=manual (bit 1) + inverter=on (¿? será inverter off un cero en el bit 2 pone el inverter en off)*/
 	rTCON = 0x2;
 	/* iniciar timer (bit 0) con auto-reload (bit 3)*/

@@ -10,6 +10,9 @@
 #include "44b.h"
 #include "stdio.h"
 #include <inttypes.h>
+#include "Excepciones.h"
+#include "Button.h"
+#include "button2.h"
 
 /*--- variables globales ---*/
 extern int switch_leds;
@@ -18,14 +21,11 @@ extern int on_led_1;
 //extern int valor_pantalla;
 
 /*--- funciones externas ---*/
-extern void leds_off();
-extern void led1_on();
 extern void leds_switch();
 extern void timer_init();
-extern void Eint4567_init();
 extern void D8Led_init();
-extern void D8Led_symbol();
 
+extern void doSWI(uint32_t T);
 /*--- declaracion de funciones ---*/
 void Main(void);
 
@@ -36,33 +36,25 @@ void Main(void) {
 	sys_init();        // Inicializacion de la placa, interrupciones y puertos
 	timer_init();	   // Inicializacion del temporizador
 
-	Eint4567_init();// inicializamos los pulsadores. Cada vez que se pulse se verá reflejado en el 8led
 	D8Led_init(); // inicializamos el 8led
 
-	/* Valor inicial de los leds */
-	//leds_off();
-	//led1_on();
-	int valor_pantalla = 0;
-	while (1) {
-		/* Cambia los leds con cada interrupcion del temporizador */
-		if (switch_leds == 1) {
-//			D8Led_symbol(valor_pantalla);
-//			valor_pantalla = (valor_pantalla + 1) % 16;
-//			if (on_led_0 == 1) {
-//				led0_on();
-//			} else {
-//				led0_off();
-//			}
-//
-//			if (on_led_1 == 1) {
-//				led1_on();
-//				on_led_1 = 0;
-//			} else {
-//				led1_off();
-//			}
+	//Eint4567_init();
+	Button_init(); // inicializamos los pulsadores. Cada vez que se pulse se verá reflejado en el 8led
 
+	/* Valor inicial de los leds */
+//	Timer2_Inicializar();
+//	Timer2_Empezar();
+//	int res = Timer2_Leer();
+	//excepcion_init();
+	//trataExcepcion();
+	// doSWI(1);
+	// Delay(1000);
+	while (1) {
+		// Cambia los leds con cada interrupcion del temporizador
+		if (switch_leds == 1) {
 			leds_switch();
 			switch_leds = 0;
 		}
+
 	}
 }
