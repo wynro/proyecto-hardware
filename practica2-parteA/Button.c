@@ -12,27 +12,35 @@
 #include "Button.h"
 
 #define ANCHO_CUENTA (10*1000) // ms
-#define TRP 10 // * 10 ms
-#define TRD 10 // * 10 ms
+#define TRP 15 // * 10 ms
+#define TRD 20 // * 10 ms
+#define WAIT_BETWEEN_INCREMENTS 30 // Bloques de 10 ms
 #define ESPERA (10*1000) // ms
 #define PREESCALADO 32 // Na na na na na na na na na na na na na na na na... BATMAN! <DEV>
 unsigned int cuenta = 0;
 unsigned int num_espera = 0;
 unsigned int pressed;
 
-typedef enum state {
+typedef enum {
 	reposo, // Estado en el cual esperamos a que llege una interrupcion de boton
 	espera_trp, // Estado en el cual esperamos a que pase el tiempo de seguridad trp
 	desactivado, // Estado en el cual ignoramos cualquier interrupcion excepto el reloj
 	espera_trd // Estado en el cual esperamos a que pase el tiempo de seguridad trd
-} State;
+} Button_state;
 
 /*--- variables globales ---*/ // Mala idea... <DEV> <--Esto sera un reto para commenTrimmer
 /* count la utilizamos para sacar un número por el 8led.
  Cuando se pulsa un botón sumamos y con el otro restamos. ¡A veces (siempre) hay rebotes!  <DEV>*/
-unsigned int count = 0;
-State estado = reposo;
 
+/**
+ * Almacena el valor actual de la pantalla
+ */
+unsigned int actual = 1;
+unsigned int _next = 0;
+unsigned int _min = 0;
+unsigned int _max = 16;
+
+Button_state estado = reposo;
 /*--- declaracion de funciones ---*/
 extern void D8Led_symbol(int value); // declaramos la función que escribe en el 8led
 
@@ -47,7 +55,7 @@ inline void Timer4_init() {
 	// Establece la rutina de servicio para TIMER4
 	pISR_TIMER4 = (unsigned) Button_Timer_ISR;
 	// Configura el Timer4 a frecuencia de microsegundo
-	// TODO: Comprobar que esto no afecta a los otros timers (Lo hace)
+	// TODO: Comprobar que esto no afecta a los otros timers (Lo hace), ya no :)
 	rTCFG0 &= 0xFF00FFFF;
 	rTCFG0 |= PREESCALADO << 16; // ajusta el preescalado (para el timer4 y timer5)
 	rTCFG1 &= 0xFFF0FFFF;
@@ -63,7 +71,7 @@ inline void Timer4_set_time(int t) {
 inline void Timer4_start() {
 	// establecer update=manual (bit 1) + inverter=off
 	//rTCON = 0b0010 << 20; <DEV>
-	rTCON &= 0xFF0FFFFF;
+	rTCON &= 0xFFEFFFFF;
 	rTCON |= 0b0010 << 20;
 	// iniciar timer (bit 0) sin auto-reload (bit 3)
 	//rTCON = 0b0001 << 20; <DEV>
@@ -74,7 +82,7 @@ inline void Timer4_start() {
 inline void Timer4_start_reload() {
 	// establecer update=manual (bit 1) + inverter=off
 	//rTCON = 0b0010 << 20; <DEV>
-	rTCON &= 0xFF0FFFFF;
+	rTCON &= 0xFFEFFFFF;
 	rTCON |= 0b0010 << 20;
 	// iniciar timer (bit 0) con auto-reload (bit 3)
 	//rTCON = 0b0001 << 20; <DEV>
@@ -92,7 +100,7 @@ inline void Timer4_set_and_start_reload(int t) {
 	Timer4_start_reload();
 }
 
-void Button_init(void) {
+void Button_init(int min, int max) {
 	/* Configuracion del controlador de interrupciones. Estos registros están definidos en 44b.h */
 	rI_ISPC = 0x3ffffff;	// Borra INTPND escribiendo 1s en I_ISPC
 	rEXTINTPND = 0xf;    // Borra EXTINTPND escribiendo 1s en el propio registro
@@ -114,9 +122,11 @@ void Button_init(void) {
 	rI_ISPC |= (BIT_EINT4567);
 	rEXTINTPND = 0xf;
 
+	_min = min;
+	_max = max;
 	// Iniciar timer
 	Timer4_init();
-	D8Led_symbol(count);
+	D8Led_symbol(min);
 }
 
 void Button_ISR(void) {
@@ -124,7 +134,7 @@ void Button_ISR(void) {
 	// Desactivar interrupciones
 	rINTMSK |= BIT_EINT4567;	// Desactivar interrupciones de botones
 	// Finalizar ISR
-	rEXTINTPND = 0xf;			// borra los bits en EXTINTPND
+	//rEXTINTPND = 0xf;			// borra los bits en EXTINTPND
 	rI_ISPC |= BIT_EINT4567;	// borra el bit pendiente en INTPND
 	// Reiniciamos la cuenta
 	Timer4_set_and_start_reload(ESPERA);
@@ -140,12 +150,14 @@ void action(int n) {
 	//D8Led_symbol(16);
 	switch (n) {
 	case 4:
-		count = (count + 1) % 16;
-		D8Led_symbol(count);
+		actual = (actual + 1) % (_max - _min + 1);
+		D8Led_symbol(actual + _min);
 		break;
 	case 8:
-		count = (count - 1) % 16;
-		D8Led_symbol(count);
+		_next = 1;
+		break;
+	case 12:
+		//Ambos botones pulsados
 		break;
 	default:
 		break;
@@ -160,18 +172,16 @@ void Button_Timer_ISR() {
 		if (num_espera == TRP) {
 			estado = desactivado;
 			cuenta = 0;
-			//TODO: Programar timer para la espera necesaria
-			//Timer4_init();
 		} else {
 			num_espera++;
 		}
 		break;
 	case desactivado:
 		// Si esta activado algun boton, no pasamos de estado
-		if ((rPDATG & 0x40) || (rPDATG & 0x80)) {
+		if ((rPDATG & 0xC0) != 0xC0) {
 			estado = desactivado;
 			cuenta++;
-			if (cuenta == 30) {
+			if (cuenta == WAIT_BETWEEN_INCREMENTS) {
 				action(pressed);
 				cuenta = 0;
 			}
@@ -183,6 +193,8 @@ void Button_Timer_ISR() {
 		break;
 	case espera_trd:
 		if (num_espera == TRD) {
+			//rEXTINTPND = 0xf;			// borra los bits en EXTINTPND
+			//rI_ISPC |= BIT_EINT4567;	// borra el bit pendiente en INTPND
 			rEXTINTPND = 0xf;			// borra los bits en EXTINTPND
 			rI_ISPC |= BIT_EINT4567;	// borra el bit pendiente en INTPND
 			rINTMSK &= ~BIT_EINT4567;	// Reactivamos interrupciones
@@ -195,4 +207,12 @@ void Button_Timer_ISR() {
 		break;
 	}
 	rI_ISPC |= BIT_TIMER4; // Bajamos la interrupcion
+}
+
+int Button_valor_actual(void) {
+	return actual + _min;
+}
+
+int next(void) {
+	return _next;
 }
