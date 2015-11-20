@@ -30,7 +30,7 @@ void Timer2_Inicializar(void) {
 	/* Configuracion controlador de interrupciones */
 	rINTMOD = 0x0; // Configura las lineas como de tipo IRQ
 	rINTCON = 0x1; // Habilita int. vectorizadas y la linea IRQ (FIQ no)
-	rINTMSK = ~(BIT_GLOBAL | BIT_TIMER2);
+	rINTMSK &= ~BIT_TIMER2;
 	// Emascara todas las lineas excepto Timer2 y el bit global (bits 26 y 13,
 	// BIT_GLOBAL y BIT_TIMER2 están definidos en 44b.h)
 
@@ -38,8 +38,10 @@ void Timer2_Inicializar(void) {
 	pISR_TIMER2 = (unsigned) Timer2_ISR;
 
 	// Configura el Timer2
-	rTCFG0 = PREESCALADO << 8; // ajusta el preescalado (para el timer2)
-	rTCFG1 = 0x00; // selecciona la entrada del mux que proporciona el reloj. La 00 corresponde a un divisor de 1/2.
+	rTCFG0 &= 0xFFFF00FF;
+	rTCFG0 |= PREESCALADO << 8; // ajusta el preescalado (para el timer2)
+	rTCFG1 &= 0xFFFFF0FF;
+	rTCFG1 |= 0x00; // selecciona la entrada del mux que proporciona el reloj. La 00 corresponde a un divisor de 1/2.
 	rTCNTB2 = ANCHO_CUENTA; // Registro de cuenta
 	rTCMPB2 = ANCHO_CUENTA / 2; // Registro de comparacion
 }

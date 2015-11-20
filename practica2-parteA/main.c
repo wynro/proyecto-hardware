@@ -11,81 +11,121 @@
 #include "stdio.h"
 #include <inttypes.h>
 #include "Excepciones.h"
-#include "Button.h"
+#include "Button_rebound.h"
+#include "sudoku_2015.h"
+#include "Timer2.h"
+#include "8led.h"
+#include "arm_recalcular.h"
 
-/*--- variables globales ---*/
-extern int switch_leds;
-//extern int valor_pantalla;
+#define NUM_PRUEBAS 1000
 
-/*--- funciones externas ---*/
-extern void leds_switch();
-extern void timer_init();
-extern void D8Led_init();
+// Funciones de sudoku
+//extern int sudoku_recalcular_c_c(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]);
+//extern int sudoku_recalcular_c_a(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]);
+//extern int sudoku_recalcular_c_t(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]);
+//
+//extern int sudoku_recalcular_a_c(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]);
+//extern int sudoku_recalcular_a_a(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]);
+//extern int sudoku_recalcular_a_t(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]);
 
-extern void doSWI(uint32_t T);
-/*--- declaracion de funciones ---*/
-
-typedef enum {
-	esperando_fila, esperando_columna, esperando_valor
-} Game_state;
+static CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]__attribute__((align(4))) = {
+	{0x9800,0x6800,0x0000,0x0000,0x0000,0x0000,0x7800,0x0000,0x8800,0,0,0,0,0,0,0},
+	{0x8800,0x0000,0x0000,0x0000,0x0000,0x4800,0x3800,0x0000,0x0000,0,0,0,0,0,0,0},
+	{0x1800,0x0000,0x0000,0x5800,0x0000,0x0000,0x0000,0x0000,0x0000,0,0,0,0,0,0,0},
+	{0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x1800,0x7800,0x6800,0,0,0,0,0,0,0},
+	{0x2800,0x0000,0x0000,0x0000,0x9800,0x3800,0x0000,0x0000,0x5800,0,0,0,0,0,0,0},
+	{0x7800,0x0000,0x8800,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0,0,0,0,0,0,0},
+	{0x0000,0x0000,0x7800,0x0000,0x3800,0x2800,0x0000,0x4800,0x0000,0,0,0,0,0,0,0},
+	{0x3800,0x8800,0x2800,0x1800,0x0000,0x5800,0x6800,0x0000,0x0000,0,0,0,0,0,0,0},
+	{0x0000,0x4800,0x1800,0x0000,0x0000,0x9800,0x5800,0x2800,0x0000,0,0,0,0,0,0,0}
+};
 
 void Main(void);
-void led1_on(void);
 
 /*--- codigo de funciones ---*/
 void Main(void) {
 
 	/* Inicializa controladores */
 	sys_init();        // Inicializacion de la placa, interrupciones y puertos
-	timer_init();	   // Inicializacion del temporizador
+	//timer_init();	   // Inicializacion del temporizador
 
 	D8Led_init(); // inicializamos el 8led
 
 	//Eint4567_init();
-	Button_init(1,9); // inicializamos los pulsadores. Cada vez que se pulse se verá reflejado en el 8led
+	Button_init(0, 9); // inicializamos los pulsadores. Cada vez que se pulse se verá reflejado en el 8led
+//	led1_on();
 
-	/* Valor inicial de los leds */
-//	Timer2_Inicializar();
-//	Timer2_Empezar();
-//	int res = Timer2_Leer();
-	//excepcion_init();
-	//trataExcepcion();
-	// doSWI(1);
-	// Delay(1000);
-	led1_on();
-	Game_state estado = esperando_fila;
-	while (1) {
-		int num_fila = 0;
-		int num_columna = 0;
-		int valor = 0;
-		// Cambia los leds con cada interrupcion del temporizador
-		// HeartBeat
-		if (switch_leds == 1) {
-			leds_switch();
-			switch_leds = 0;
-		}
+	// Medida de tiempos
+	Timer2_Inicializar();
+
+//	int i;
+//	int tiempo_total_c_a = 0;
+//	int tiempo_total_c_c = 0;
+//	int tiempo_total_c_t = 0;
+//	int tiempo_total_a_a = 0;
+//	int tiempo_total_a_c = 0;
+//	int tiempo_total_a_t = 0;
 //
-//		switch (estado) {
-//		case esperando_fila:
-//			if(next && )
-//			break;
-//		case esperando_columna:
+//	double media_c_a = 0;
+//	double media_c_c = 0;
+//	double media_c_t = 0;
+//	double media_a_a = 0;
+//	double media_a_c = 0;
+//	double media_a_t = 0;
 //
-//			break;
-//		case esperando_valor:
+//	for (i = 0; i < NUM_PRUEBAS; ++i) {
+//		Timer2_Empezar();
+//		sudoku_recalcular_c_c(cuadricula);
+//		tiempo_total_c_c += Timer2_Leer();
+//	}
+//	media_c_c = tiempo_total_c_c / NUM_PRUEBAS;
 //
-//			break;
-//		default:
-//			break;
+//	for (i = 0; i < NUM_PRUEBAS; ++i) {
+//		Timer2_Empezar();
+//		sudoku_recalcular_c_a(cuadricula);
+//		tiempo_total_c_a += Timer2_Leer();
+//	}
+//	media_c_a = tiempo_total_c_a / NUM_PRUEBAS;
+//
+//	for (i = 0; i < NUM_PRUEBAS; ++i) {
+//		Timer2_Empezar();
+//		sudoku_recalcular_c_t(cuadricula);
+//		tiempo_total_c_t += Timer2_Leer();
+//	}
+//	media_c_t = tiempo_total_c_t /NUM_PRUEBAS;
+//
+//	for (i = 0; i < NUM_PRUEBAS; ++i) {
+//		Timer2_Empezar();
+//		sudoku_recalcular_a_c(cuadricula);
+//		tiempo_total_a_c += Timer2_Leer();
+//	}
+//	media_a_c = tiempo_total_a_c / NUM_PRUEBAS;
+//
+//	for (i = 0; i < NUM_PRUEBAS; ++i) {
+//		Timer2_Empezar();
+//		sudoku_recalcular_a_a(cuadricula);
+//		tiempo_total_a_a += Timer2_Leer();
+//	}
+//	media_a_a = tiempo_total_a_a / NUM_PRUEBAS;
+//
+//	for (i = 0; i < NUM_PRUEBAS; ++i) {
+//		Timer2_Empezar();
+//		sudoku_recalcular_a_t(cuadricula);
+//		tiempo_total_a_t += Timer2_Leer();
+//	}
+//	media_a_t = tiempo_total_a_t / NUM_PRUEBAS;
+//
+//	int y = 1;
+
+	// Iniciamos el juego
+	init_game(cuadricula);
+	//sudoku_recalcular_c_a_2(cuadricula);
+
+//	while (1) {
+//		// HeartBeat
+//		if (switch_leds == 1) {
+//			leds_switch();
+//			switch_leds = 0;
 //		}
-//		Delay(2);
-//		D8Led_symbol(0);
-//		Delay(2);
-//		D8Led_symbol(num_fila);
-//		Delay(2);
-//		D8Led_symbol(num_columna);
-//		Delay(2);
-//		D8Led_symbol(valor);
-
-	}
 }
+

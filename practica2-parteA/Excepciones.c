@@ -1,5 +1,5 @@
 /*
- * Excepciones.c
+ * Exceptions.c
  *
  *  Created on: 05/11/2015
  *      Author: Guillermo Robles
@@ -9,10 +9,8 @@
 #include "44blib.h"
 #include <inttypes.h>
 #include "Excepciones.h"
-// Funciones de tratamiento de pantalla
-extern void D8Led_init();
-extern void D8Led_symbol();
-extern int getMode();
+#include "8led.h"
+#include "Modo.h"
 
 /**
  *
