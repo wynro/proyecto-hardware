@@ -1,10 +1,3 @@
-/**
- * Fichero que guarda la funcion arm_candidatos, que analiza una casilla
- * de nuestro sudoku.
- *
- * Autor: Guillermo Robles Gonzalez (604409)
- */
-
 #######################################################################################################
 # Funcion ARM: Dada una cuadricula y una celda, busca en la fila, en la
 # columna y en la region de dicha celda y ajusta las pistas de la celda
@@ -16,9 +9,9 @@
 # return: 0 en caso de que la celda comprobada este vacia, 1 en caso de que contenga algo y
 #         sea correcto, -1 en caso de que contenga algo pero sea incorrecto
 #######################################################################################################
-.global sudoku_candidatos_arm_2
+.global sudoku_candidatos_arm
 .arm
-sudoku_candidatos_arm_2:
+sudoku_candidatos_arm:
 	# r3: direccion de la celda siendo modificada
 	# r4: valor de la celda modificada
 	// Prologo
@@ -37,7 +30,7 @@ sudoku_candidatos_arm_2:
 
 	//mov r5, r4, LSR #12 // Lo movemos cortando el numero
 	//cmp r5, #0 // Si la celda visitada NO es cero, es pista inicial y no hay que tocarla
-	//bne sudoku_candidatos_arm_2_fin // Saltamos al final para no tocar la celda
+	//bne sudoku_candidatos_arm_fin // Saltamos al final para no tocar la celda
 	// Recordar que, en el algoritmo elegido, primero marcamos todos los numeros como posibles, y luego vamos eliminando
 	// posibilidades conforme las encontremos
 	// Ponemos todas las pistas a 1
@@ -46,18 +39,18 @@ sudoku_candidatos_arm_2:
 	// Recorrido por fila-columna
 	# r5: iterador de fila-columna
 	mov r5, #0 // Indice de recorrido
-sudoku_candidatos_arm_2_bucle_fila_columna:
+sudoku_candidatos_arm_bucle_fila_columna:
 	mov r6, r0 // Movemos la direccion inicial para no modificarla
 	add r6, r6, r1, LSL #5 // Le sumamos el offset de la fila inicial
 	add r6, r6, r5, LSL #1 // Le sumamos el offset de la columna contador
 
 	cmp r6, r3	// Comparamos la direccion objetivo con nuestra propia direccion
-	beq sudoku_candidatos_arm_2_bucle_fila_columna_si_fila_cero	// Si es igual, hay que ignorarla
+	beq sudoku_candidatos_arm_bucle_fila_columna_si_fila_cero	// Si es igual, hay que ignorarla
 
 	ldrh r6, [r6] // Cargamos el valor a leer
 	lsr r6, #12 // Separamos el numero de la celda
 	cmp r6, #0 // Si el numero es cero lo ignoramos, no nos vale como pista
-	beq sudoku_candidatos_arm_2_bucle_fila_columna_si_fila_cero
+	beq sudoku_candidatos_arm_bucle_fila_columna_si_fila_cero
 	sub r6, r6, #1 // Le restamos 1 para que sea indice valido
 
 	# r7: auxiliar. Mascara
@@ -65,27 +58,27 @@ sudoku_candidatos_arm_2_bucle_fila_columna:
 	mvn r7, r7, LSL r6 // Movemos el 1 a la posición adecuada y lo negamos para convertirlo en una mascara
 	and r4, r4, r7 // Aplicamos la mascara a nuestra celda
 
-sudoku_candidatos_arm_2_bucle_fila_columna_si_fila_cero:
+sudoku_candidatos_arm_bucle_fila_columna_si_fila_cero:
 	mov r6, r0 // Movemos la direccion inicial para no modificarla
 	add r6, r6, r5, LSL #5 // Le sumamos el offset de la fila inicial (offset_fila = fila * 2^5)
 	add r6, r6, r2, LSL #1 // Le sumamos el offset de la columna contador (offset_columna = contador_columna * 2^1)
 
 	cmp r6, r3	// Comparamos la direccion objetivo con nuestra propia direccion
-	beq sudoku_candidatos_arm_2_bucle_fila_columna_si_columna_cero // Si es igual, hay que ignorarla
+	beq sudoku_candidatos_arm_bucle_fila_columna_si_columna_cero // Si es igual, hay que ignorarla
 
 	ldrh r6, [r6] // Cargamos el valor a leer
 	lsr	r6, #12 // Separamos el numero
 	cmp r6, #0 // En caso de que sea cero...
-	beq sudoku_candidatos_arm_2_bucle_fila_columna_si_columna_cero
+	beq sudoku_candidatos_arm_bucle_fila_columna_si_columna_cero
 	sub r6, r6, #1 // Le restamos 1 para que sea indice valido
 	mov r7, #1 // Ponemos el 1 de la futura mascara
 	mvn r7, r7, LSL r6 // Movemos el 1 a su posicion y lo negamos para convertirlo en una mascara
 	and r4, r4, r7 // Aplicamos la mascara a nuestra celda
 
-sudoku_candidatos_arm_2_bucle_fila_columna_si_columna_cero:
+sudoku_candidatos_arm_bucle_fila_columna_si_columna_cero:
 	add r5, r5, #1
 	cmp r5, #9
-	bne sudoku_candidatos_arm_2_bucle_fila_columna
+	bne sudoku_candidatos_arm_bucle_fila_columna
 	// Recorremos region
 	// calculamos la fila inicial de la region
 	mov r5, #6 // Inicialmente asumimos que estamos en la region 2 (columna inicial 6)
@@ -103,10 +96,10 @@ sudoku_candidatos_arm_2_bucle_fila_columna_si_columna_cero:
 	mov r2, r5
 
 	mov r8, #0 // Inicializamos contador de fila
-sudoku_candidatos_arm_2_tag_fila:
+sudoku_candidatos_arm_tag_fila:
 
 	mov r9, #0 // Inicializamos contador de columna
-sudoku_candidatos_arm_2_tag_columna:
+sudoku_candidatos_arm_tag_columna:
 
 	//
 	mov r5, r0 // Movemos a r5 el valor de la direccion inicial de la cuadricula
@@ -116,31 +109,31 @@ sudoku_candidatos_arm_2_tag_columna:
 	add r5, r5, r7, LSL #1 // Le sumamos a la dirección inicial el offset de columna
 
 	cmp r5, r3	// Comparamos la direccion objetivo con nuestra propia direccion
-	beq sudoku_candidatos_arm_2_tag_columna_cero // Si es igual, hay que ignorarla
+	beq sudoku_candidatos_arm_tag_columna_cero // Si es igual, hay que ignorarla
 
 	ldrh r5, [r5] // Cargamos el la celda a comprobar
 	lsr r5, #12 // Extraemos el numero
 	cmp r5, #0 // Si el numero es 0...
-	beq sudoku_candidatos_arm_2_tag_columna_cero // ...lo ignoramos
+	beq sudoku_candidatos_arm_tag_columna_cero // ...lo ignoramos
 
 	sub r5, r5, #1 // Le restamos 1 para que sea indice valido de bits
 	mov r6, #1 // Ponemos el 1 de la futura mascara
 	lsl r6, r5 // Movemos el 1 a la posición adecuada
 	bic r4, r4, r6 // Bic nos permite elimina el bit marcado (la pista dada)
 
-sudoku_candidatos_arm_2_tag_columna_cero:
+sudoku_candidatos_arm_tag_columna_cero:
 	add r9, r9, #1 // Incrementamos el contador de columna
 	cmp r9, #3 // Si es 3 fin
-	bne sudoku_candidatos_arm_2_tag_columna
+	bne sudoku_candidatos_arm_tag_columna
 
 	add r8, r8, #1 // Incrementamos contador de fila
 	cmp r8, #3
-	bne sudoku_candidatos_arm_2_tag_fila
+	bne sudoku_candidatos_arm_tag_fila
 
 	mov r0, #0							// Asumimos que la celda esta vacia, ponemos el 0 en la respuesta
 	mov r5, r4, LSR #12					// Extraemos el numero de la casilla
 	cmp r5, #0							// Si la casilla es 0, no está rellena y no hay que tenerla en cuenta
-	beq sudoku_candidatos_arm_2_fin_esc	// Saltamos al final pero guardamos la celda
+	beq sudoku_candidatos_arm_fin_esc	// Saltamos al final pero guardamos la celda
 
 	// Una vez se ha calculado, debemos devolver:
 	// Si no está deberemos marcar el bit correspondiente de esa celda como errónea.
@@ -161,9 +154,9 @@ sudoku_candidatos_arm_2_tag_columna_cero:
 	movne r0, #-1
 	orrne	r4, #0x0200 // Ponemos el bit de error a 1
 
-sudoku_candidatos_arm_2_fin_esc:
+sudoku_candidatos_arm_fin_esc:
 	strh r4, [r3] // Devolvemos la celda modificada a memoria
-sudoku_candidatos_arm_2_fin:
+sudoku_candidatos_arm_fin:
 	// Epilogo
 	LDMFD   sp!, {r4-r11,lr}
 	BX      lr // Retornamos al lugar de invocación

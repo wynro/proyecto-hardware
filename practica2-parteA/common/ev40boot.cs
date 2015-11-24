@@ -1,5 +1,5 @@
 reset							; reset board
-memwrite 0x01D30000 0x00000000	; WTCON (watchdog timer control Register)  disable warch dog
+memwrite 0x01D30000 0x00000000	; WTCON (watchdog timer control Register)  disable watch dog
 memwrite 0x01E0000C 0x07ffffff	; INTMSK (disable all interrupt)
 memwrite 0x01E00024 0xffffffff	; clear all interrupt
 memwrite 0x01C80000 0x11110102	; BWSCON (Bus Width & Wait Status Control Register)
