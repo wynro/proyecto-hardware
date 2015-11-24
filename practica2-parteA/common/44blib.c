@@ -169,7 +169,6 @@ void sys_init()// Interrupt & Port
 	/* enable interrupt */
 	rINTMOD = 0x0; // Programamos el modo de interrupciones como 0, que significa
 	rINTCON = 0x1;
-	rINTMSK &= ~BIT_GLOBAL;
 	rI_ISPC = 0xffffffff;			/* clear all interrupt pend	*/
 	rEXTINTPND = 0xf;				// clear EXTINTPND reg
 	Port_Init();					/* Initial 44B0X's I/O port */

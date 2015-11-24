@@ -9,15 +9,12 @@
 #include "44blib.h"
 #include <inttypes.h>
 #include "Timer2.h"
+#include "Stack.h"
 // Number of events to record
 #define SIZE 20
 
 int *stack;
 int pointer;
-
-void debug_init();
-void push_debug(int ID_Evento, int auxData);
-
 void debug_init() {
 	stack = (int *) 0xc7ff000;
 	pointer = SIZE*3;

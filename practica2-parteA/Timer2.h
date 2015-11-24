@@ -5,6 +5,7 @@
  *      Author: a604409
  */
 
+#pragma once
 #ifndef TIMER2_H_
 #define TIMER2_H_
 

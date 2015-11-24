@@ -1,5 +1,5 @@
 /*
- * Exceptions.c
+ * Excepciones.c
  *
  *  Created on: 05/11/2015
  *      Author: Guillermo Robles
@@ -9,8 +9,10 @@
 #include "44blib.h"
 #include <inttypes.h>
 #include "Excepciones.h"
-#include "8led.h"
-#include "Modo.h"
+// Funciones de tratamiento de pantalla
+extern void D8Led_init();
+extern void D8Led_symbol();
+extern int getMode();
 
 /**
  *
@@ -30,9 +32,7 @@ void trataExcepcion(void) {
 //Algoritmo de tratamiento:
 // Imprimir codigo de error en 8led
 	D8Led_init(); // Nos arriesgamos a reinizializar la pantalla...
-
 	codigo_error = getMode(); // Obtenemos el modo, que usaremos para determinar en que excepcion estamos
-	int a = 1;
 	//push_debug(codigo_error, 0); // Metemos la excepcion en la pila
 	// Por ahora, colgamos el sistema con el codigo de error parpadeante
 	while (1) {
