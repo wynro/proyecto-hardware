@@ -1,0 +1,290 @@
+# Embest IDE Project File, Format Version 1.00
+# WARNING: DO NOT EDIT OR DELETE THIS PROJECT FILE!
+
+<BEGIN> PROJECT_NAME
+test_flash
+<END>
+
+<BEGIN> CONFIG
+
+	<BEGIN> CPU
+	MODULE=arm7.DLL
+	FAMILY=ARM7
+	FAMILYID=1
+	MEMBER=ARM7
+	MEMBERID=1
+	ENDIAN=0
+	MAKER=SUMSUNG
+	CHIP=S3c44b0x
+	<END>
+
+	<BEGIN> REMOTE
+	DEVICE=PowerIceArm7.DLL
+	COMMTYPE=PARALLEL
+	PARALLEL=LPT1
+	SPEED=0
+	<END>
+
+	<BEGIN> DEBUG
+	SYMBOL=.\debug\test_flash.elf
+	DOWNLOAD=.\debug\test_flash.elf
+	DOWNLOADADDR=0x0C000000
+	AUTODOWNLOAD=FALSE
+	AUTOSCRIPT=TRUE
+	VERIFY=FALSE
+	USEMEMMAP=FALSE
+	EXECFDOWN=TRUE
+	EXECFENTRY=FALSE
+	SCRIPT=..\common\ev40boot.cs
+	LINK=
+	<END>
+
+	<BEGIN> DIR
+	SUBDIR=TRUE
+	SOURCE=..\..\S3CEV40;
+	<END>
+
+<END>
+
+<BEGIN> BUILD_CONFIG
+	CONFIG_DLL=GccArmSettingPage.dll
+	<BEGIN> COMPILE_COMMAND_LINE
+	-gdwarf -c -I.\include $(SOURCE_FILE) -o.\debug\$(OBJ_FILE)
+	<END>
+	<BEGIN> ASSEMBLE_COMMAND_LINE
+	-gdwarf2 -I.\include $(SOURCE_FILE) -o.\debug\$(OBJ_FILE)
+	<END>
+	<BEGIN> LINK_COMMAND_LINE
+	arm-elf-ld -T..\common\ram_ice.ld  -L..\..\..\..\Build\xgcc-arm-elf\arm-elf\lib -L..\..\..\..\Build\xgcc-arm-elf\lib\gcc-lib\arm-elf\3.0.2
+	 -o.\debug\test_flash.elf $(<44binit_flash.o>OBJ_FILES) ..\common\Hzk16.o -lc -lgcc .\lib\network.lib
+	<END>
+<END>
+
+<BEGIN> PROJECT_FILES
+
+	<BEGIN> GROUP="asm"
+		<PROP> GROUP_FILTER="*.s"
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\asm\Call_int.s
+		STATUS=CLOSE
+		<END>
+
+	<END>
+
+	<BEGIN> GROUP="include"
+		<PROP> GROUP_FILTER="*.h;*.mac"
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\include\44b.h
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\include\44blib.h
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\include\def.h
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\include\ethernet.H
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\include\flash.h
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\include\IIC.H
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\include\Iis.h
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\include\keyboard.h
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\include\lcd.h
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\include\option.h
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\include\Rtc.h
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\network\stdafx.h
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\include\TIMER.H
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\include\TP.H
+		STATUS=CLOSE
+		<END>
+
+	<END>
+
+	<BEGIN> GROUP="src"
+		<PROP> GROUP_FILTER="*.c"
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\src\8led.c
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\src\AscII6x8.c
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\src\Bmp.c
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\src\ethernet.c
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\src\flash.c
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\src\Iic.c
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\src\Iis.c
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\src\keyboard.c
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\src\lcd.c
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\src\led.c
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\main.c
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\src\NetworkApply.c
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\src\rtc.c
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\src\RTC_EV40.c
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\src\timer.c
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\src\tp.c
+		STATUS=CLOSE
+		<END>
+
+	<END>
+
+	<BEGIN> GROUP="common"
+		<PROP> GROUP_FILTER="*.s;*.c"
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=..\common\44binit_flash.s
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=..\common\44blib.c
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=..\common\ev40boot.cs
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=..\common\flash.ld
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=..\common\Link.c
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=..\common\ram_ice.ld
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=..\common\uhal.c
+		STATUS=CLOSE
+		<END>
+
+	<END>
+
+	<BEGIN> SOURCE_FILE
+	SOURCE=.\debug\objdump
+	STATUS=CLOSE
+	<END>
+
+	<BEGIN> SOURCE_FILE
+	SOURCE=..\common\ProgramFlash.txt
+	STATUS=CLOSE
+	<END>
+
+	<BEGIN> SOURCE_FILE
+	SOURCE=.\readme.txt
+	STATUS=CLOSE
+	<END>
+
+<END>

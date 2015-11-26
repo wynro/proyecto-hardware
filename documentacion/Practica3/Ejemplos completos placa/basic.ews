@@ -1,0 +1,28 @@
+# Embest IDE Workspace File, Format Version 1.00
+# WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
+
+<BEGIN> CORE_INFO_TYPE
+Workspace
+<END>
+
+<BEGIN> CORE_INFO_VERSION
+1.00
+<END>
+
+<BEGIN> PROJECT_LIST
+PROJECT=.\001_asm1\asm1_a.pjf
+PROJECT=.\001_asm1\asm1_b.pjf
+PROJECT=.\002_asm2\ARMcode.pjf
+PROJECT=.\003_ThumbCode\ThumbCode.pjf
+PROJECT=.\004_ARMMode\ARMmode.pjf
+PROJECT=.\005_c1\c1.pjf
+PROJECT=.\006_c2\c2.pjf
+ACTIVE_PROJECT=.\007_explasm\rantest.pjf
+PROJECT=.\008_interwork\interwork.pjf
+PROJECT=.\003_ThumbCode\ThumbCode2.pjf
+PROJECT=.\002_asm2\ARMcode2.pjf
+<END>
+
+<BEGIN> BATCH_BUILD_LIST
+<END>
+

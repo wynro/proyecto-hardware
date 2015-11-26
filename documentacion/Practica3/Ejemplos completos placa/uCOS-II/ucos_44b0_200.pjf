@@ -1,0 +1,265 @@
+# Embest IDE Project File, Format Version 1.00
+# WARNING: DO NOT EDIT OR DELETE THIS PROJECT FILE!
+
+<BEGIN> PROJECT_NAME
+ucos_44b0_200
+<END>
+
+<BEGIN> CONFIG
+
+	<BEGIN> CPU
+	MODULE=arm7.DLL
+	FAMILY=ARM7
+	FAMILYID=1
+	MEMBER=ARM7
+	MEMBERID=1
+	MAKER=SUMSUNG
+	CHIP=S3c44b0x
+	ENDIAN=0
+	<END>
+
+	<BEGIN> DEBUG
+	LINK=.\debug\ucos_44b0_200.elf
+	SYMBOL=.\debug\ucos_44b0_200.elf
+	DOWNLOAD=.\debug\ucos_44b0_200.elf
+	DOWNLOADADDR=0x0C000000
+	AUTODOWNLOAD=FALSE
+	AUTOSCRIPT=TRUE
+	VERIFY=TRUE
+	USEMEMMAP=FALSE
+	EXECFDOWN=TRUE
+	EXECFENTRY=FALSE
+	SCRIPT=.\s3c44b0\start\ev40boot.cs
+	<END>
+
+	<BEGIN> REMOTE
+	DEVICE=PowerIceArm7.DLL
+	COMMTYPE=PARALLEL
+	PARALLEL=LPT1
+	SPEED=0
+	<END>
+
+	<BEGIN> DIR
+	SUBDIR=TRUE
+	SOURCE=..\ucos-II;
+	<END>
+
+<END>
+
+<BEGIN> BUILD_CONFIG
+	CONFIG_DLL=GccArmSettingPage.dll
+	<BEGIN> COMPILE_COMMAND_LINE
+	-gdwarf -c -D_LIB_LED_off -I.\ucos-II200 -I.\s3c44b0\ucos-II -I.\s3c44b0\uhal $(SOURCE_FILE) -o.\debug\$(OBJ_FILE)
+	<END>
+	<BEGIN> ASSEMBLE_COMMAND_LINE
+	-gdwarf2 -I.\s3c44b0\start $(SOURCE_FILE) -o.\debug\$(OBJ_FILE)
+	<END>
+	<BEGIN> LINK_COMMAND_LINE
+	arm-elf-ld -T.\s3c44b0\start\ram_ice.ld  -L..\..\..\..\Build\xgcc-arm-elf\arm-elf\lib -L..\..\..\..\Build\xgcc-arm-elf\lib\gcc-lib\arm-elf\3.0.2
+	 -o.\debug\ucos_44b0_200.elf $(<44binit.o>OBJ_FILES) -lc -lm -lgcc -lg
+	<END>
+<END>
+
+<BEGIN> PROJECT_FILES
+
+	<BEGIN> GROUP="ucos src"
+		<PROP> GROUP_FILTER=""
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\ucos-ii200\Os_core.c
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\ucos-ii200\OS_MBOX.c
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\ucos-ii200\OS_MEM.c
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\ucos-ii200\OS_Q.c
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\ucos-ii200\OS_SEM.c
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\ucos-ii200\OS_TASK.c
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\ucos-ii200\OS_TIME.c
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\ucos-ii200\Ucos_ii.c
+		STATUS=CLOSE
+		<END>
+
+	<END>
+
+	<BEGIN> GROUP="ucos port"
+		<PROP> GROUP_FILTER=""
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\s3c44b0\ucos-ii\os_cpu_a.s
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\s3c44b0\ucos-ii\Os_cpu_c.c
+		STATUS=CLOSE
+		<END>
+
+	<END>
+
+	<BEGIN> GROUP="ucos h"
+		<PROP> GROUP_FILTER=""
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\ucos-II200\includes.h
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\s3c44b0\ucos-II\Os_cfg.h
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\s3c44b0\ucos-II\os_cpu.h
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\ucos-II200\ucos_ii.h
+		STATUS=CLOSE
+		<END>
+
+	<END>
+
+	<BEGIN> GROUP="44b0 init"
+		<PROP> GROUP_FILTER=""
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\s3c44b0\start\44binit.s
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\s3c44b0\start\memcfg.a
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\s3c44b0\start\option.a
+		STATUS=CLOSE
+		<END>
+
+	<END>
+
+	<BEGIN> GROUP="uhal"
+		<PROP> GROUP_FILTER=""
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\s3c44b0\uhal\44b.h
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\s3c44b0\start\44blib.c
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\s3c44b0\start\ev40boot.cs
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\s3c44b0\start\flash.ld
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\s3c44b0\uhal\option.h
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\s3c44b0\start\ram_ice.ld
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\s3c44b0\uhal\uhal.c
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\s3c44b0\uhal\uhal.h
+		STATUS=CLOSE
+		<END>
+
+	<END>
+
+	<BEGIN> GROUP="main"
+		<PROP> GROUP_FILTER=""
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\s3c44b0\8led.c
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\s3c44b0\Call_int.s
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\s3c44b0\keyboard.c
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\s3c44b0\led.c
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\s3c44b0\main.c
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\s3c44b0\RTC_check.c
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\s3c44b0\rtc_lib.c
+		STATUS=CLOSE
+		<END>
+
+	<END>
+
+	<BEGIN> SOURCE_FILE
+	SOURCE=.\debug\objdump
+	STATUS=CLOSE
+	<END>
+
+	<BEGIN> SOURCE_FILE
+	SOURCE=.\readme.txt
+	STATUS=CLOSE
+	<END>
+
+<END>

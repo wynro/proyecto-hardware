@@ -1,0 +1,160 @@
+# Embest IDE Project File, Format Version 1.00
+# WARNING: DO NOT EDIT OR DELETE THIS PROJECT FILE!
+
+<BEGIN> PROJECT_NAME
+DMA_Test
+<END>
+
+<BEGIN> CONFIG
+
+	<BEGIN> CPU
+	MODULE=arm7.DLL
+	FAMILY=ARM7
+	FAMILYID=1
+	MEMBER=ARM7
+	MEMBERID=1
+	MAKER=SUMSUNG
+	CHIP=S3c44b0x
+	ENDIAN=0
+	<END>
+
+	<BEGIN> DEBUG
+	LINK=.\debug\DMA_Test.elf
+	AUTODOWNLOAD=FALSE
+	AUTOSCRIPT=TRUE
+	VERIFY=TRUE
+	USEMEMMAP=FALSE
+	EXECFDOWN=TRUE
+	EXECFENTRY=FALSE
+	SYMBOL=.\debug\DMA_Test.elf
+	DOWNLOAD=.\debug\DMA_Test.elf
+	DOWNLOADADDR=0x0C000000
+	RESETSYMBOL=
+	SCRIPT=..\common\ev40boot.cs
+	<END>
+
+	<BEGIN> REMOTE
+	DEVICE=PowerIceArm7.DLL
+	SPEED=0
+	COMMTYPE=PARALLEL
+	PARALLEL=LPT1
+	<END>
+
+	<BEGIN> DIR
+	SUBDIR=FALSE
+	<END>
+
+<END>
+
+<BEGIN> BUILD_CONFIG
+	CONFIG_DLL=GccArmSettingPage.dll
+	<BEGIN> COMPILE_COMMAND_LINE
+	-gdwarf -c -I..\common\ $(SOURCE_FILE) -o.\debug\$(OBJ_FILE)
+	<END>
+	<BEGIN> ASSEMBLE_COMMAND_LINE
+	-gdwarf2 -I..\common\ $(SOURCE_FILE) -o.\debug\$(OBJ_FILE)
+	<END>
+	<BEGIN> LINK_COMMAND_LINE
+	arm-elf-ld -T..\common\ram_ice.ld  -L..\..\..\..\Build\xgcc-arm-elf\arm-elf\lib -L..\..\..\..\Build\xgcc-arm-elf\lib\gcc-lib\arm-elf\3.0.2
+	 -o.\debug\DMA_Test.elf $(<44binit.o>OBJ_FILES) -lc -lg -lgcc
+	<END>
+<END>
+
+<BEGIN> PROJECT_FILES
+
+	<BEGIN> GROUP="Source"
+		<PROP> GROUP_FILTER="*.c;*.cpp;*.cc;*.cxx;*.s;*.asm"
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\DMA.c
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\mian.c
+		STATUS=CLOSE
+		<END>
+
+	<END>
+
+	<BEGIN> GROUP="include"
+		<PROP> GROUP_FILTER="*.h;*.inl;*.mac;*.inc"
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=..\common\44b.h
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=..\common\44blib.h
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=..\common\def.h
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=..\common\option.h
+		STATUS=CLOSE
+		<END>
+
+	<END>
+
+	<BEGIN> GROUP="common"
+		<PROP> GROUP_FILTER="*.s;*.c"
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=..\common\44binit.s
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=..\common\44blib.c
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=..\common\ev40boot.cs
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=..\common\flash.ld
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=..\common\Link.c
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=..\common\ram_ice.ld
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=..\common\uhal.c
+		STATUS=CLOSE
+		<END>
+
+	<END>
+
+	<BEGIN> SOURCE_FILE
+	SOURCE=.\debug\objdump
+	STATUS=CLOSE
+	<END>
+
+	<BEGIN> SOURCE_FILE
+	SOURCE=..\common\ProgramFlash.txt
+	STATUS=CLOSE
+	<END>
+
+	<BEGIN> SOURCE_FILE
+	SOURCE=.\readme.txt
+	STATUS=CLOSE
+	<END>
+
+<END>

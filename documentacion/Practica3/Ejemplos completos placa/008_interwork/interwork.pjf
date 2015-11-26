@@ -1,0 +1,120 @@
+# Embest IDE Project File, Format Version 1.00
+# WARNING: DO NOT EDIT OR DELETE THIS PROJECT FILE!
+
+<BEGIN> PROJECT_NAME
+interwork
+<END>
+
+<BEGIN> CONFIG
+
+	<BEGIN> CPU
+	MODULE=arm7.DLL
+	FAMILY=ARM7
+	FAMILYID=1
+	MEMBER=ARM7
+	MEMBERID=1
+	ENDIAN=0
+	<END>
+
+	<BEGIN> REMOTE
+	DEVICE=SimArm7.DLL
+	COMMTYPE=PARALLEL
+	PARALLEL=LPT1
+	SPEED=3
+	<END>
+
+	<BEGIN> DEBUG
+	AUTODOWNLOAD=FALSE
+	AUTOSCRIPT=TRUE
+	VERIFY=TRUE
+	USEMEMMAP=FALSE
+	EXECFDOWN=FALSE
+	EXECFENTRY=TRUE
+	SYMBOL=.\debug\interwork.elf
+	DOWNLOAD=.\debug\interwork.elf
+	DOWNLOADADDR=0x0c000000
+	MEMMAPFILE=
+	LINK=.\debug\interwork.elf
+	SCRIPT=..\common\EV40.cs
+	<END>
+
+	<BEGIN> DIR
+	SUBDIR=FALSE
+	<END>
+
+<END>
+
+<BEGIN> BUILD_CONFIG
+	CONFIG_DLL=GccArmSettingPage.dll
+	<BEGIN> COMPILE_COMMAND_LINE
+	-mthumb-interwork -gdwarf -c $(SOURCE_FILE) -o.\debug\$(OBJ_FILE)
+	<END>
+	<BEGIN> ASSEMBLE_COMMAND_LINE
+	-mthumb-interwork -gdwarf2 $(SOURCE_FILE) -o.\debug\$(OBJ_FILE)
+	<END>
+	<BEGIN> LINK_COMMAND_LINE
+	arm-elf-ld -Ttext 0x0C000000 -o.\debug\interwork.elf $(<entry.o>OBJ_FILES)
+	<END>
+<END>
+
+<BEGIN> PROJECT_FILES
+
+	<BEGIN> GROUP="Arm Files"
+		<PROP> GROUP_FILTER="*.c;*.cpp;*.cc;*.cxx;*.s;*.asm"
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\arm.c
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\entry.s
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\random.s
+		STATUS=CLOSE
+		<END>
+
+	<END>
+
+	<BEGIN> GROUP="Thumb Files"
+		<PROP> GROUP_FILTER="*.c;*.cpp;*.cc;*.cxx;*.s;*.asm"
+
+		<BEGIN> COMPILE_COMMAND_LINE
+		-mthumb -mthumb-interwork -gdwarf -c $(SOURCE_FILE) -o.\debug\$(OBJ_FILE)
+		<END>
+
+		<BEGIN> ASSEMBLE_COMMAND_LINE
+		-mthumb-interwork -mthumb -gdwarf2 $(SOURCE_FILE) -o.\debug\$(OBJ_FILE)
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\thumb.c
+		STATUS=CLOSE
+		<END>
+
+	<END>
+
+	<BEGIN> GROUP="Other files"
+		<PROP> GROUP_FILTER=""
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\debug\interwork.bin
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\ram_ice.ld
+		STATUS=CLOSE
+		<END>
+
+		<BEGIN> SOURCE_FILE
+		SOURCE=.\readme.txt
+		STATUS=CLOSE
+		<END>
+
+	<END>
+
+<END>

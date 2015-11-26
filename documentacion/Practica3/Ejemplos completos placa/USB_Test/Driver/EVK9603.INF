@@ -1,0 +1,93 @@
+; evk9603.inf
+;
+; Installation file (.inf) for the Embest S3CEV40 USB device.
+;
+; (c) Copyright 2004 ShenZhen Embest Info&Tech Co.,Ltd. 
+;
+
+[Version]
+Signature="$CHICAGO$"
+Provider=%Embest%
+ClassGUID={36fc9e60-c465-11cf-8056-444553540000}
+Class=USB
+DriverVer=04/01/2004
+
+[DestinationDirs]
+DefaultDestDir   = 12
+
+;
+; Driver information
+;
+
+[Manufacturer]
+%Embest%   = Embest.Mfg
+
+[Embest.Mfg]
+%Embest.DeviceDesc0% = evk9603, USB\VID_0400&PID_0007
+
+
+;
+; General installation section
+;
+[evk9603.NT]
+CopyFiles=DriverCopyFiles
+AddReg=evk9603_AddReg
+
+;
+; File sections
+;
+
+[DriverCopyFiles]
+evk9603.sys,,,2
+
+[evk9603_AddReg]
+HKLM, "System\CurrentControlSet\Services\evk9603\Parameters","BreakOnEntry", 0x00010001, 0
+
+;
+; Service Installation
+;
+
+[evk9603.NT.Services]
+AddService = evk9603, 0x00000002 , evk9603_Service_Inst
+
+[evk9603_Service_Inst]
+DisplayName    = %evk9603.SvcDesc%
+ServiceType    = 1                  ; SERVICE_KERNEL_DRIVER
+StartType      = 3                  ; SERVICE_DEMAND_START
+ErrorControl   = 0x1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\evk9603.sys
+
+
+;
+; Source file information
+;
+
+[SourceDisksNames.x86]
+1 = %DiskId1%,,,""
+
+[SourceDisksFiles]
+; Files for disk ShenZhen Embest Info&Tech Co.,Ltd. Installation Disk #1 (USB)
+evk9603.sys = 1,,
+
+
+[Strings]
+
+;
+; Non-Localizable Strings
+;
+
+REG_SZ         = 0x00000000
+REG_MULTI_SZ   = 0x00010000
+REG_EXPAND_SZ  = 0x00020000
+REG_BINARY     = 0x00000001
+REG_DWORD      = 0x00010001
+SERVICEROOT    = "System\CurrentControlSet\Services"
+
+;
+; Localizable Strings
+;
+
+Embest.DeviceDesc0 = "Embest S3CEV40 USB Driver"
+DiskId1 = "ShenZhen Embest Info&Tech Co.,Ltd. Installation Disk #1 (USB)"
+Embest = "ShenZhen Embest Info&Tech Co.,Ltd."
+evk9603.SvcDesc="Embest S3CEV40 USB"
