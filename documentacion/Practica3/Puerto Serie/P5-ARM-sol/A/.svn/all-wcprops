@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/lec2008/!svn/ver/161/trunk/labs/P5/code/P5-ARM-sol/A
+END
+uart.h
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/lec2008/!svn/ver/119/trunk/labs/P5/code/P5-ARM-sol/A/uart.h
+END
+main.c
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/lec2008/!svn/ver/161/trunk/labs/P5/code/P5-ARM-sol/A/main.c
+END
+Uart.pjf
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/lec2008/!svn/ver/119/trunk/labs/P5/code/P5-ARM-sol/A/Uart.pjf
+END
+uart.c
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/lec2008/!svn/ver/161/trunk/labs/P5/code/P5-ARM-sol/A/uart.c
+END
