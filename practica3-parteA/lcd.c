@@ -175,6 +175,24 @@ void Lcd_Draw_Box(INT16 usLeft, INT16 usTop, INT16 usRight, INT16 usBottom,
 	Lcd_Draw_VLine(usTop, usBottom, usRight, ucColor, 1);
 }
 
+void Lcd_Draw_Box_inverted(INT16 usLeft, INT16 usTop, INT16 usRight,
+		INT16 usBottom, INT8U ucColor) {
+	Lcd_Draw_HLine_inverted(usLeft, usRight - 1, usTop, 1);
+	Lcd_Draw_HLine_inverted(usLeft + 1, usRight, usBottom, 1);
+	Lcd_Draw_VLine_inverted(usTop + 1, usBottom, usLeft, 1);
+	Lcd_Draw_VLine_inverted(usTop, usBottom - 1, usRight, 1);
+}
+
+void Lcd_Draw_Filled_Box(INT16 usLeft, INT16 usTop, INT16 usRight,
+		INT16 usBottom, INT8U ucColor) {
+	int i, j;
+	for (i = usLeft; i < usRight; i++) {
+		for (j = usTop; j < usBottom; j++) {
+			LCD_PutPixel(i, j, ucColor);
+		}
+	}
+}
+
 /*********************************************************************************************
  * name:		Lcd_Draw_Line()
  * func:		Draw line with appointed color
@@ -345,6 +363,40 @@ void Lcd_Draw_VLine_pointed(INT16 usY0, INT16 usY1, INT16 usX0, INT8U ucColor,
 	}
 }
 
+void Lcd_Draw_HLine_inverted(INT16 usX0, INT16 usX1, INT16 usY0, INT16U usWidth) {
+	INT16 usLen;
+
+	if (usX1 < usX0) {
+		GUISWAP(usX1, usX0);
+	}
+
+	while ((usWidth--) > 0) {
+		usLen = usX1 - usX0 + 1;
+		while ((usLen--) > 0) {
+			LCD_PutPixel(usX0 + usLen, usY0,
+					BLACK - LCD_GetPixel(usX0 + usLen,usY0));
+		}
+		usY0++;
+	}
+}
+
+void Lcd_Draw_VLine_inverted(INT16 usY0, INT16 usY1, INT16 usX0, INT16U usWidth) {
+	INT16 usLen;
+
+	if (usY1 < usY0) {
+		GUISWAP(usY1, usY0);
+	}
+
+	while ((usWidth--) > 0) {
+		usLen = usY1 - usY0 + 1;
+		while ((usLen--) > 0) {
+			LCD_PutPixel(usX0, usY0 + usLen,
+					BLACK - LCD_GetPixel(usX0, usY0 + usLen));
+		}
+		usX0++;
+	}
+}
+
 /*********************************************************************************************
  * name:		Lcd_DspAscII8x16()
  * func:		display 8x16 ASCII character string
@@ -368,7 +420,7 @@ void Lcd_DspAscII8x16(INT16U x0, INT16U y0, INT8U ForeColor, INT8U * s) {
 			return;
 		} else {
 			qm = *(s + i);
-			ulOffset = (INT32U) (qm) * 16;		//Here to be changed tomorrow
+			ulOffset = (INT32U) (qm) * 16;	//Here to be changed tomorrow
 			for (j = 0; j < 16; j++) {
 				ywbuf[j] = g_auc_Ascii8x16[ulOffset + j];
 			}
@@ -387,7 +439,7 @@ void Lcd_DspAscII8x16(INT16U x0, INT16U y0, INT8U ForeColor, INT8U * s) {
 }
 
 void Lcd_DisplayChar(INT16U usX0, INT16U usY0, INT8U ForeColor, INT8U ucChar) {
-	// TODO: PUES ME HARÉ MI PROPIO LCD; CON CASINOS, Y FURCIAS!
+// TODO: PUES ME HARÉ MI PROPIO LCD; CON CASINOS, Y FURCIAS!
 	INT16 k, x, y, xx;
 	INT32U ulOffset;
 	ulOffset = (INT32U) ucChar * 16;//Here to be changed tomorrow (never changed)
@@ -404,7 +456,7 @@ void Lcd_DisplayChar(INT16U usX0, INT16U usY0, INT8U ForeColor, INT8U ucChar) {
 
 void Lcd_DisplayChar_inverted(INT16U usX0, INT16U usY0, INT8U ForeColor,
 		INT8U ucChar) {
-	// TODO: PUES ME HARÉ MI PROPIO LCD; CON CASINOS, Y FURCIAS!
+// TODO: PUES ME HARÉ MI PROPIO LCD; CON CASINOS, Y FURCIAS!
 	INT16 k, x, y, xx;
 	INT32U ulOffset;
 	ulOffset = (INT32U) ucChar * 16;//Here to be changed tomorrow (never changed)
@@ -479,7 +531,7 @@ void Lcd_Circle_Filled(INT8 X, INT8 Y, INT16 radius, INT8U ForeColor) {
 	int i, j;
 	for (i = X - radius; i < X + radius; ++i) {
 		for (j = Y - radius; j < Y + radius; ++j) {
-			if ((i-X) * (i-X) + (j-Y) * (j-Y) <= radius * radius) {
+			if ((i - X) * (i - X) + (j - Y) * (j - Y) <= radius * radius) {
 				LCD_PutPixel(i, j, ForeColor);
 			}
 		}
@@ -512,26 +564,26 @@ void Lcd_Dma_Trans(void) {
 	INT8U err;
 
 	ucZdma0Done = 1;
-	//#define LCD_VIRTUAL_BUFFER	(0xc400000)
-	//#define LCD_ACTIVE_BUFFER	(LCD_VIRTUAL_BUFFER+(SCR_XSIZE*SCR_YSIZE/2))	//DMA ON
-	//#define LCD_ACTIVE_BUFFER	LCD_VIRTUAL_BUFFER								//DMA OFF
-	//#define LCD_BUF_SIZE		(SCR_XSIZE*SCR_YSIZE/2)
-	//So the Lcd Buffer Low area is from LCD_VIRTUAL_BUFFER to (LCD_ACTIVE_BUFFER+(SCR_XSIZE*SCR_YSIZE/2))
+//#define LCD_VIRTUAL_BUFFER	(0xc400000)
+//#define LCD_ACTIVE_BUFFER	(LCD_VIRTUAL_BUFFER+(SCR_XSIZE*SCR_YSIZE/2))	//DMA ON
+//#define LCD_ACTIVE_BUFFER	LCD_VIRTUAL_BUFFER								//DMA OFF
+//#define LCD_BUF_SIZE		(SCR_XSIZE*SCR_YSIZE/2)
+//So the Lcd Buffer Low area is from LCD_VIRTUAL_BUFFER to (LCD_ACTIVE_BUFFER+(SCR_XSIZE*SCR_YSIZE/2))
 	rNCACHBE1 = (((unsigned) (LCD_ACTIVE_BUFFER) >> 12) << 16)
 			| ((unsigned) (LCD_VIRTUAL_BUFFER) >> 12);
 	rZDISRC0 = (DW << 30) | (1 << 28) | LCD_VIRTUAL_BUFFER; // inc
 	rZDIDES0 = (2 << 30) | (1 << 28) | LCD_ACTIVE_BUFFER; // inc
 	rZDICNT0 = (2 << 28) | (1 << 26) | (3 << 22) | (0 << 20) | (LCD_BUF_SIZE);
-	//                      |            |            |             |            |---->0 = Disable DMA
-	//                      |            |            |             |------------>Int. whenever transferred
-	//                      |            |            |-------------------->Write time on the fly
-	//                      |            |---------------------------->Block(4-word) transfer mode
-	//                      |------------------------------------>whole service
-	//reEnable ZDMA transfer
+//                      |            |            |             |            |---->0 = Disable DMA
+//                      |            |            |             |------------>Int. whenever transferred
+//                      |            |            |-------------------->Write time on the fly
+//                      |            |---------------------------->Block(4-word) transfer mode
+//                      |------------------------------------>whole service
+//reEnable ZDMA transfer
 	rZDICNT0 |= (1 << 20);		//after ES3
 	rZDCON0 = 0x1; // start!!!
 
-	//Delay(500);
+//Delay(500);
 	while (ucZdma0Done)
 		;		//wait for DMA finish
 }

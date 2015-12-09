@@ -88,7 +88,7 @@ extern "C" {
 #define CLKVAL_MONO 		(12)
 #define CLKVAL_GREY4 		(12)
 #define CLKVAL_GREY16 		(12)
- #define CLKVAL_COLOR 		(10)
+#define CLKVAL_COLOR 		(10)
 
 #define LCD_BUF_SIZE		(SCR_XSIZE*SCR_YSIZE/2)
 #define LCD_ACTIVE_BUFFER	(0xc300000)
@@ -114,15 +114,19 @@ void  Lcd_Dma_Trans(void);
 void  LcdVirtualToTrue(void);
 void  LcdClrRect(INT16 usLeft, INT16 usTop, INT16 usRight, INT16 usBottom, INT8U ucColor);
 void  Lcd_Draw_Box(INT16 usLeft, INT16 usTop, INT16 usRight, INT16 usBottom, INT8U ucColor);
+void Lcd_Draw_Box_inverted(INT16 usLeft, INT16 usTop, INT16 usRight, INT16 usBottom, INT8U ucColor);
+void  Lcd_Draw_Filled_Box(INT16 usLeft, INT16 usTop, INT16 usRight, INT16 usBottom, INT8U ucColor);
 void  Lcd_Draw_Line(INT16 usX0, INT16 usY0, INT16 usX1, INT16 usY1, INT8U ucColor, INT16U usWidth);
 void  Lcd_Draw_HLine(INT16 usX0, INT16 usX1, INT16 usY0, INT8U ucColor, INT16U usWidth);
 void  Lcd_Draw_VLine(INT16 usY0, INT16 usY1, INT16 usX0, INT8U ucColor, INT16U usWidth);
 void  Lcd_Draw_HLine_pointed(INT16 usX0, INT16 usX1, INT16 usY0, INT8U ucColor, INT16U usWidth);
 void  Lcd_Draw_VLine_pointed(INT16 usY0, INT16 usY1, INT16 usX0, INT8U ucColor, INT16U usWidth);
+void  Lcd_Draw_HLine_inverted(INT16 usX0, INT16 usX1, INT16 usY0, INT16U usWidth);
+void  Lcd_Draw_VLine_inverted(INT16 usY0, INT16 usY1, INT16 usX0, INT16U usWidth);
 void  Lcd_Anti_Disp(INT16U usX0, INT16U usY0, INT16U usX1, INT16U usY1);
 void  Lcd_DisplayChar(INT16U usX0, INT16U usY0, INT8U ForeColor, INT8U ucChar);
 void  Lcd_DisplayChar_inverted(INT16U usX0, INT16U usY0, INT8U ForeColor, INT8U ucChar);
-void  Lcd_DisplayString(INT16U usX0, INT16U usY0, INT8U *pucStr);
+//void  Lcd_DisplayString(INT16U usX0, INT16U usY0, INT8U *pucStr);
 void  Lcd_DisplayShort(INT16 sX, INT16 sY, INT16U usInt);
 
 void  Lcd_Circle(INT8 X, INT8 Y, INT16 radius, INT8U ForeColor);

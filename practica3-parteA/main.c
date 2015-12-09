@@ -9,47 +9,26 @@
 #include "44blib.h"
 #include "44b.h"
 #include "lcd.h"
-
-#define SUDOKU_NUM_CUADS 9
-#define SUDOKU_SQUARE_SIZE 18
-#define SUDOKU_X0 30
-#define SUDOKU_Y0 30
-
-#define SUDOKU_FONT_HEIGHT 16
-#define SUDOKU_FONT_LENGTH 8
-
-#define ASCII_NUMBER_BASE 48
+#include "sudoku_graphics.h"
+#include "sudoku_2015.h"
+#include "Button.h"
+#include "Timer2.h"
+#include "Bmp.h"
 
 /*--- declaracion de funciones ---*/
 void Main(void);
 
-inline void putNumberInSquare(INT8 x, INT8 y, INT8 number) {
-	Lcd_DisplayChar(
-			SUDOKU_X0 + ((SUDOKU_SQUARE_SIZE - SUDOKU_FONT_LENGTH) / 2 + 1)
-					+ ((SUDOKU_SQUARE_SIZE + 1) * x),
-			SUDOKU_Y0 + ((SUDOKU_SQUARE_SIZE - SUDOKU_FONT_HEIGHT) + 1)
-					+ ((SUDOKU_SQUARE_SIZE + 1) * y), BLACK,
-			ASCII_NUMBER_BASE + number);
-}
-
-inline void remarkSquare(INT8 x, INT8 y) {
-	Lcd_Draw_Box(SUDOKU_X0 + 1 + ((SUDOKU_SQUARE_SIZE + 1) * x),
-			SUDOKU_Y0 + 1 + ((SUDOKU_SQUARE_SIZE + 1) * y),
-			SUDOKU_X0 + SUDOKU_SQUARE_SIZE + ((SUDOKU_SQUARE_SIZE + 1) * x),
-			SUDOKU_Y0 + SUDOKU_SQUARE_SIZE + ((SUDOKU_SQUARE_SIZE + 1) * y),
-			BLACK);
-}
-
-inline void invertSquare(INT8 x, INT8 y) {
-	ReverseSquare(SUDOKU_X0 + 1 + ((SUDOKU_SQUARE_SIZE + 1) * x),
-			SUDOKU_Y0 + 1 + ((SUDOKU_SQUARE_SIZE + 1) * y),
-			SUDOKU_X0 + SUDOKU_SQUARE_SIZE + ((SUDOKU_SQUARE_SIZE + 1) * x),
-			SUDOKU_Y0 + SUDOKU_SQUARE_SIZE + ((SUDOKU_SQUARE_SIZE + 1) * y));
-}
-
+typedef enum {
+	title_screen, fin, esperando_fila, esperando_columna, esperando_valor
+} Game_state;
 
 /*--- codigo de la funcion ---*/
 void Main(void) {
+	int tiempo_juego = 0;
+	int tiempo_calculos = 0;
+	int tiempo_ini = 0;
+	int tiempo_fin = 0;
+
 	sys_init(); /* inicializacion de la placa, interrupciones, puertos y UART */
 
 	/* initial LCD controller */
@@ -65,79 +44,128 @@ void Main(void) {
 //		Lcd_DspHz16(10,0,DARKGRAY,"”¢›ÌÃÿ»˝–« µ—È∆¿π¿∞Â");
 #endif
 
-	//Lcd_DspAscII8x16(10, 20, BLACK, "Codigo del puesto: ");
-	int i;
-//	for (i = 0; i < 10; ++i) {
-//		Lcd_Draw_HLine(SUDOKU_X0, 100, SUDOKU_X0 + 11 * i, BLACK, 1);
-//		Lcd_Draw_VLine(SUDOKU_Y0, 100, SUDOKU_Y0 + 11 * i, BLACK, 1);
-//	}
-//	Lcd_Draw_HLine(10, 100, 3, BLACK, 1);
-//	Lcd_Draw_Box(10,30,50,40,BLACK);
+	CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS] __attribute__((align(4))) = { {
+			0x9800, 0x6800, 0x0000, 0x0000, 0x0000, 0x0000, 0x7800, 0x0000,
+			0x8800, 0, 0, 0, 0, 0, 0, 0 }, { 0x8800, 0x0000, 0x0000, 0x0000,
+			0x0000, 0x4800, 0x3800, 0x0000, 0x0000, 0, 0, 0, 0, 0, 0, 0 }, {
+			0x1800, 0x0000, 0x0000, 0x5800, 0x0000, 0x0000, 0x0000, 0x0000,
+			0x0000, 0, 0, 0, 0, 0, 0, 0 }, { 0x0000, 0x0000, 0x0000, 0x0000,
+			0x0000, 0x0000, 0x1800, 0x7800, 0x6800, 0, 0, 0, 0, 0, 0, 0 }, {
+			0x2800, 0x0000, 0x0000, 0x0000, 0x9800, 0x3800, 0x0000, 0x0000,
+			0x5800, 0, 0, 0, 0, 0, 0, 0 }, { 0x7800, 0x0000, 0x8800, 0x0000,
+			0x003B, 0x0000, 0x0000, 0x0000, 0x0000, 0, 0, 0, 0, 0, 0, 0 }, {
+			0x0030, 0x0000, 0x7800, 0x0000, 0x3800, 0x2800, 0x0000, 0x4800,
+			0x0000, 0, 0, 0, 0, 0, 0, 0 }, { 0x3800, 0x8800, 0x2800, 0x1800,
+			0x0000, 0x5800, 0x6800, 0x0000, 0x0000, 0, 0, 0, 0, 0, 0, 0 }, {
+			0x0000, 0x4800, 0x1800, 0x0000, 0x0000, 0x9800, 0x5800, 0x2800,
+			0x0000, 0, 0, 0, 0, 0, 0, 0 } };
 
-//	Lcd_Draw_VLine(0,100,0,BLACK,1);
-//	Lcd_Draw_VLine(0,100,11,BLACK,1);
-//	Lcd_Draw_VLine(0,100,22,BLACK,1);
-//	Lcd_Draw_VLine(0,100,33,BLACK,1);
+	Timer2_Inicializar();
+	Button_init(1, 10);
+	Timer2_Empezar();
+	tiempo_ini = Timer2_Leer();
+	sudoku_recalcular(cuadricula);
+	tiempo_fin = Timer2_Leer();
+	tiempo_calculos += (tiempo_fin - tiempo_ini);
 
-// Guidelines
-	Lcd_Draw_HLine_pointed(10, 300, 30, BLACK, 1);
-	Lcd_Draw_VLine_pointed(25, 300, 15, BLACK, 1);
+	uint8_t fila = 1;
+	uint8_t columna = 1;
+	int valor = 0;
+	Game_state estadoJuego = title_screen;
 
-	// Dibujamos la cuadricula en sÌ
-	for (i = 0; i < SUDOKU_NUM_CUADS + 1; ++i) {
-		Lcd_Draw_VLine(SUDOKU_Y0,
-				SUDOKU_Y0 + (SUDOKU_NUM_CUADS * (SUDOKU_SQUARE_SIZE + 1)),
-				SUDOKU_X0 + (SUDOKU_SQUARE_SIZE + 1) * i, BLACK, 1);
-		Lcd_Draw_HLine(SUDOKU_X0,
-				SUDOKU_X0 + (SUDOKU_NUM_CUADS * (SUDOKU_SQUARE_SIZE + 1)),
-				SUDOKU_Y0 + (SUDOKU_SQUARE_SIZE + 1) * i, BLACK, 1);
+	while (1) {
+		tiempo_juego = Timer2_Leer() / 1000000;
+		Lcd_Clr();
+		if (estadoJuego == title_screen) {
+			sudoku_graphics_print_title_screen();
+		} else {
+			// Actualizamos la pantalla
+			sudoku_graphics_draw_base();
+			sudoku_graphics_fill_from_data(cuadricula);
+			sudoku_graphics_draw_time(tiempo_juego, tiempo_calculos);
+			if (fila < 10) {
+				sudoku_graphics_remark_square(fila - 1, columna - 1);
+				if (!es_pista(cuadricula[columna - 1][fila - 1])) {
+					sudoku_graphics_mark_error_in_square(fila - 1, columna - 1,
+							valor);
+				}
+			} else {
+				// Tiene sentido que no se dibuje, dado que no seleccionas coordenadas v·lidas
+			}
+		}
+		sudoku_graphics_update_lcd();
+
+//		sudoku_graphics_update_lcd();
+		switch (estadoJuego) {
+		case title_screen:
+			if (Button_next()) {
+				Lcd_Clr();
+				Button_low_next();
+				sudoku_graphics_draw_base();
+				sudoku_graphics_draw_time(0, 0);
+				sudoku_graphics_fill_from_data(cuadricula);
+				sudoku_graphics_update_lcd();
+				fila = 1;
+				columna = 1;
+				valor = 0;
+				Button_reconfigure_range(1, 10);
+				estadoJuego = esperando_fila;
+				Timer2_Empezar();
+			}
+			break;
+		case esperando_fila:
+			fila = Button_valor_actual();
+			if (Button_next()) {
+				Button_low_next();
+				if (Button_valor_actual() != 10) {
+					fila = Button_valor_actual();
+					Button_reconfigure_range(1, 9);
+					//Button_set_valor_actual(1);
+					estadoJuego = esperando_columna;
+				} else {
+					// FIN
+					fila = 1;
+					columna = 1;
+					valor = 0;
+					Button_reconfigure_range(1, 1);
+					estadoJuego = title_screen;
+				}
+			}
+			break;
+		case esperando_columna:
+			columna = Button_valor_actual();
+			if (Button_next()) {
+				Button_low_next();
+				columna = Button_valor_actual();
+				Button_reconfigure_range(0, 9);
+				estadoJuego = esperando_valor;
+			}
+			break;
+		case esperando_valor:
+			valor = Button_valor_actual();
+			if (Button_next()) {
+				Button_low_next();
+				valor = Button_valor_actual();
+
+				// Update sudoku
+				if (!es_pista(cuadricula[columna - 1][fila - 1])) {
+					celda_poner_valor(&(cuadricula[columna - 1][fila - 1]),
+							valor);
+					tiempo_ini = Timer2_Leer();
+					sudoku_recalcular(cuadricula);
+					tiempo_fin = Timer2_Leer();
+					tiempo_calculos += (tiempo_fin - tiempo_ini);
+				}
+				fila = 1;
+				columna = 1;
+				valor = 0;
+				Button_reconfigure_range(1, 10);
+				estadoJuego = esperando_fila;
+			}
+			break;
+		default:
+			break;
+		}
 	}
-
-	// Dibujamos los numeros del lateral
-	for (i = 0; i < SUDOKU_NUM_CUADS; i++) {
-		Lcd_DisplayChar(SUDOKU_X0 + 6 + ((SUDOKU_SQUARE_SIZE + 1) * i),
-				SUDOKU_Y0 - (SUDOKU_SQUARE_SIZE + 1) + 3, BLACK,
-				ASCII_NUMBER_BASE + i);
-		Lcd_DisplayChar(SUDOKU_X0 + 6 - (SUDOKU_SQUARE_SIZE + 1),
-				SUDOKU_Y0 + 3 + ((SUDOKU_SQUARE_SIZE + 1) * i), BLACK,
-				ASCII_NUMBER_BASE + i);
-	}
-
-	putNumberInSquare(3, 3, 4);
-	remarkSquare(0, 1);
-	invertSquare(3, 3);
-	ReverseLine(20, 40);
-	ReverseSquare(0, 0, 40, 50);
-	Lcd_Circle(200,200,25,BLACK);
-
-	Lcd_Circle_Filled(200,100,25,BLACK);
-
-	Lcd_DisplayChar_inverted(0, 0, BLACK, ASCII_NUMBER_BASE + 3);
-//	Lcd_DisplayChar(SUDOKU_X0+6,SUDOKU_Y0+3,BLACK,ASCII_NUMBER_BASE+3);
-//	Lcd_DisplayChar(SUDOKU_X0,SUDOKU_Y0+3,BLACK,ASCII_NUMBER_BASE+3);
-//
-//	Lcd_DisplayChar(32,32,BLACK,ASCII_NUMBER_BASE+5);
-//
-//	Lcd_Draw_Box(10, 40, 310, 230, 14);
-//	Lcd_Draw_Box(20, 45, 300, 225, 13);
-//	Lcd_Draw_Box(30, 50, 290, 220, 12);
-//	Lcd_Draw_Box(40, 55, 280, 215, 11);
-//	Lcd_Draw_Box(50, 60, 270, 210, 10);
-//	Lcd_Draw_Box(60, 65, 260, 205, 9);
-//	Lcd_Draw_Box(70, 70, 250, 200, 8);
-//	Lcd_Draw_Box(80, 75, 240, 195, 7);
-//	Lcd_Draw_Box(90, 80, 230, 190, 6);
-//	Lcd_Draw_Box(100, 85, 220, 185, 5);
-//	Lcd_Draw_Box(110, 90, 210, 180, 4);
-//	Lcd_Draw_Box(120, 95, 200, 175, 3);
-//	Lcd_Draw_Box(130, 100, 190, 170, 2);
-	//BitmapView(125, 135, Stru_Bitmap_gbMouse);
-	Lcd_Dma_Trans();
-
-	DelayMs(100);
-	Lcd_Circle_Filled(200,150,10,LIGHTGRAY);
-	Lcd_Dma_Trans();
-	while (1)
-		;
 }
 

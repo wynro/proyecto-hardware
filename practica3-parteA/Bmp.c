@@ -136,7 +136,10 @@ void BitmapPop(INT16U x, INT16U y, STRU_BITMAP Stru_Bitmap)
 			
 		}
 	}
+	SCR_XSIZE;
+	SCR_YSIZE;
 }
+
 
 /*********************************************************************************************
 * name:		CursorInit()
