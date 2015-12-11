@@ -66,6 +66,10 @@ int sudoku_recalcular(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]);
  */
 int es_error(CELDA celda);
 
+int es_pista(CELDA celda);
+
 void celda_poner_valor(CELDA *celdaptr, uint8_t val);
+
+void sudoku_vacia_tabla(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]);
 
 #endif /* SUDOKU_2015_H_ */

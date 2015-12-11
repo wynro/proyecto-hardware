@@ -44,10 +44,11 @@ void Timer2_Empezar(void) {
 }
 
 /*--- codigo de las funciones ---*/
+//MILISEGUNDOS
 int Timer2_Leer(void) {
 	long cuenta = rTCNTB2;
 	cuenta -= rTCNTO2;
 	cuenta += (timer2_num_int * rTCNTB2 );
 	cuenta = cuenta / 32;
-	return cuenta;
+	return cuenta/1000;
 }

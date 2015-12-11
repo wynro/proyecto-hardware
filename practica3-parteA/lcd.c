@@ -438,6 +438,10 @@ void Lcd_DspAscII8x16(INT16U x0, INT16U y0, INT8U ForeColor, INT8U * s) {
 	}
 }
 
+void Lcd_DspAscII8x16HorizontallyCentered(INT16U y0, INT8U ForeColor, INT8U * s) {
+	Lcd_DspAscII8x16((SCR_XSIZE - (strlen(s) * 8)) / 2, y0, ForeColor, s);
+}
+
 void Lcd_DisplayChar(INT16U usX0, INT16U usY0, INT8U ForeColor, INT8U ucChar) {
 // TODO: PUES ME HARÉ MI PROPIO LCD; CON CASINOS, Y FURCIAS!
 	INT16 k, x, y, xx;

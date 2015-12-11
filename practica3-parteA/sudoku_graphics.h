@@ -20,10 +20,10 @@
 
 #define ASCII_NUMBER_BASE 48
 
-
 void sudoku_graphics_draw_base();
 void sudoku_graphics_fill_from_data(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]);
 void sudoku_graphics_update_lcd();
-
+void sudoku_graphics_print_final_screen(int tiempo_juego_ms,
+		int tiempo_calculos_ms, int errores);
 
 #endif /* SUDOKU_GRAPHICS_H_ */

@@ -109,6 +109,22 @@ int sudoku_recalcular(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]) {
 		fila += 1;
 	}
 	//retornar el numero de celdas vacias, siendo negativo si hay errores
-	return errores ? -celdas_vacias : celdas_vacias;
+	return errores ? -1 : celdas_vacias;
 }
 
+void sudoku_vacia_tabla(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]) {
+	int celdas_vacias = 0;
+	int errores = 0;
+	int fila = 0;
+	while (fila < (NUM_REGION * TAM_REGION)) {
+		int columna = 0;
+		while (columna < (NUM_REGION * TAM_REGION)) {
+			// Si NO es pista, la ponemos a 0
+			if(!es_pista(cuadricula[fila][columna])){
+				celda_poner_valor(&cuadricula[fila][columna], 0);
+			}
+			columna +=1;
+		}
+		fila += 1;
+	}
+}

@@ -11,7 +11,9 @@
 #include "44b.h"
 #include "lcd.h"
 #include "title-bitmap.h"
+#include "aperture-logo-bitmap.h"
 #include "Bmp.h"
+#include "still-alive-lyrics.h"
 
 #define celdaPos0x(x) (SUDOKU_X0 + 1 + ((SUDOKU_SQUARE_SIZE + 1) * (x)))
 #define celdaPos0y(y) (SUDOKU_Y0 + 1 + ((SUDOKU_SQUARE_SIZE + 1) * (y)))
@@ -340,13 +342,11 @@ int strlen(char* s) {
 	}
 	return i;
 }
-void sudoku_graphics_draw_time(int time_playing_s, int time_calculating_us) {
+void sudoku_graphics_draw_time(int time_playing_s, int time_calculating_ms) {
 	char *s = "Jugando:";
-	char *t = "Calculos:";
+	char *t = "Calc (ms):";
 	char play_time[8];
 	char calc_time[8];
-
-	int time_calculating_ms = time_calculating_us / 1000;
 
 	itoa(time_calculating_ms, calc_time, 10);
 	toComplexNotation(time_playing_s, play_time);
@@ -375,6 +375,68 @@ void sudoku_graphics_draw_time(int time_playing_s, int time_calculating_us) {
 
 void sudoku_graphics_print_title_screen() {
 	char *s = TITLE_MESSAGE;
-	Lcd_DspAscII8x16(0, 0, BLACK, s);
-	BitmapView(0, 0, Stru_Bitmap_title);
+	Lcd_DspAscII8x16HorizontallyCentered((SCR_YSIZE / 2) + 16 * 2, BLACK,
+			(unsigned char *) s);
+	BitmapViewHorizontallyCentered(
+			(SCR_YSIZE - Stru_Bitmap_title.usHeight) / 2
+					- Stru_Bitmap_title.usHeight / 4, Stru_Bitmap_title);
+}
+
+void sudoku_graphics_print_final_screen(int tiempo_juego_s,
+		int tiempo_calculos_ms, int errores) {
+	char *time_playing_message = "Tiempo total de juego: ";
+	char *time_calculating_message = "Tiempo total de calculo(ms): ";
+	char *mensaje_aperture = "Pulsa start para recibir tu premio";
+	char *mensaje_fracaso_1 = "No resolviste el sudoku :(";
+	char *mensaje_fracaso_2 = "Pulsa start para reiniciar.";
+	char time_playing[7];
+	char time_calculating[7];
+
+	toComplexNotation(tiempo_juego_s, time_playing);
+	itoa(tiempo_calculos_ms, time_calculating, 10);
+	// 3 posibles pantallas
+	// Titulo
+	BitmapViewHorizontallyCentered(20, Stru_Bitmap_title);
+
+	// Tiempo de juego
+	int time_playing_x = ((SCR_XSIZE - strlen(time_playing_message) * 8
+			- strlen(time_playing) * 8)) / 2;
+	Lcd_DspAscII8x16(time_playing_x, (SCR_YSIZE / 2) - 32, BLACK,
+			(unsigned char *) time_playing_message);
+	Lcd_DspAscII8x16(time_playing_x + strlen(time_playing_message) * 8,
+			(SCR_YSIZE / 2) - 32, BLACK, (unsigned char *) time_playing);
+
+	// Tiempo de calculo
+	int time_calculating_x = ((SCR_XSIZE - strlen(time_calculating_message) * 8
+			- strlen(time_calculating) * 8)) / 2;
+	Lcd_DspAscII8x16(time_calculating_x, (SCR_YSIZE / 2) - 16, BLACK,
+			(unsigned char *) time_calculating_message);
+	Lcd_DspAscII8x16(time_calculating_x + strlen(time_calculating_message) * 8,
+			(SCR_YSIZE / 2) - 16, BLACK, (unsigned char *) time_calculating);
+
+	switch (errores) {
+	case 0:
+		// Terminado con éxito, aperture entra en escena
+		Lcd_DspAscII8x16HorizontallyCentered((SCR_YSIZE / 2) + 16 * 3, BLACK,
+				(unsigned char *) mensaje_aperture);
+		break;
+	default:
+		// Con errores/Sin terminar
+		Lcd_DspAscII8x16HorizontallyCentered((SCR_YSIZE / 2) + 16 * 3, BLACK,
+				(unsigned char *) mensaje_fracaso_1);
+		Lcd_DspAscII8x16HorizontallyCentered((SCR_YSIZE / 2) + 16 * 4, BLACK,
+				(unsigned char *) mensaje_fracaso_2);
+		break;
+	}
+}
+
+void sudoku_graphics_print_still_alive(int lineNumber) {
+	BitmapViewHorizontallyCentered(16, Stru_Bitmap_aperture);
+	int i;
+	for (i = 0; i < 6; ++i) {
+		Lcd_DspAscII8x16HorizontallyCentered(
+				Stru_Bitmap_aperture.usHeight + 16 * 2 + 16 * i, BLACK,
+				still_alive[lineNumber + i]);
+	}
+
 }
