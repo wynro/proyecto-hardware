@@ -20,3 +20,8 @@ RemoteSystemsTempFiles/
 **/.#*.tex
 **/.fuse_hidden*
 **/_region_*
+**/*.idx
+**/*.out
+**/*.toc
+**/memoria/*.log
+**/*.aux
