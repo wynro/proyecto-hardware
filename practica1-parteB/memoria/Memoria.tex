@@ -15,9 +15,9 @@
 
 % Titulo Antiguo, para la posteridad, como no se usa...
 \title{Proyecto Hardware - Practica 1\\Desarrollo combinado y
-  optimizaci\'on de programas en multiples lenguajes de alto y bajo
+  optimización de programas en multiples lenguajes de alto y bajo
   nivel} \author{Guillermo Robles Gonzalez - NIP: 604409\\Sergio
-  Mart\'in Segura - NIP: 622612} \date{\today}
+  Martín Segura - NIP: 622612} \date{\today}
 
 
 
@@ -33,22 +33,22 @@
   \vspace{0.5cm}
   {\scshape\Large Proyecto Hardware\\Practica 1\\}
   \vspace{1.5cm}
-  {\huge\bfseries Desarrollo combinado y optimizaci\'on de programas en
+  {\huge\bfseries Desarrollo combinado y optimización de programas en
     multiples lenguajes de alto y bajo nivel\\}
   \vspace{2cm}
-  {\Large \textit{Guillermo Robles Gonz\'alez - NIP: 604409}\\}
-  {\Large \textit{Sergio Mart\'in Segura - NIP: 622612}\\}
+  {\Large \textit{Guillermo Robles González - NIP: 604409}\\}
+  {\Large \textit{Sergio Martín Segura - NIP: 622612}\\}
   \vfill
   Supervisado por:\\
   Javier Resano Ezcaray (coordinador)\\
-  Mar\'ia Villarroya Gaud\'o\\
+  María Villarroya Gaudó\\
   Enrique Torres Moreno\\
-  Jes\'us Alastruey Bened\'e\\
-  Dar\'io Su\'arez Gracia\\
+  Jesús Alastruey Benedé\\
+  Darío Suárez Gracia\\
   % Dr.~Emmett \textsc{Doc} Lathrop Brown\\
   % Martin \textsc{Marty} Seamus McFly\\
   % \textbf{Marty:} Un momento, un momento Doc, ¿Quieres decir que has
-  % construido una m\'aquina del tiempo...? ¡¡¿En un DeLorean?!!\\
+  % construido una máquina del tiempo...? ¡¡¿En un DeLorean?!!\\
   % \textbf{Doc:} Bueno, siempre he pensado ``si vas a viajar al
   % pasado, hazlo con estilo'' ¿Y que mejor que con un DeLorean?
   \vfill
@@ -62,140 +62,140 @@
 % El resto
 \section{Resumen}
 % Es un apartado fundamental. Es lo primero que se lee y muchas*
-% veces lo \'unico que lee. Es la s\'intesis de todo el trabajo
-% realizado, qu\'e, c\'omo y por qu\'e hemos hecho el trabajo. Debe ser
+% veces lo único que lee. Es la síntesis de todo el trabajo
+% realizado, qué, cómo y por qué hemos hecho el trabajo. Debe ser
 % auto contenido y debemos esbozar nuestras conclusiones.
 
 % [*] todas
-El trabajo que se realiza es la programaci\'on de una serie de
+El trabajo que se realiza es la programación de una serie de
 funciones y rutinas, en varios lenguajes de bajo nivel y uno de alto
-nivel, para la ayuda a la realizaci\'on del conocido puzle
+nivel, para la ayuda a la realización del conocido puzle
 sudoku. Este trabajo se enmarca dentro de la asignatura de Proyecto
-Hardware de 3 del grado superior en Ingenier\'ia inform\'atica por la
-Universidad de Zaragoza. Adem\'as, se comparar\'a la eficiencia relativa
-de los distintos lenguajes, y se ver\'a la capacidad de los
-compiladores modernos de realizar compilaci\'on cruzada,
-permiti\'endonos combinar c\'odigo escrito en m\'ultiples lenguajes.
+Hardware de 3 del grado superior en Ingeniería informática por la
+Universidad de Zaragoza. Además, se comparará la eficiencia relativa
+de los distintos lenguajes, y se verá la capacidad de los
+compiladores modernos de realizar compilación cruzada,
+permitiéndonos combinar código escrito en múltiples lenguajes.
 
-\section{Introducci\'on}
-% Enmarca y sit\'ua el trabajo a realizar.
-Sudoku es un puzle desarrollado en 1970, muy popular en Jap\'on desde
+\section{Introducción}
+% Enmarca y sitúa el trabajo a realizar.
+Sudoku es un puzle desarrollado en 1970, muy popular en Japón desde
 1986 y conocido mundialmente desde 2005.  El objetivo del sudoku es
-rellenar una cuadr\'icula de 9 x 9 celdas (81 casillas) dividida en
-subcuadr\'iculas de 3 x 3 (tambi\'en llamadas cajas o regiones)con las
-cifras del 1 al 9 partiendo de algunos n\'umeros ya dispuestos en
-algunas de las celdas. Aunque se podr\'ian usar colores, letras,
-figuras, se conviene en usar n\'umeros para mayor claridad, lo que
+rellenar una cuadrícula de 9 x 9 celdas (81 casillas) dividida en
+subcuadrículas de 3 x 3 (también llamadas cajas o regiones)con las
+cifras del 1 al 9 partiendo de algunos números ya dispuestos en
+algunas de las celdas. Aunque se podrían usar colores, letras,
+figuras, se conviene en usar números para mayor claridad, lo que
 importa, es que sean nueve elementos diferenciados, que no se deben
-repetir en una misma fila, columna o subcuadr\'icula.  Por el propio
-diseño del puzle es parte primordial de su resoluci\'on conocer qu\'e
-n\'umeros pueden ser candidatos de ocupar una casilla concreta y, por
-extensi\'on, todas las dem\'as casillas.  Por eso nuestro proyecto es
-desarrollar un asistente electr\'onico que de forma autom\'atica sugiera
+repetir en una misma fila, columna o subcuadrícula.  Por el propio
+diseño del puzle es parte primordial de su resolución conocer qué
+números pueden ser candidatos de ocupar una casilla concreta y, por
+extensión, todas las demás casillas.  Por eso nuestro proyecto es
+desarrollar un asistente electrónico que de forma automática sugiera
 los candidatos para cada celda dado un puzle concreto.  En esta
-primera parte, el trabajo consiste en la creaci\'on de una serie de
-rutinas que, dada una cuadr\'icula decidir\'a cuales son los posibles
-candidatos para cada casilla vac\'ia.
+primera parte, el trabajo consiste en la creación de una serie de
+rutinas que, dada una cuadrícula decidirá cuales son los posibles
+candidatos para cada casilla vacía.
 \section{Objetivos}
-% Explica qu\'e se quiere conseguir.
-Aunque el objetivo principal del proyecto sea la creaci\'on de un sencillo
-programa de ayuda a la resoluci\'on del popular puzzle. Desde un punto de
-vista pedag\'ogico existen otros objetivos no estrictamente relacionados
+% Explica qué se quiere conseguir.
+Aunque el objetivo principal del proyecto sea la creación de un sencillo
+programa de ayuda a la resolución del popular puzzle. Desde un punto de
+vista pedagógico existen otros objetivos no estrictamente relacionados
 con el objetivo principal:
 \begin{itemize}
 \item Aprender a desarrollar codigo para microcontroladores en
-  m\'ultiples lenguajes (tanto de alto como de bajo nivel), y
+  múltiples lenguajes (tanto de alto como de bajo nivel), y
   conocer las tecnicas que existen para el entrelazado y compilado
-  conjunto de un programa escrito en m\'ultiples lenguajes.
-\item Comparar a nivel puramente t\'ecnico m\'ultiples lenguajes y
-  combinaciones de los mismos, principalmente mediante la m\'etrica
+  conjunto de un programa escrito en múltiples lenguajes.
+\item Comparar a nivel puramente técnico múltiples lenguajes y
+  combinaciones de los mismos, principalmente mediante la métrica
   "nº de instrucciones de procesador para terminar una tarea"
-\item Realizaci\'on justificada de toma de decisiones sobre el proyecto,
-  tanto en aspectos de diseño como de implementaci\'on
+\item Realización justificada de toma de decisiones sobre el proyecto,
+  tanto en aspectos de diseño como de implementación
   % So META
-\item Documentar correctamente el desarrollo y caracter\'isticas del
-  producto en cuesti\'on
+\item Documentar correctamente el desarrollo y características del
+  producto en cuestión
 \end{itemize}
 
 \clearpage
-\section{Metodolog\'ia}
+\section{Metodología}
 % Describe los pasos realizados para llegar hasta los
 % resultados. Todas aquellas decisiones de diseño tomadas en el
 % proceso deben incluirse.En la asignatura de Proyecto Hardware se
 % debe explicar en este apartado el esquema del proyecto (ficheros y
-% funciones que lo componen), n\'umero total de l\'ineas de c\'odigo y
-% horas de dedicaci\'on. As\'i c\'omo el c\'odigo desarrollado comentado.
-Se ha usado una metodolog\'ia de prototipado r\'apido, basada en la
-creaci\'on r\'apida de prototipos funcionales, que se iran refinando
-mediante revisiones sucesivas, hasta llegar a una versi\'on que
+% funciones que lo componen), número total de líneas de código y
+% horas de dedicación. Así cómo el código desarrollado comentado.
+Se ha usado una metodología de prototipado rápido, basada en la
+creación rápida de prototipos funcionales, que se iran refinando
+mediante revisiones sucesivas, hasta llegar a una versión que
 abarque toda la funcionalidad deseada y cumpla los objetivos de
 velocidad, eficiencia o calidad deseados. \\
 % https://www.youtube.com/watch?v=7WDFUcjWARU
-Esta metodolog\'ia permite obtener r\'apidamente versiones
-funcionales, ya sea para testeo o discusi\'on con el cliente, sin
+Esta metodología permite obtener rápidamente versiones
+funcionales, ya sea para testeo o discusión con el cliente, sin
 embargo sufre el defecto de que una vez establecido un algoritmo,
-tiende a ser dif\'icil cambiarlo. Se ha evitado este defecto revisando
+tiende a ser difícil cambiarlo. Se ha evitado este defecto revisando
 los algoritmos usados y la forma de implementarlos con cuidado, y
 realizando a veces reimplementaciones completas de ciertos trozos del
 programa.
-\subsection{Diseño\\ {\small Dedicaci\'on: aprox 2 horas}}
-El primer paso para afrontar el proyecto ha sido la estructuraci\'on y
-divisi\'on del problema para solucionar sus partes de modo ordenado
+\subsection{Diseño\\ {\small Dedicación: aprox 2 horas}}
+El primer paso para afrontar el proyecto ha sido la estructuración y
+división del problema para solucionar sus partes de modo ordenado
 y coherente.\\
-Con t\'ecnicas como la divisi\'on en ficheros de las rutinas y la
-definici\'on (pre-condici\'on y post-condici\'on) previa a la implementaci\'on
-hemos logrado construir un c\'odigo bien estructurado de una forma \'agil
+Con técnicas como la división en ficheros de las rutinas y la
+definición (pre-condición y post-condición) previa a la implementación
+hemos logrado construir un código bien estructurado de una forma ágil
 y sencilla sin preocuparnos en el momento del diseño de los problemas
-de implementaci\'on que ir\'ian surgiendo.
-\subsection{Implementaci\'on\\ {\small Dedicaci\'on: aprox 3 horas}}
-La implementaci\'on se ha realizado conjuntamente, no realizando
-reparto de tareas, ya que se ha considerado que dado el tama\~no del
-problema en cuesti\'on no merec\'ia la pena.
-\subsection{Control de Resultados\\ {\small Dedicaci\'on: aprox 3 horas}}
+de implementación que irían surgiendo.
+\subsection{Implementación\\ {\small Dedicación: aprox 3 horas}}
+La implementación se ha realizado conjuntamente, no realizando
+reparto de tareas, ya que se ha considerado que dado el tamaño del
+problema en cuestión no merecía la pena.
+\subsection{Control de Resultados\\ {\small Dedicación: aprox 3 horas}}
 Para el control de resultados se han utilizado 3 tablas de sudoku, una
 de ellas aportada con el trabajo, y las otras obtenidas de revistas de
 pasatiempos.\\
-Dada la metodolog\'ia usada, se realizaban pruebas constantemente,
-midi\'endose tanto la correctitud de los algoritmos, como la eficiencia
+Dada la metodología usada, se realizaban pruebas constantemente,
+midiéndose tanto la correctitud de los algoritmos, como la eficiencia
 de los mismos.\\
-El control de resultados se realiz\'o de manera manual, con algo de
+El control de resultados se realizó de manera manual, con algo de
 ayuda de utilidades de tratamiento de texto.
-\subsection{Obtenci\'on de m\'etricas\\ {\small Dedicaci\'on: aprox 2 horas}}
-Para las mediciones de correctitud, primero se realiz\'o y comprob\'o el
-c\'odigo en C, siendo esta nuestra implementaci\'on base, y a partir de
-esa implementaci\'on se resolvieron las cuadriculas a utilizar, las
-cuales fueron comprobadas manualmente. A continuaci\'on, mediante la
-funci\'on de exportado de zonas de memoria de Eclipse y la utilidad diff
+\subsection{Obtención de métricas\\ {\small Dedicación: aprox 2 horas}}
+Para las mediciones de correctitud, primero se realizó y comprobó el
+código en C, siendo esta nuestra implementación base, y a partir de
+esa implementación se resolvieron las cuadriculas a utilizar, las
+cuales fueron comprobadas manualmente. A continuación, mediante la
+función de exportado de zonas de memoria de Eclipse y la utilidad diff
 (que permite comparar archivos de texto o binarios y resaltar las
 diferencias) se comprobaba si las implementaciones en otros lenguajes
 eran correctas, comparando su salida con la salida de ejemplo.\\
-Para la medici\'on del tiempo de ejecuci\'on (medida poco \'util en un
+Para la medición del tiempo de ejecución (medida poco útil en un
 entorno real, dado que depende del sistema de prueba, pero adecuado
-para comparar las distintas implementaciones) se repitio la ejecuci\'on
+para comparar las distintas implementaciones) se repitio la ejecución
 de las rutinas en cuestion varias veces, dado que tardaban demasiado
-poco para ser medidas normalmente. Para ello se utiliz\'o un cron\'ometro
-externo al sistema, que se iniciaba y deten\'ia manualmente, por ello,
+poco para ser medidas normalmente. Para ello se utilizó un cronómetro
+externo al sistema, que se iniciaba y detenía manualmente, por ello,
 se ralizan varias medidas, para evitar sesgo humano.\\
-Para las mediciones de tamaño de c\'odigo (tanto est\'atico como din\'amico)
-se ha usado la ayuda del debugger gdb, mediante la interfaz gr\'afica
+Para las mediciones de tamaño de código (tanto estático como dinámico)
+se ha usado la ayuda del debugger gdb, mediante la interfaz gráfica
 ofrecida por el IDE Eclipse.
 
 \section{Resultados}
 % Hay que presentar los resultados, explicarlos y analizarlos.
-En la escritura de las pruebas se utiliza la notaci\'on c\_a para
-indicar que la funci\'on llamadora (en nuestro caso la que recorre la
-cuadr\'icula) esta realizada en C, y la funci\'on hoja (en nuestro
+En la escritura de las pruebas se utiliza la notación c\_a para
+indicar que la función llamadora (en nuestro caso la que recorre la
+cuadrícula) esta realizada en C, y la función hoja (en nuestro
 caso, la que analiza una casilla particular y marca sus candidatos)
 esta en ARM; de la misma forma se usa la sigla t para funciones Thumb.\\
-Todas las medidas est\'an en segundos
+Todas las medidas están en segundos
 
-Tiempos de ejecuci\'on:
+Tiempos de ejecución:
 \begin{itemize}
-\item {\large Tiempo de ejecuci\'on}\\
+\item {\large Tiempo de ejecución}\\
   1000 pruebas:
   \begin{center}
     \begin{tabular}{ r | r | r | r | r | r | r | r }
-      Funci\'on & $t_1 (s)$ & $t_2 (s)$ & $t_3 (s)$ & $t_4 (s)$ & $t_5 (s)$ & Media (s) & TPE\footnotemark[1] (s) \\ \hline
+      Función & $t_1 (s)$ & $t_2 (s)$ & $t_3 (s)$ & $t_4 (s)$ & $t_5 (s)$ & Media (s) & TPE\footnotemark[1] (s) \\ \hline
       c\_c    & 16.02 & 16.23 & 16.27 & 16.19 & 16.11 & 16.16 & 0.001616 \\
       c\_a    & 3.22  & 2.8   & 2.76  & 2.73  & 2.73  & 2.848 & 0.000285 \\
       c\_t    & 3.57  & 3.39  & 3.51  & 3.51  & 3.51  & 3.498 & 0.000349 \\ \hline
@@ -204,12 +204,12 @@ Tiempos de ejecuci\'on:
       a\_t    & 3.22  & 3.2   & 3.26  & 3.16  & 3.32  & 3.232 & 0.000323 \\ \hline
     \end{tabular}
   \end{center}
-  \footnotemark[1]{Tiempo Por Ejecuci\'on de la subrutina en cuesti\'on}
+  \footnotemark[1]{Tiempo Por Ejecución de la subrutina en cuestión}
 
   10000 pruebas:\\
   \begin{center}
     \begin{tabular}{ r | r | r | r | r | r | r | r }
-      Funci\'on & $t_1 (s)$ & $t_2 (s)$ & $t_3 (s)$ & $t_4 (s)$ & $t_5 (s)$ & Media (s) & TPE\footnotemark[1] (s) \\ \hline
+      Función & $t_1 (s)$ & $t_2 (s)$ & $t_3 (s)$ & $t_4 (s)$ & $t_5 (s)$ & Media (s) & TPE\footnotemark[1] (s) \\ \hline
       c\_c    & 155.12 & 152.56 & 157.72 & 158.64 & 158.64 & 156.54 & 0.001565 \\
       c\_a    & 23.26  & 23.13  & 23.20  & 23.19  & 23.19  & 23.194 & 0.000232 \\
       c\_t    & 31.53  & 31.41  & 31.98  & 31.36  & 31.36  & 31.528 & 0.000315 \\ \hline
@@ -218,31 +218,31 @@ Tiempos de ejecuci\'on:
       a\_t    & 27.41  & 28.08  & 29.04  & 28.95  & 28.95  & 28.486 & 0.000285 \\ \hline
     \end{tabular}
   \end{center}
-  \footnotemark[1]{Tiempo Por Ejecuci\'on de la subrutina en cuesti\'on}
+  \footnotemark[1]{Tiempo Por Ejecución de la subrutina en cuestión}
   \clearpage
-\item {\large Tamaño de c\'odigo}\\
-  En la comparaci\'on se ha medido la funci\'on candidatos, que a partir
-  de una casilla obtiene los n\'umeros que pueden ir all\'i. Se ha usado
+\item {\large Tamaño de código}\\
+  En la comparación se ha medido la función candidatos, que a partir
+  de una casilla obtiene los números que pueden ir allí. Se ha usado
   como base la casilla (0,2) del sudoku dado como ejemplo, dado que es
-  la primera casilla vac\'ia.
+  la primera casilla vacía.
   \begin{center}
     \begin{tabular}{ l | r | r }
       % TODO: terminar
-      & \multicolumn{2}{|c|}{Tamano} \\
-      Funci\'on                                 & est\'atico (bytes)   & Tamaño din\'amico (instrucciones) \\ \hline
-      sudoku\_candidatos\_c                   & 676                       & 2634                            \\
-      sudoku\_candidatos\_arm                 & 288                       & 349                             \\
-      sudoku\_candidatos\_thumb (Con pr\'ologo) & 254                       & 480                             \\
-      sudoku\_candidatos\_thumb (Sin pr\'ologo) & 214                       & 489                             \\ \hline
+      & \multicolumn{2}{|c}{Tamaño} \\
+      Función                                 & estático (bytes)   & dinámico (instrucciones) \\ \hline
+      sudoku\_candidatos\_c                   & 676                  & 2634                       \\
+      sudoku\_candidatos\_arm                 & 288                  & 349                        \\
+      sudoku\_candidatos\_thumb (Con prólogo) & 254                  & 480                        \\
+      sudoku\_candidatos\_thumb (Sin prólogo) & 214                  & 489                        \\ \hline
     \end{tabular}
   \end{center}
-  En este caso se han medido los tamaños de c\'odigo de las funciones
+  En este caso se han medido los tamaños de código de las funciones
   que calculan la tabla de sudoku completa; ha sido imposible la
-  medici\'on del tamaño din\'amico por razones de coste computacional
+  medición del tamaño dinámico por razones de coste computacional
   \begin{center}
     \begin{tabular}{ l | r | r }
       % TODO: terminar
-      Funci\'on                                   & Tamaño est\'atico (bytes) \\ \hline
+      Función                                   & Tamaño estático (bytes) \\ \hline
       sudoku\_recalcular\_c\_c                  & 172                       \\
       sudoku\_recalcular\_c\_a                  & 172                       \\
       sudoku\_recalcular\_c\_t \footnotemark[1] & 172                       \\
@@ -251,16 +251,16 @@ Tiempos de ejecuci\'on:
       sudoku\_recalcular\_a\_t                  & 100                       \\
     \end{tabular}
   \end{center}
-  \footnotemark{Es de notar que esta funci\'on no llama a
+  \footnotemark{Es de notar que esta función no llama a
     sudoku\_candidatos\_thumb directamente, dada la imposibilidad de
-    llamar a funciones en thumb desde C; sino a una funci\'on especial
-    sudoku\_candidatos\_thumb\_prologo, que est\'a escrita en ARM y
-    ejecuta la funci\'on thumb deseada}
+    llamar a funciones en thumb desde C; sino a una función especial
+    sudoku\_candidatos\_thumb\_prologo, que está escrita en ARM y
+    ejecuta la función thumb deseada}
 \end{itemize}
 
-% \subsection{Conclusiones de las m\'etricas}
+% \subsection{Conclusiones de las métricas}
 
-% [ Introducir aqu\'i m\'etricas y conclusi\'on]
+% [ Introducir aquí métricas y conclusión]
 %                               @B@B@
 %                               @@B@B
 %                               @B@B@
@@ -326,45 +326,45 @@ Tiempos de ejecuci\'on:
 %            Mi@kO:                                ::uO7
 
 \section{Conclusiones}
-% Es lo \'ultimo que se lee, por tanto es una secci\'on muy importante
+% Es lo último que se lee, por tanto es una sección muy importante
 % que se debe utilizar para remarcar los mensajes que queremos que
 % el lector reciba. Por ejemplo, si estamos evaluando un producto
-% podemos enfatizar sus puntos fuertes y sus puntos d\'ebiles, y
+% podemos enfatizar sus puntos fuertes y sus puntos débiles, y
 % señalar posibilidades de mejora. Normalmente al final se incluyen
-% referencias, bibliograf\'ia, \'indice de expresiones t\'ecnicas y
+% referencias, bibliografía, índice de expresiones técnicas y
 % anexos.
 
-La primera observaci\'on que se hace es la inmensa diferencia en
+La primera observación que se hace es la inmensa diferencia en
 eficiencia entre C y ensamblador, incluso en algoritmos sencillos como
 este, sin embargo la diferencia de dificultad al realizar los
 programas es considerable. Es de notar que la principal diferencia es
-en la funci\'on candidatos, que es la que m\'as carga aporta al programa;
-tambi\'en puede verse como el llamador es poco importante, obteni\'endose
-diferencias de apenas unas pocas cienmil\'esimas de segundo entre las
+en la función candidatos, que es la que más carga aporta al programa;
+también puede verse como el llamador es poco importante, obteniéndose
+diferencias de apenas unas pocas cienmilésimas de segundo entre las
 llamadas a c\_a y a\_a.\\
-La elecci\'on de C como funci\'on hoja es impensable, dado que se obtienen
-tiempos del orden de 6-7 veces mayores, una posibilidad ser\'ia utilizar
-una compilaci\'on mas agresiva en la eficiencia, que aunque dificulta la
-comprensi\'on del c\'odigo generado, generalmente es m\'as eficiente. En la
-situaci\'on en la que estamos (Interacci\'on con un humano) la diferencia
+La elección de C como función hoja es impensable, dado que se obtienen
+tiempos del orden de 6-7 veces mayores, una posibilidad sería utilizar
+una compilación mas agresiva en la eficiencia, que aunque dificulta la
+comprensión del código generado, generalmente es más eficiente. En la
+situación en la que estamos (Interacción con un humano) la diferencia
 de eficiencia entre ASM y Thumb es despreciable, por lo tanto el
-factor que determinar\'a la elecci\'on ser\'a el tamaño de la memoria
-disponible, escogi\'endose Thumb en caso de que esta sea baja, y ARM en
+factor que determinará la elección será el tamaño de la memoria
+disponible, escogiéndose Thumb en caso de que esta sea baja, y ARM en
 caso contrario.\\
-En conclusi\'on, se observa que la forma que balancea mejor comodidad de
-desarrollo y eficiencia es la programaci\'on del cuerpo principal de la
-aplicaci\'on en un lenguaje de alto nivel (C en nuestro caso), y la
-programaci\'on de las subrutinas especialmente costosas en un lenguaje
+En conclusión, se observa que la forma que balancea mejor comodidad de
+desarrollo y eficiencia es la programación del cuerpo principal de la
+aplicación en un lenguaje de alto nivel (C en nuestro caso), y la
+programación de las subrutinas especialmente costosas en un lenguaje
 de bajo nivel (ensamblador).
 
 \subsection{Margen de mejora}
 Para la tarea para la cual se va a utilizar (un sistema que incluye
-interacci\'on con un ser humano) la velocidad de las subrutinas es
+interacción con un ser humano) la velocidad de las subrutinas es
 suficientemente alta, sin embargo, si comparamos nuestra
-implementaci\'on con implementaciones de algunos compañeros, vemos que
-a\'un queda muchas posibilidades de mejorar en ese aspecto.
+implementación con implementaciones de algunos compañeros, vemos que
+aún queda muchas posibilidades de mejorar en ese aspecto.
 \clearpage
-\section{Bibliograf\'ia}
+\section{Bibliografía}
 \begin{itemize}
 \item Manuales de consulta ofrecidos por el profesorado
 \item \url{https://es.wikipedia.org/wiki/Sudoku}
