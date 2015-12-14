@@ -25,3 +25,5 @@ RemoteSystemsTempFiles/
 **/*.toc
 **/memoria/*.log
 **/*.aux
+# .lnk
+**/*.lnk
