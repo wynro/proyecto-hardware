@@ -7,8 +7,12 @@
 #include "44b.h"
 #include "Timer2.h"
 
+void Timer2_ISR(void) __attribute__((interrupt("IRQ")));
+
+
 /*--- variables globales ---*/
 int timer2_num_int = 0;
+
 
 /*--- codigo de las funciones ---*/
 void Timer2_ISR(void) {

@@ -10,38 +10,56 @@
 
 /**
  * Valor actual de la cuenta interna
+ *
+ * @return valor actual
  */
 int Button_valor_actual(void);
 
 /**
  * Informa de si se ha de avanzar
+ *
+ * @return 1 en caso de que el flag este activo, 0 en caso contrario
  */
 int Button_next(void);
 
 /**
- * Iniciar el sistema de botones
+ * Iniciar el sistema de botones, poniendo la pantalla al valor minimo pasado
+ *
+ * @param[in] min Valor minimo que aparecera en la pantalla
+ * @param[in] max Valor maximo que aparecera en la pantalla
  */
 void Button_init(int min, int max);
 
 /**
  * Accion asociada a la pulsacion del boton de codigo n
+ *
+ * @param[in] n Codigo de boton pulsado
  */
 void action(int n);
 
 /**
- * Ajustamos el valor de la cuenta interna del boton, actualizando el display
+ * Ajusta el valor de la cuenta interna del boton, actualizando el display.
+ * n ha de pertenecer al rango al cual esta actualmente configurado el boton.
+ *
+ * @param[in] n nuevo valor a poner
  */
-void Button_set_valor_actual(int);
+void Button_set_valor_actual(int n);
 
 /**
- * Bajamos el flag interno de next
+ * Baja el flag interno de next
  */
 void Button_low_next(void);
 
+/**
+ * Indica si ha sido realizada alguna accion que afecte al estado interno
+ * del boton, tanto la pulsacion de un boton como la repeticion de una accion
+ *
+ * @return 1 en caso de que el flag este activo, 0 en caso contrario
+ */
 int Button_update_screen();
 
+/**
+ * Baja el flag interno indicando que se han realizado acciones
+ */
 void Button_low_update_screen();
-
-
-
 #endif /* BUTTON_H_ */

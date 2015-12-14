@@ -19,6 +19,9 @@ enum {
 	NUM_REGION = 3
 };
 
+/**
+ * Inicializa el juego
+ */
 void init_game(void);
 
 /**
@@ -53,7 +56,7 @@ int sudoku_candidatos_arm(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS],
  *
  * @param	cuadricula	Cuadricula a modificar
  *
- * @return	Numero de casillas vacias, negativo en caso de que haya errores
+ * @return	Numero de casillas vacias, o -1 en caso de que haya errores
  */
 int sudoku_recalcular(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]);
 
@@ -64,12 +67,48 @@ int sudoku_recalcular(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]);
  *
  * @return 0 en caso de que la celda sea correcta
  */
-int es_error(CELDA celda);
+int celda_es_error(CELDA celda);
 
-int es_pista(CELDA celda);
+/**
+ * Devuelve un numero mayor que cero en caso de que la celda sea pista inicial,
+ * devuelve 0 en caso contrario
+ *
+ * @param[in] celda Celda a comprobar
+ *
+ * @return 0 si y solo si la celda no es pista
+ */
+int celda_es_pista(CELDA celda);
 
+/**
+ * Devuelve un numero mayor que cero en caso de que la celda sea pista
+ * inicial, devuelve 0 en caso contrario
+ *
+ * @param[in] celda Celda a comprobar
+ *
+ * @return 0 si y solo si la celda no es pista
+ */
+int celda_es_candidato(CELDA celda, uint8_t valor);
+
+/**
+ * Actualiza el valor de la celda dada al valor dado
+ *
+ * @param[out] celda Celda a cambiar
+ * @param[in]  val	Nuevo valor
+ */
 void celda_poner_valor(CELDA *celdaptr, uint8_t val);
 
+/**
+ * Devuelve el numero en la celda dada (0 si es vacia)
+ *
+ * @param[out] celda Celda a consultar
+ */
+inline uint8_t celda_leer_valor(CELDA celda);
+
+/**
+ * Pone cualquier casilla que no sea pista a 0
+ *
+ * @param[out] cuadricuala Cuadricula a editar
+ */
 void sudoku_vacia_tabla(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]);
 
 #endif /* SUDOKU_2015_H_ */
