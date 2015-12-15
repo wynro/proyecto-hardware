@@ -14,6 +14,10 @@
 #include "def.h"
 
 #define SUDOKU_NUM_CUADS 9
+/**
+ * Tenemos el problema de que este numero ha de ser simultaneamente
+ * multiplo de 9 y de 2, y 36 era demasiado grande, pero bueno...
+ */
 #define SUDOKU_SQUARE_SIZE 18
 #define SUDOKU_X0 20
 #define SUDOKU_Y0 20

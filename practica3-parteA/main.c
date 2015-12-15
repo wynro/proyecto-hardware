@@ -169,6 +169,9 @@ void Main(void) {
 				Button_low_next();
 				// Seleccionamos modo de juego (cuadricula/instrucciones)
 				int valor_actual = Button_valor_actual();
+				// Aun cuando sea menos eficiente,
+				// esto permite reutilizar los
+				// casilleros
 				if (valor_actual == 1) {
 					memcpy(cuadriculaSeleccionada, cuadricula,
 							sizeof(cuadriculaSeleccionada));
