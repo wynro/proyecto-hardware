@@ -15,6 +15,7 @@
 #include "Timer2.h"
 #include "Bmp.h"
 #include "string.h"
+#include "resources/still-alive-lyrics.h"
 
 /*--- declaracion de funciones ---*/
 void Main(void);
@@ -23,6 +24,7 @@ typedef enum {
 	title_screen,
 	final_screen,
 	aperture,
+	instructions,
 	esperando_fila,
 	esperando_columna,
 	esperando_valor
@@ -59,14 +61,15 @@ CELDA cuadriculaCasiResuelta[NUM_FILAS][NUM_COLUMNAS] = { { 0x0000, 0x6800,
 void Main(void) {
 	int tiempo_juego = 0;
 	int tiempo_calculos = 0;
-	int tiempo_ini = 0;
-	int tiempo_fin = 0;
+	int tiempo_ini_calculo = 0;
+	int tiempo_fin_calculo = 0;
 	int tiempo_juego_final = 0;
 	int tiempo_final_no_leido = 1;
 	int tiempo_base_aperture = 0;
 	int tiempo_base_aperture_no_leido = 1;
 	int iterador_aperture = -1;
-	// Lo siento much pero no voy a poner 119 estados mas
+	int errores = 1;
+	// Lo siento mucho pero no voy a poner 119 estados mas
 	int last_time_aperture = -1;
 
 	sys_init(); /* inicializacion de la placa, interrupciones, puertos y UART */
@@ -77,20 +80,17 @@ void Main(void) {
 	Lcd_Clr();
 	Lcd_Active_Clr();
 
-	/* draw rectangle pattern */
-#ifdef Eng_v // english version
-	Lcd_DspAscII8x16(10,0,DARKGRAY,"Embest S3CEV40 ");
-#else
-//		Lcd_DspHz16(10,0,DARKGRAY,"英蓓特三星实验评估板");
-#endif
+
+
+
+//
+//	sudoku_graphics_print_title_screen();
+//	while (1)
+//		;
 
 	Timer2_Inicializar();
-	Button_init(1, 2);
+	Button_init(1, 3);
 	Timer2_Empezar();
-	tiempo_ini = Timer2_Leer();
-	int errores = sudoku_recalcular(cuadricula);
-	tiempo_fin = Timer2_Leer();
-	tiempo_calculos += (tiempo_fin - tiempo_ini);
 
 	uint8_t fila = 1;
 	uint8_t columna = 1;
@@ -103,7 +103,7 @@ void Main(void) {
 		// BLOQUE RENDERIZADO
 		Lcd_Clr();
 		if (estadoJuego == title_screen) {
-			sudoku_graphics_print_title_screen();
+			sudoku_graphics_print_title_screen(Button_valor_actual());
 		} else if (estadoJuego == final_screen) {
 			// Esto es para poder mantener en funcionamiento el reloj, para la tarta
 			if (tiempo_final_no_leido) {
@@ -113,6 +113,11 @@ void Main(void) {
 			sudoku_graphics_print_final_screen(tiempo_juego_final,
 					tiempo_calculos, errores);
 		} else if (estadoJuego == aperture) {
+			// Cores and turrets of every stage,
+			// Wouldn't you like to escape this cage?
+			// Come to us and you'll be sure
+			// You're not safe in Aperture
+
 			// La gestion de animaciones no es simple
 			if (tiempo_base_aperture_no_leido) {
 				tiempo_base_aperture_no_leido = 0;
@@ -124,11 +129,26 @@ void Main(void) {
 				last_time_aperture = tiempo_juego;
 			}
 			sudoku_graphics_print_still_alive(iterador_aperture);
+		} else if (estadoJuego == instructions) {
+			sudoku_graphics_print_instructions();
 		} else {
 			// Actualizamos la pantalla de juego
 			sudoku_graphics_draw_base();
 			sudoku_graphics_fill_from_data(cuadriculaSeleccionada);
 			sudoku_graphics_draw_time(tiempo_juego, tiempo_calculos);
+			switch (estadoJuego) {
+			case esperando_fila:
+				sudoku_graphics_draw_state(0, 0);
+				break;
+			case esperando_columna:
+				sudoku_graphics_draw_state(1, 0);
+				break;
+			case esperando_valor:
+				sudoku_graphics_draw_state(2, Button_valor_actual());
+				break;
+			default:
+				break;
+			}
 			// Por el problemilla A
 			if (fila < 10) {
 				sudoku_graphics_remark_square(fila - 1, columna - 1);
@@ -146,16 +166,25 @@ void Main(void) {
 		switch (estadoJuego) {
 		case title_screen:
 			if (Button_next()) {
-				// Seleccionamos cuadricula
-				if (Button_valor_actual() == 1) {
+				Button_low_next();
+				// Seleccionamos modo de juego (cuadricula/instrucciones)
+				int valor_actual = Button_valor_actual();
+				if (valor_actual == 1) {
 					memcpy(cuadriculaSeleccionada, cuadricula,
 							sizeof(cuadriculaSeleccionada));
-				} else {
+				} else if (valor_actual == 2) {
 					memcpy(cuadriculaSeleccionada, cuadriculaCasiResuelta,
 							sizeof(cuadriculaSeleccionada));
+				} else {
+					estadoJuego = instructions;
+					break;
 				}
+				tiempo_ini_calculo = Timer2_Leer();
+				errores = sudoku_recalcular(cuadriculaSeleccionada);
+				tiempo_fin_calculo = Timer2_Leer();
+				tiempo_calculos += (tiempo_fin_calculo - tiempo_ini_calculo);
 				// Reseteamos to-do
-				sudoku_vacia_tabla(cuadriculaSeleccionada);
+
 				fila = 1;
 				columna = 1;
 				valor = 0;
@@ -170,7 +199,7 @@ void Main(void) {
 
 				// Dibujamos la nueva tabla
 				Lcd_Clr();
-				Button_low_next();
+
 				sudoku_graphics_draw_base();
 				sudoku_graphics_draw_time(0, 0);
 				sudoku_graphics_fill_from_data(cuadriculaSeleccionada);
@@ -220,10 +249,11 @@ void Main(void) {
 					celda_poner_valor(
 							&(cuadriculaSeleccionada[columna - 1][fila - 1]),
 							valor);
-					tiempo_ini = Timer2_Leer();
+					tiempo_ini_calculo = Timer2_Leer();
 					errores = sudoku_recalcular(cuadriculaSeleccionada);
-					tiempo_fin = Timer2_Leer();
-					tiempo_calculos += (tiempo_fin - tiempo_ini);
+					tiempo_fin_calculo = Timer2_Leer();
+					tiempo_calculos +=
+							(tiempo_fin_calculo - tiempo_ini_calculo);
 				}
 				fila = 1;
 				columna = 1;
@@ -242,19 +272,28 @@ void Main(void) {
 				Button_low_next();
 				if (!errores) {
 					// Vamonos a aperture
-					Button_init(1, 2);
+					Button_reconfigure_range(1, 3);
 					estadoJuego = aperture;
 				} else {
-					Button_init(1, 2);
+					Button_reconfigure_range(1, 3);
 					estadoJuego = title_screen;
 				}
 			}
 			break;
 		case aperture:
-			if (Button_next() || iterador_aperture == 113) { //TODO: sincronizar esto con still-alive-lyrics.h
+			if (Button_next() || iterador_aperture == (STILL_ALIVE_SIZE - 6)) {
 				Button_low_next();
+				Button_reconfigure_range(1, 3);
 				estadoJuego = title_screen;
 			}
+			break;
+		case instructions:
+			if (Button_next()) {
+				Button_low_next();
+				Button_reconfigure_range(1, 3);
+				estadoJuego = title_screen;
+			}
+			break;
 		default:
 			break;
 		}

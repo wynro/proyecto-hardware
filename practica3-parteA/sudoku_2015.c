@@ -20,7 +20,7 @@ inline void celda_poner_valor(CELDA *celdaptr, uint8_t val) {
 	*celdaptr = ((*celdaptr) & 0x0FFF) | ((val & 0x000F) << 12);
 }
 
-inline int es_error(CELDA celda) {
+inline int celda_es_error(CELDA celda) {
 	return celda & 0b0000001000000000;
 }
 

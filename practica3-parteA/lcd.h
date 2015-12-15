@@ -114,7 +114,7 @@ void  Lcd_Dma_Trans(void);
 void  LcdVirtualToTrue(void);
 void  LcdClrRect(INT16 usLeft, INT16 usTop, INT16 usRight, INT16 usBottom, INT8U ucColor);
 void  Lcd_Draw_Box(INT16 usLeft, INT16 usTop, INT16 usRight, INT16 usBottom, INT8U ucColor);
-void Lcd_Draw_Box_inverted(INT16 usLeft, INT16 usTop, INT16 usRight, INT16 usBottom, INT8U ucColor);
+void  Lcd_Draw_Box_inverted(INT16 usLeft, INT16 usTop, INT16 usRight, INT16 usBottom, INT8U ucColor);
 void  Lcd_Draw_Filled_Box(INT16 usLeft, INT16 usTop, INT16 usRight, INT16 usBottom, INT8U ucColor);
 void  Lcd_Draw_Line(INT16 usX0, INT16 usY0, INT16 usX1, INT16 usY1, INT8U ucColor, INT16U usWidth);
 void  Lcd_Draw_HLine(INT16 usX0, INT16 usX1, INT16 usY0, INT8U ucColor, INT16U usWidth);
@@ -134,6 +134,10 @@ void  Lcd_Circle(INT8 X, INT8 Y, INT16 radius, INT8U ForeColor);
 void  Zdma0Done(void) __attribute__ ((interrupt ("IRQ")));
 void  Lcd_DspAscII6x8(INT16U usX0, INT16U usY0,INT8U ForeColor, INT8U* pucChar);
 void  Lcd_DspAscII8x16(INT16U x0, INT16U y0, INT8U ForeColor, INT8U* s);
+void  Lcd_DspAscII8x16HorizontallyCentered(INT16U y0, INT8U ForeColor, INT8U * s);
+void  Lcd_DspAscII8x16HorizontallyCentered_inverted(INT16U y0, INT8U ForeColor, INT8U * s);
+
+
 void  Lcd_DspHz16(INT16U x0, INT16U y0, INT8U ForeColor, INT8U *s);
 void  ReverseLine(INT32U ulHeight, INT32U ulY);
 void  ReverseSquare(INT32U ulX0, INT32U ulY0, INT32U ulX1, INT32U ulY1);

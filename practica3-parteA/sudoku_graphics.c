@@ -12,20 +12,53 @@
 #include "lcd.h"
 #include "resources/title-bitmap.h"
 #include "resources/aperture-logo-bitmap.h"
-#include "Bmp.h"
 #include "resources/still-alive-lyrics.h"
+#include "Bmp.h"
 
 #define celdaPos0x(x) (SUDOKU_X0 + 1 + ((SUDOKU_SQUARE_SIZE + 1) * (x)))
 #define celdaPos0y(y) (SUDOKU_Y0 + 1 + ((SUDOKU_SQUARE_SIZE + 1) * (y)))
 
 #define DRAW_MESSAGE
 
-#define MESSAGE "Introduzca fila A para finalizar"
-//#define TIME_PLAYING "Jugando:"
-//#define TIME_CALCULATING "Calculos:"
-#define TITLE_MESSAGE "Pulse start para jugar!"
+char *time_message = "Tiempos:";
+char *time_playing_short = "Jugando:";
+char *time_calculating_short = "Calc (ms):";
+char *time_playing_message = "Tiempo total de juego: ";
+char *time_calculating_message = "Tiempo total de calculo(ms): ";
+char *mensaje_aperture = "Pulsa start para recibir tu premio";
+char *mensaje_fracaso_1 = "No resolviste el sudoku :(";
+char *mensaje_fracaso_2 = "Pulsa start para reiniciar.";
+char *mensaje_seleccionando = "Seleccione:";
+char *mensaje_fila = "Fila";
+char *mensaje_columna = "Columna";
+char *mensaje_valor = "Valor";
+char *title_message = "Pulse start para seleccionar!";
+char *message_A = "Introduzca fila A para finalizar";
+#define INSTRUCTION_LINES 11
 
-/* A utility function to reverse a string  */
+// Estas instrucciones han sido cedidas por Miguel Jorge Galindo e Iñigo Gascon
+char *instructions[INSTRUCTION_LINES] = {
+"INSTRUCCIONES DE JUEGO: ",
+"Cuando comience el juego podra elegir",
+"la fila que quiere modificar con el",
+"boton izquierdo y confirmar la",
+"eleccion con el boton derecho.",
+"A continuacion podra elegir la",
+"columna de la misma manera.",
+"Por ultimo debera seleccionar",
+"el valor deseado.",
+"",
+"Pulse boton derecho para volver"
+};
+//
+//char *instructions[INSTRUCTION_LINES] = { "INSTRUCCIONES",
+//		"El boton derecho actua como start y", "enter.",
+//		"El boton izquierdo permite cambiar la", "seleccion actual.", "",
+//		"Introduzca fila A para salir" };
+#define GAME_TYPES_SIZE 3
+char *game_types_message[GAME_TYPES_SIZE] = { "1: Cuadricula normal",
+		"2: Cuadricula terminada", "3: Instrucciones" };
+
 void reverse(char str[], int length) {
 	int start = 0;
 	int end = length - 1;
@@ -36,39 +69,27 @@ void reverse(char str[], int length) {
 	}
 }
 
-// Implementation of itoa()
 char* itoa(int num, char* str, int base) {
 	int i = 0;
 	int isNegative = 0;
-
-	/* Handle 0 explicitely, otherwise empty string is printed for 0 */
 	if (num == 0) {
 		str[i++] = '0';
 		str[i] = '\0';
 		return str;
 	}
-
-	// In standard itoa(), negative numbers are handled only with
-	// base 10. Otherwise numbers are considered unsigned.
 	if (num < 0 && base == 10) {
 		isNegative = 1;
 		num = -num;
 	}
-
-	// Process individual digits
 	while (num != 0) {
 		int rem = num % base;
 		str[i++] = (rem > 9) ? (rem - 10) + 'a' : rem + '0';
 		num = num / base;
 	}
-
-	// If number is negative, append '-'
-	if (isNegative)
+	if (isNegative) {
 		str[i++] = '-';
-
-	str[i] = '\0'; // Append string terminator
-
-	// Reverse the string
+	}
+	str[i] = '\0';
 	reverse(str, i);
 
 	return str;
@@ -233,7 +254,7 @@ void sudoku_graphics_fill_from_data(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]) {
 				// Simplemente ponemos el numero en el cuadrado, y si es error lo marcamos
 				sudoku_graphics_put_number_in_square(i, j, valor,
 						es_pista(cuadricula[j][i]) ? BLACK : DARKGRAY);
-				if (es_error(cuadricula[j][i])) {
+				if (celda_es_error(cuadricula[j][i])) {
 					sudoku_graphics_invert_square(i, j);
 				}
 			}
@@ -288,11 +309,9 @@ void sudoku_graphics_draw_base() {
 	}
 
 #ifdef DRAW_MESSAGE
-	char *message = MESSAGE;
-
 	Lcd_DspAscII8x16(SUDOKU_FONT_LENGTH,
 			SCR_YSIZE - SUDOKU_FONT_HEIGHT - SUDOKU_FONT_HEIGHT / 2, BLACK,
-			message);
+			message_A);
 #endif
 }
 
@@ -343,52 +362,71 @@ int strlen(char* s) {
 	return i;
 }
 void sudoku_graphics_draw_time(int time_playing_s, int time_calculating_ms) {
-	char *s = "Jugando:";
-	char *t = "Calc (ms):";
 	char play_time[8];
 	char calc_time[8];
 
 	itoa(time_calculating_ms, calc_time, 10);
 	toComplexNotation(time_playing_s, play_time);
+	// Mensaje de tiempos
+	Lcd_DspAscII8x16((SUDOKU_NUM_CUADS + 2) * SUDOKU_SQUARE_SIZE,
+			SUDOKU_FONT_HEIGHT / 2, BLACK, time_message);
 	// Mensaje de Tiempo jugado
 	Lcd_DspAscII8x16((SUDOKU_NUM_CUADS + 2) * SUDOKU_SQUARE_SIZE,
-			SUDOKU_FONT_HEIGHT / 2, BLACK, s);
+			SUDOKU_FONT_HEIGHT / 2 + SUDOKU_FONT_HEIGHT, BLACK,
+			time_playing_short);
+	// Tiempo de juego
+	Lcd_DspAscII8x16((SUDOKU_NUM_CUADS + 2) * SUDOKU_SQUARE_SIZE,
+			(SUDOKU_FONT_HEIGHT / 2) + 2 * SUDOKU_FONT_HEIGHT, BLACK,
+			play_time);
+
 	// Mensaje de tiempo de calculo
 	Lcd_DspAscII8x16((SUDOKU_NUM_CUADS + 2) * SUDOKU_SQUARE_SIZE,
-			(SUDOKU_FONT_HEIGHT / 2) + SUDOKU_FONT_HEIGHT, BLACK, t);
-
-	// Tiempo de juego
-	Lcd_DspAscII8x16(
-			(SUDOKU_NUM_CUADS + 2) * SUDOKU_SQUARE_SIZE + (strlen(s) - 1) * 8,
-			(SUDOKU_FONT_HEIGHT / 2), BLACK, play_time);
+			(SUDOKU_FONT_HEIGHT / 2) + 3 * SUDOKU_FONT_HEIGHT, BLACK,
+			time_calculating_short);
 
 	// Tiempo de calculo
-	Lcd_DspAscII8x16(
-			(SUDOKU_NUM_CUADS + 2) * SUDOKU_SQUARE_SIZE + (strlen(t) + 1) * 8,
-			(SUDOKU_FONT_HEIGHT / 2) + SUDOKU_FONT_HEIGHT, BLACK, calc_time);
-//	Lcd_DspAscII8x16(
-//			(SUDOKU_NUM_CUADS + 2) * SUDOKU_SQUARE_SIZE
-//					+ SUDOKU_FONT_LENGTH * 10,
-//			SUDOKU_FONT_HEIGHT / 2, BLACK, play_time_s);
-
+	Lcd_DspAscII8x16((SUDOKU_NUM_CUADS + 2) * SUDOKU_SQUARE_SIZE,
+			(SUDOKU_FONT_HEIGHT / 2) + 4 * SUDOKU_FONT_HEIGHT, BLACK,
+			calc_time);
 }
 
-void sudoku_graphics_print_title_screen() {
-	char *s = TITLE_MESSAGE;
-	Lcd_DspAscII8x16HorizontallyCentered((SCR_YSIZE / 2) + 16 * 2, BLACK,
-			(unsigned char *) s);
+void sudoku_graphics_print_instructions() {
+	int i;
+	for (i = 0; i < INSTRUCTION_LINES; ++i) {
+		Lcd_DspAscII8x16(20, 16 + 16 * i, BLACK, instructions[i]);
+	}
+}
+
+void sudoku_graphics_print_title_screen(int lineSelected) {
+	int i;
 	BitmapViewHorizontallyCentered(
-			(SCR_YSIZE - Stru_Bitmap_title.usHeight) / 2
-					- Stru_Bitmap_title.usHeight / 4, Stru_Bitmap_title);
+			(SCR_YSIZE / 2) - SUDOKU_FONT_HEIGHT * 2
+					- Stru_Bitmap_title.usHeight, Stru_Bitmap_title);
+
+	// Line selection
+	int maxLength = 0;
+	for (i = 0; i < GAME_TYPES_SIZE; ++i) {
+		// Comprobamos si toca actualizar la linea mayor
+		if (i == lineSelected - 1) {
+			Lcd_DspAscII8x16HorizontallyCentered_inverted(
+					(SCR_YSIZE / 2) - SUDOKU_FONT_HEIGHT
+							+ SUDOKU_FONT_HEIGHT * i, BLACK,
+					game_types_message[i]);
+		} else {
+			Lcd_DspAscII8x16HorizontallyCentered(
+					(SCR_YSIZE / 2) - SUDOKU_FONT_HEIGHT
+							+ SUDOKU_FONT_HEIGHT * i, BLACK,
+					game_types_message[i]);
+		}
+
+	}
+	Lcd_DspAscII8x16HorizontallyCentered(
+			(SCR_YSIZE / 2) + SUDOKU_FONT_HEIGHT * 5, BLACK,
+			(unsigned char *) title_message);
 }
 
 void sudoku_graphics_print_final_screen(int tiempo_juego_s,
 		int tiempo_calculos_ms, int errores) {
-	char *time_playing_message = "Tiempo total de juego: ";
-	char *time_calculating_message = "Tiempo total de calculo(ms): ";
-	char *mensaje_aperture = "Pulsa start para recibir tu premio";
-	char *mensaje_fracaso_1 = "No resolviste el sudoku :(";
-	char *mensaje_fracaso_2 = "Pulsa start para reiniciar.";
 	char time_playing[7];
 	char time_calculating[7];
 
@@ -401,23 +439,24 @@ void sudoku_graphics_print_final_screen(int tiempo_juego_s,
 	// Tiempo de juego
 	int time_playing_x = ((SCR_XSIZE - strlen(time_playing_message) * 8
 			- strlen(time_playing) * 8)) / 2;
-	Lcd_DspAscII8x16(time_playing_x, (SCR_YSIZE / 2) - 32, BLACK,
-			(unsigned char *) time_playing_message);
+	Lcd_DspAscII8x16(time_playing_x, (SCR_YSIZE / 2) - SUDOKU_FONT_HEIGHT * 2,
+			BLACK, (unsigned char *) time_playing_message);
 	Lcd_DspAscII8x16(time_playing_x + strlen(time_playing_message) * 8,
 			(SCR_YSIZE / 2) - 32, BLACK, (unsigned char *) time_playing);
 
 	// Tiempo de calculo
 	int time_calculating_x = ((SCR_XSIZE - strlen(time_calculating_message) * 8
 			- strlen(time_calculating) * 8)) / 2;
-	Lcd_DspAscII8x16(time_calculating_x, (SCR_YSIZE / 2) - 16, BLACK,
-			(unsigned char *) time_calculating_message);
+	Lcd_DspAscII8x16(time_calculating_x, (SCR_YSIZE / 2) - SUDOKU_FONT_HEIGHT,
+			BLACK, (unsigned char *) time_calculating_message);
 	Lcd_DspAscII8x16(time_calculating_x + strlen(time_calculating_message) * 8,
 			(SCR_YSIZE / 2) - 16, BLACK, (unsigned char *) time_calculating);
 
 	switch (errores) {
 	case 0:
 		// Terminado con éxito, aperture entra en escena
-		Lcd_DspAscII8x16HorizontallyCentered((SCR_YSIZE / 2) + 16 * 3, BLACK,
+		Lcd_DspAscII8x16HorizontallyCentered(
+				(SCR_YSIZE / 2) + SUDOKU_FONT_HEIGHT * 3, BLACK,
 				(unsigned char *) mensaje_aperture);
 		break;
 	default:
@@ -439,4 +478,44 @@ void sudoku_graphics_print_still_alive(int lineNumber) {
 				still_alive[lineNumber + i]);
 	}
 
+}
+
+void sudoku_graphics_draw_state(int state, int number) {
+	char valor[2];
+	if (number > 9) {
+		valor[1] = 'A';
+		valor[2] = '\0';
+	} else {
+		itoa(number, valor, 10);
+	}
+	Lcd_DspAscII8x16((SUDOKU_NUM_CUADS + 2) * SUDOKU_SQUARE_SIZE,
+			(SUDOKU_FONT_HEIGHT / 2) + (6 * SUDOKU_FONT_HEIGHT), BLACK,
+			mensaje_seleccionando);
+	switch (state) {
+	case 0:
+		// Esperando fila
+		Lcd_DspAscII8x16((SUDOKU_NUM_CUADS + 2) * SUDOKU_SQUARE_SIZE,
+				(SUDOKU_FONT_HEIGHT / 2) + (7 * SUDOKU_FONT_HEIGHT), BLACK,
+				mensaje_fila);
+		break;
+	case 1:
+		// Esperando columna
+		Lcd_DspAscII8x16((SUDOKU_NUM_CUADS + 2) * SUDOKU_SQUARE_SIZE,
+				(SUDOKU_FONT_HEIGHT / 2) + (7 * SUDOKU_FONT_HEIGHT), BLACK,
+				mensaje_columna);
+		break;
+	case 2:
+		// Esperando valor
+		Lcd_DspAscII8x16((SUDOKU_NUM_CUADS + 2) * SUDOKU_SQUARE_SIZE,
+				(SUDOKU_FONT_HEIGHT / 2) + (7 * SUDOKU_FONT_HEIGHT), BLACK,
+				mensaje_valor);
+		Lcd_DspAscII8x16(
+				(SUDOKU_NUM_CUADS + 2) * SUDOKU_SQUARE_SIZE
+						+ (strlen(mensaje_valor) + 1) * 8,
+				(SUDOKU_FONT_HEIGHT / 2) + (7 * SUDOKU_FONT_HEIGHT), BLACK,
+				valor);
+		break;
+	default:
+		break;
+	}
 }

@@ -37,4 +37,9 @@ void BitmapPop(INT16U x, INT16U y, STRU_BITMAP Stru_Bitmap);
 void BitmapView(INT16U x, INT16U y, STRU_BITMAP Stru_Bitmap);
 void CursorView(INT16U x, INT16U y);
 
+void BitmapViewHorizontallyCentered(INT16U y, STRU_BITMAP Stru_Bitmap);
+void BitmapViewVerticallyCentered(INT16U x, STRU_BITMAP Stru_Bitmap);
+void BitmapViewCentered(STRU_BITMAP Stru_Bitmap);
+
+
 #endif /* __BMP_H_ */

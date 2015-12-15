@@ -43,10 +43,11 @@ void sudoku_graphics_update_lcd();
  *
  * @param[in] tiempo_juego_ms Tiempo que ha durado el juego, en ms
  * @param[in] tiempo_calculos_ms Tiempo que han durado los calculos, en ms
+ * @param[in] tiempo_renderizado_ms Tiempo de renderizado, en ms
  * @param[in] errores Numero de errores actual
  *
  */
-void sudoku_graphics_print_final_screen(int tiempo_juego_ms,
+void sudoku_graphics_print_final_screen(int tiempo_juego_s,
 		int tiempo_calculos_ms, int errores);
 
 /**
@@ -92,10 +93,26 @@ void sudoku_graphics_remark_error_in_square(INT8 x, INT8 y, INT8 error);
 void sudoku_graphics_print_title_screen();
 
 /**
+ * Imprime la pantalla de instrucciones
+ */
+void sudoku_graphics_print_instructions();
+
+/**
  * Imprime 6 lineas de Still Alive a partir de la linea dada
  *
  * @param[in] lineNumber Linea a partir de la cual comenzar a imprimir
  */
 void sudoku_graphics_print_still_alive(int lineNumber);
+
+/**
+ * Dibuja el estado de seleccion en el que nos encontramos
+ * state=0 => esperando fila
+ * state=1 => esperando columna
+ * state=2 => esperando valor
+ *
+ * @param[in] state Estado actual, en forma textual
+ * @param[in] number Valor actual del boton
+ */
+void sudoku_graphics_draw_state(int state, int number);
 
 #endif /* SUDOKU_GRAPHICS_H_ */

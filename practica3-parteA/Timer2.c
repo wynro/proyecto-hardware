@@ -9,7 +9,6 @@
 
 void Timer2_ISR(void) __attribute__((interrupt("IRQ")));
 
-
 /*--- variables globales ---*/
 int timer2_num_int = 0;
 

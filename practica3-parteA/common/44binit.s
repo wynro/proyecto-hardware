@@ -288,12 +288,20 @@ F0:
     STRCC   r2, [r1], #4        /* --> STRCC r2, [r1] + ADD r1, r1, #4   */ 
     BCC	    F0
 F1:
-    LDR	    r1, =Image_ZI_Limit	/* Top of zero init segment */
-    MOV	    r2, #0
+	mov r3, #0
+	LDR r0, =Image_ZI_Base
+	LDR r1, =Image_ZI_Limit
 F2:
-    CMP	    r3, r1	    		/* Zero init */
-    STRCC   r2, [r3], #4
-    BCC	    F2
+	cmp r0, r1
+	strcc r3, [r0], #4
+	bcc F2
+#F1:
+#    LDR	    r1, =Image_ZI_Limit	/* Top of zero init segment */
+#    MOV	    r2, #0
+#F2:
+#    CMP	    r3, r1	    		/* Zero init */
+#    STRCC   r2, [r3], #4
+#    BCC	    F2
 
 	MRS	r0, CPSR
 	BIC	r0, r0, #NOINT /* enable interrupt */

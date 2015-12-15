@@ -438,12 +438,47 @@ void Lcd_DspAscII8x16(INT16U x0, INT16U y0, INT8U ForeColor, INT8U * s) {
 	}
 }
 
+void Lcd_DspAscII8x16_inverted(INT16U x0, INT16U y0, INT8U ForeColor, INT8U * s) {
+	INT16 i, j, k, x, y, xx;
+	INT8U qm;
+	INT32U ulOffset;
+	INT8 ywbuf[16], temp[2];
+
+	for (i = 0; i < strlen((const char*) s); i++) {
+		if ((INT8U) *(s + i) >= 161) {
+			temp[0] = *(s + i);
+			temp[1] = '\0';
+			return;
+		} else {
+			qm = *(s + i);
+			ulOffset = (INT32U) (qm) * 16;	//Here to be changed tomorrow
+			for (j = 0; j < 16; j++) {
+				ywbuf[j] = g_auc_Ascii8x16[ulOffset + j];
+			}
+
+			for (y = 0; y < 16; y++) {
+				for (x = 0; x < 8; x++) {
+					k = x % 8;
+					if (!(ywbuf[y] & (0x80 >> k))) {
+						xx = x0 + x + i * 8;
+						LCD_PutPixel(xx, y + y0, (INT8U)ForeColor);
+					}
+				}
+			}
+		}
+	}
+}
+
 void Lcd_DspAscII8x16HorizontallyCentered(INT16U y0, INT8U ForeColor, INT8U * s) {
 	Lcd_DspAscII8x16((SCR_XSIZE - (strlen(s) * 8)) / 2, y0, ForeColor, s);
 }
 
+void Lcd_DspAscII8x16HorizontallyCentered_inverted(INT16U y0, INT8U ForeColor, INT8U * s) {
+	Lcd_DspAscII8x16_inverted((SCR_XSIZE - (strlen(s) * 8)) / 2, y0, ForeColor, s);
+}
+
 void Lcd_DisplayChar(INT16U usX0, INT16U usY0, INT8U ForeColor, INT8U ucChar) {
-// TODO: PUES ME HARÉ MI PROPIO LCD; CON CASINOS, Y FURCIAS!
+	// TODO: PUES ME HARÉ MI PROPIO LCD; CON CASINOS, Y FURCIAS!
 	INT16 k, x, y, xx;
 	INT32U ulOffset;
 	ulOffset = (INT32U) ucChar * 16;//Here to be changed tomorrow (never changed)
