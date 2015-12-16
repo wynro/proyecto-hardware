@@ -16,6 +16,7 @@
 #include "Bmp.h"
 #include "string.h"
 #include "resources/still-alive-lyrics.h"
+#include "sudoku_collection_san.h"
 
 /*--- declaracion de funciones ---*/
 void Main(void);
@@ -29,33 +30,7 @@ typedef enum {
 	esperando_columna,
 	esperando_valor
 } Game_state;
-CELDA cuadriculaSeleccionada[NUM_FILAS][NUM_COLUMNAS];
-CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS] = { { 0x9800, 0x6800, 0x0000, 0x0000,
-		0x0000, 0x0000, 0x7800, 0x0000, 0x8800, 0, 0, 0, 0, 0, 0, 0 }, { 0x8800,
-		0x0000, 0x0000, 0x0000, 0x0000, 0x4800, 0x3800, 0x0000, 0x0000, 0, 0, 0,
-		0, 0, 0, 0 }, { 0x1800, 0x0000, 0x0000, 0x5800, 0x0000, 0x0000, 0x0000,
-		0x0000, 0x0000, 0, 0, 0, 0, 0, 0, 0 }, { 0x0000, 0x0000, 0x0000, 0x0000,
-		0x0000, 0x0000, 0x1800, 0x7800, 0x6800, 0, 0, 0, 0, 0, 0, 0 }, { 0x2800,
-		0x0000, 0x0000, 0x0000, 0x9800, 0x3800, 0x0000, 0x0000, 0x5800, 0, 0, 0,
-		0, 0, 0, 0 }, { 0x7800, 0x0000, 0x8800, 0x0000, 0x0000, 0x0000, 0x0000,
-		0x0000, 0x0000, 0, 0, 0, 0, 0, 0, 0 }, { 0x0030, 0x0000, 0x7800, 0x0000,
-		0x3800, 0x2800, 0x0000, 0x4800, 0x0000, 0, 0, 0, 0, 0, 0, 0 }, { 0x3800,
-		0x8800, 0x2800, 0x1800, 0x0000, 0x5800, 0x6800, 0x0000, 0x0000, 0, 0, 0,
-		0, 0, 0, 0 }, { 0x0000, 0x4800, 0x1800, 0x0000, 0x0000, 0x9800, 0x5800,
-		0x2800, 0x0000, 0, 0, 0, 0, 0, 0, 0 } };
-CELDA cuadriculaCasiResuelta[NUM_FILAS][NUM_COLUMNAS] = { { 0x0000, 0x6800,
-		0x4800, 0x3800, 0x2800, 0x1800, 0x7800, 0x5800, 0x8800, 0, 0, 0, 0, 0,
-		0, 0 }, { 0x8800, 0x7800, 0x5800, 0x9800, 0x6800, 0x4800, 0x3800,
-		0x1800, 0x2800, 0, 0, 0, 0, 0, 0, 0 }, { 0x1800, 0x2800, 0x3800, 0x5800,
-		0x8800, 0x7800, 0x9800, 0x6800, 0x4800, 0, 0, 0, 0, 0, 0, 0 }, { 0x4800,
-		0x3800, 0x9800, 0x2800, 0x5800, 0x8800, 0x1800, 0x7800, 0x6800, 0, 0, 0,
-		0, 0, 0, 0 }, { 0x2800, 0x1800, 0x6800, 0x7800, 0x9800, 0x3800, 0x4800,
-		0x8800, 0x5800, 0, 0, 0, 0, 0, 0, 0 }, { 0x7800, 0x5800, 0x8800, 0x4800,
-		0x1800, 0x6800, 0x2800, 0x3800, 0x9800, 0, 0, 0, 0, 0, 0, 0 }, { 0x5800,
-		0x9800, 0x7800, 0x6800, 0x3800, 0x2800, 0x8800, 0x4800, 0x1800, 0, 0, 0,
-		0, 0, 0, 0 }, { 0x3800, 0x8800, 0x2800, 0x1800, 0x4800, 0x5800, 0x6800,
-		0x9800, 0x7800, 0, 0, 0, 0, 0, 0, 0 }, { 0x6800, 0x4800, 0x1800, 0x8800,
-		0x7800, 0x9800, 0x5800, 0x2800, 0x3800, 0, 0, 0, 0, 0, 0, 0 } };
+CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS];
 
 /*--- codigo de la funcion ---*/
 void Main(void) {
@@ -80,26 +55,19 @@ void Main(void) {
 	Lcd_Clr();
 	Lcd_Active_Clr();
 
-
-
-
-//
-//	sudoku_graphics_print_title_screen();
-//	while (1)
-//		;
-
 	Timer2_Inicializar();
 	Button_init(1, 3);
+	Timer2_Reiniciar();
 	Timer2_Empezar();
 
 	uint8_t fila = 1;
 	uint8_t columna = 1;
 	int valor = 0;
 
-	Game_state estadoJuego = title_screen; // TODO: cambiar
+	Game_state estadoJuego = title_screen;
 
 	while (1) {
-		tiempo_juego = Timer2_Leer() / 1000;
+		tiempo_juego = Timer2_Leer() / 1000000;
 		// BLOQUE RENDERIZADO
 		Lcd_Clr();
 		if (estadoJuego == title_screen) {
@@ -134,14 +102,14 @@ void Main(void) {
 		} else {
 			// Actualizamos la pantalla de juego
 			sudoku_graphics_draw_base();
-			sudoku_graphics_fill_from_data(cuadriculaSeleccionada);
+			sudoku_graphics_fill_from_data(cuadricula);
 			sudoku_graphics_draw_time(tiempo_juego, tiempo_calculos);
 			switch (estadoJuego) {
 			case esperando_fila:
-				sudoku_graphics_draw_state(0, 0);
+				sudoku_graphics_draw_state(0, fila);
 				break;
 			case esperando_columna:
-				sudoku_graphics_draw_state(1, 0);
+				sudoku_graphics_draw_state(1, columna);
 				break;
 			case esperando_valor:
 				sudoku_graphics_draw_state(2, Button_valor_actual());
@@ -152,7 +120,7 @@ void Main(void) {
 			// Por el problemilla A
 			if (fila < 10) {
 				sudoku_graphics_remark_square(fila - 1, columna - 1);
-				if (!es_pista(cuadriculaSeleccionada[columna - 1][fila - 1])) {
+				if (!celda_es_pista(cuadricula[columna - 1][fila - 1])) {
 					sudoku_graphics_mark_error_in_square(fila - 1, columna - 1,
 							valor);
 				}
@@ -173,18 +141,22 @@ void Main(void) {
 				// esto permite reutilizar los
 				// casilleros
 				if (valor_actual == 1) {
-					memcpy(cuadriculaSeleccionada, cuadricula,
-							sizeof(cuadriculaSeleccionada));
+					// Una cualquiera
+					sudoku_collection_descomprime(
+							cuadriculas[Timer2_Leer() % NUM_CUADRICULAS],
+							cuadricula);
 				} else if (valor_actual == 2) {
-					memcpy(cuadriculaSeleccionada, cuadriculaCasiResuelta,
-							sizeof(cuadriculaSeleccionada));
+					// Cuadricula especial
+					sudoku_collection_descomprime(cuadriculaCasiResuelta,
+							cuadricula);
 				} else {
 					estadoJuego = instructions;
 					break;
 				}
-				tiempo_ini_calculo = Timer2_Leer();
-				errores = sudoku_recalcular(cuadriculaSeleccionada);
-				tiempo_fin_calculo = Timer2_Leer();
+				tiempo_calculos = 0;
+				tiempo_ini_calculo = Timer2_Leer() / 1000;
+				errores = sudoku_recalcular(cuadricula);
+				tiempo_fin_calculo = Timer2_Leer() / 1000;
 				tiempo_calculos += (tiempo_fin_calculo - tiempo_ini_calculo);
 				// Reseteamos to-do
 
@@ -204,13 +176,14 @@ void Main(void) {
 				Lcd_Clr();
 
 				sudoku_graphics_draw_base();
+				sudoku_graphics_fill_from_data(cuadricula);
 				sudoku_graphics_draw_time(0, 0);
-				sudoku_graphics_fill_from_data(cuadriculaSeleccionada);
+				sudoku_graphics_draw_state(0, 0);
 				sudoku_graphics_update_lcd();
 
 				// Nos vamos
 				estadoJuego = esperando_fila;
-				Timer2_Empezar();
+				Timer2_Reiniciar();
 			}
 			break;
 		case esperando_fila:
@@ -236,9 +209,17 @@ void Main(void) {
 			columna = Button_valor_actual();
 			if (Button_next()) {
 				Button_low_next();
-				columna = Button_valor_actual();
-				Button_reconfigure_range(0, 9);
-				estadoJuego = esperando_valor;
+				if (!celda_es_pista(cuadricula[columna - 1][fila - 1])) {
+					columna = Button_valor_actual();
+					Button_reconfigure_range(0, 9);
+					estadoJuego = esperando_valor;
+				} else {
+					fila = 1;
+					columna = 1;
+					valor = 0;
+					Button_reconfigure_range(1, 10);
+					estadoJuego = esperando_fila;
+				}
 			}
 			break;
 		case esperando_valor:
@@ -248,16 +229,15 @@ void Main(void) {
 				valor = Button_valor_actual();
 
 				// Update sudoku
-				if (!es_pista(cuadriculaSeleccionada[columna - 1][fila - 1])) {
-					celda_poner_valor(
-							&(cuadriculaSeleccionada[columna - 1][fila - 1]),
-							valor);
-					tiempo_ini_calculo = Timer2_Leer();
-					errores = sudoku_recalcular(cuadriculaSeleccionada);
-					tiempo_fin_calculo = Timer2_Leer();
-					tiempo_calculos +=
-							(tiempo_fin_calculo - tiempo_ini_calculo);
-				}
+
+				celda_poner_valor(
+						&(cuadricula[columna - 1][fila - 1]),
+						valor);
+				tiempo_ini_calculo = Timer2_Leer() / 1000;
+				errores = sudoku_recalcular(cuadricula);
+				tiempo_fin_calculo = Timer2_Leer() / 1000;
+				tiempo_calculos += (tiempo_fin_calculo - tiempo_ini_calculo);
+
 				fila = 1;
 				columna = 1;
 				valor = 0;
