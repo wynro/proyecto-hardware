@@ -8,7 +8,7 @@
 #ifndef STILL_ALIVE_LYRICS_H_
 #define STILL_ALIVE_LYRICS_H_
 
-#define STILL_ALIVE_SIZE 119
+#define STILL_ALIVE_SIZE 117
 
 char *still_alive[STILL_ALIVE_SIZE];
 #endif /* STILL_ALIVE_LYRICS_H_ */
