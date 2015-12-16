@@ -24,11 +24,11 @@ inline int celda_es_error(CELDA celda) {
 	return celda & 0b0000001000000000;
 }
 
-inline int es_pista(CELDA celda) {
+inline int celda_es_pista(CELDA celda) {
 	return celda & 0x0800;
 }
 
-inline int es_candidato(CELDA celda, uint8_t valor) {
+inline int celda_es_candidato(CELDA celda, uint8_t valor) {
 	return celda & (1 << (valor - 1));
 }
 
@@ -120,7 +120,7 @@ void sudoku_vacia_tabla(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]) {
 		int columna = 0;
 		while (columna < (NUM_REGION * TAM_REGION)) {
 			// Si NO es pista, la ponemos a 0
-			if(!es_pista(cuadricula[fila][columna])){
+			if(!celda_es_pista(cuadricula[fila][columna])){
 				celda_poner_valor(&cuadricula[fila][columna], 0);
 			}
 			columna +=1;
