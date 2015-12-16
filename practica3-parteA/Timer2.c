@@ -1,57 +1,66 @@
-/*
- * timer2.c
- *
- *  Created on: 23/10/2015
- *      Author: a680182
- */
+/*********************************************************************************************
+ * Fichero:		timer2.c
+ * Autor:
+ * Descrip:		funciones de control del timer2 del s3c44b0x
+ * Version:
+ *********************************************************************************************/
+
+/*--- ficheros de cabecera ---*/
 #include "44b.h"
-#include "Timer2.h"
+#include "44blib.h"
+#include <stdint.h>
 
+/*--- variables---*/
+uint32_t timer2_num_ms = 0;
+uint32_t timer2_num_s = 0;
+
+/*--- declaracion de funciones ---*/
 void Timer2_ISR(void) __attribute__((interrupt("IRQ")));
-
-/*--- variables globales ---*/
-int timer2_num_int = 0;
-
 
 /*--- codigo de las funciones ---*/
 void Timer2_ISR(void) {
-	timer2_num_int++;
-
+	timer2_num_ms = timer2_num_ms + 1;
+	uint32_t aux = timer2_num_ms * (65535 / 32) + ((65535 - rTCNTO2 )/32);
+	if (aux >= 1000000) {
+		timer2_num_s++;
+		timer2_num_ms = 0;
+	}
 	/* borrar bit en I_ISPC para desactivar la solicitud de interrupción*/
-	rI_ISPC |= BIT_TIMER2; // BIT_TIMER2 está definido en 44b.h y pone un uno en el bit 11 que correponde al Timer2
+	rI_ISPC |= BIT_TIMER2; // BIT_TIMER2 está definido en 44b.h y pone un uno en el que correponde al Timer2
 }
 
 void Timer2_Inicializar(void) {
 	/* Configuraion controlador de interrupciones */
-	rINTMOD = 0x0; // Configura las linas como de tipo IRQ
-	rINTCON = 0x1; // Habilita int. vectorizadas y la linea IRQ (FIQ no)
-	rINTMSK = (~(BIT_TIMER2)) & rINTMSK; // Emascara todas las lineas excepto Timer0 y el bit global (bits 26 y 13, BIT_GLOBAL y BIT_TIMER0 están definidos en 44b.h)
+	rINTMSK &= ~BIT_TIMER2; // Emascara todas las lineas excepto Timer2)
+
 	/* Establece la rutina de servicio para TIMER2 */pISR_TIMER2 =
 			(unsigned) Timer2_ISR;
 
-	//Configura el Timer2
-	rTCFG0 = 0xFF00FFFF & rTCFG0; /* preescalado a 0*/
-	rTCFG1 = 0x0; /*valor del divisor a 1/2*/
-	rTCNTB2 = 0xFFFFFFFF; /*valor inicial al maximo*/
-	rTCMPB2 = 0x00000000; /*valor de comparacion*/
-
-	rTCON |= 0x2000; /* establecer update=manual (bit 13)*/
-	rTCON = (rTCON & 0xF) | 0x9000;/* iniciar timer (bit 12) con auto-reload (bit 15) mientras desactivas manual bit (bit 13)
-	 * y mantienes los bits del timer0*/
+	/* Configura el Timer2 */rTCFG0 = (rTCFG0 & 0xFFFF00FF); // ajusta el preescalado a 0 para que sea la maxima frecuencia
+	rTCFG1 = (rTCFG1 & 0xFFFFF0FF); // selecciona la entrada del mux que proporciona el reloj. La 00 corresponde a un divisor de 1/2.
+	rTCNTB2 = 0xFFFF; // valor inicial de cuenta (la cuenta es descendente) se mide lo maximo posible
+	rTCMPB2 = 0; // valor de comparación
 }
 
-/*--- codigo de las funciones ---*/
 void Timer2_Empezar(void) {
-	rTCNTO2 = 0xFFFFFFFF;
-	timer2_num_int = 0;
+	timer2_num_ms = 0;
+	/* establecer update=manual (bit 13) + inverter=off */rTCON = (rTCON
+			& 0xFFFF0FFF) | 0x2000;
+	/*update manual a 0 de nuevo*/rTCON = (rTCON & 0xFFFF0FFF);
+	/* iniciar timer (bit 12) con auto-reload (bit 15)*/
+	rTCON = rTCON | 0x9000;
 }
 
-/*--- codigo de las funciones ---*/
-//MILISEGUNDOS
-int Timer2_Leer(void) {
-	long cuenta = rTCNTB2;
-	cuenta -= rTCNTO2;
-	cuenta += (timer2_num_int * rTCNTB2 );
-	cuenta = cuenta / 32;
-	return cuenta/1000;
+//Devuelve el tiempo en microsegundos
+uint32_t Timer2_Leer(void) {
+	//TCNTO permite ver el valor de la cuenta sin modificar el registro
+	uint32_t aux = (timer2_num_s * 1000000)
+			+ (timer2_num_ms * (65535 / 32) + ((65535 - rTCNTO2 )/32));
+	return aux;
 }
+
+void Timer2_Reiniciar(void) {
+	timer2_num_ms = 0;
+	timer2_num_s = 0;
+}
+

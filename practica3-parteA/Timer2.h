@@ -17,13 +17,19 @@
  */
 void Timer2_Inicializar(void);
 /**
- * Funcion que comienza la cuenta. Resetea el contador interno a 0
+ * Funcion que comienza la cuenta.
  */
 void Timer2_Empezar(void);
+
+/**
+ * Funcion que resetea el contador interno a 0
+ */
+void Timer2_Reiniciar(void);
+
 /**
  * Devuelve el contador interno en milisegundos
  *
  * @return Tiempo en milisegundos desde el ultimo reinicio del contador
  */
-int Timer2_Leer(void);
+uint32_t Timer2_Leer(void);
 #endif /* TIMER2_H_ */
