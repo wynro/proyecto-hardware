@@ -25,31 +25,26 @@ char *time_playing_short = "Jugando:";
 char *time_calculating_short = "Calc (ms):";
 char *time_playing_message = "Tiempo total de juego: ";
 char *time_calculating_message = "Tiempo total de calculo(ms): ";
-char *mensaje_aperture = "Pulsa start para recibir tu premio";
+char *mensaje_aperture_1 = "Resolviste el sudoku con exito!";
+char *mensaje_aperture_2 = "Boton derecho para recibir tu premio";
 char *mensaje_fracaso_1 = "No resolviste el sudoku :(";
-char *mensaje_fracaso_2 = "Pulsa start para reiniciar.";
+char *mensaje_fracaso_2 = "Pulsa boton derecho para reiniciar.";
 char *mensaje_seleccionando = "Seleccione:";
 char *mensaje_fila = "Fila";
 char *mensaje_columna = "Columna";
 char *mensaje_valor = "Valor";
-char *title_message = "Pulse start para seleccionar!";
+char *title_message = "Boton derecho para seleccionar!";
+char *title_message_selection = "Boton izquierdo para cambiar de opcion!";
 char *message_A = "Introduzca fila A para finalizar";
 #define INSTRUCTION_LINES 11
 
 // Estas instrucciones han sido cedidas por Miguel Jorge Galindo e Iñigo Gascon
-char *instructions[INSTRUCTION_LINES] = {
-"INSTRUCCIONES DE JUEGO: ",
-"Cuando comience el juego podra elegir",
-"la fila que quiere modificar con el",
-"boton izquierdo y confirmar la",
-"eleccion con el boton derecho.",
-"A continuacion podra elegir la",
-"columna de la misma manera.",
-"Por ultimo debera seleccionar",
-"el valor deseado.",
-"",
-"Pulse boton derecho para volver"
-};
+char *instructions[INSTRUCTION_LINES] = { "INSTRUCCIONES DE JUEGO: ",
+		"Cuando comience el juego podra elegir",
+		"la fila que quiere modificar con el", "boton izquierdo y confirmar la",
+		"eleccion con el boton derecho.", "A continuacion podra elegir la",
+		"columna de la misma manera.", "Por ultimo debera seleccionar",
+		"el valor deseado.", "", "Pulse boton derecho para volver" };
 //
 //char *instructions[INSTRUCTION_LINES] = { "INSTRUCCIONES",
 //		"El boton derecho actua como start y", "enter.",
@@ -246,14 +241,14 @@ void sudoku_graphics_fill_from_data(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]) {
 			if (valor == 0) {
 				// Hemos de rellenar todos los candidatos
 				for (k = 1; k <= 9; k++) {
-					if (es_candidato(cuadricula[j][i], k)) {
+					if (celda_es_candidato(cuadricula[j][i], k)) {
 						sudoku_graphics_mark_error(i, j, k);
 					}
 				}
 			} else {
 				// Simplemente ponemos el numero en el cuadrado, y si es error lo marcamos
 				sudoku_graphics_put_number_in_square(i, j, valor,
-						es_pista(cuadricula[j][i]) ? BLACK : DARKGRAY);
+						celda_es_pista(cuadricula[j][i]) ? BLACK : DARKGRAY);
 				if (celda_es_error(cuadricula[j][i])) {
 					sudoku_graphics_invert_square(i, j);
 				}
@@ -421,6 +416,9 @@ void sudoku_graphics_print_title_screen(int lineSelected) {
 
 	}
 	Lcd_DspAscII8x16HorizontallyCentered(
+			(SCR_YSIZE / 2) + SUDOKU_FONT_HEIGHT * 4, BLACK,
+			(unsigned char *) title_message_selection);
+	Lcd_DspAscII8x16HorizontallyCentered(
 			(SCR_YSIZE / 2) + SUDOKU_FONT_HEIGHT * 5, BLACK,
 			(unsigned char *) title_message);
 }
@@ -457,13 +455,18 @@ void sudoku_graphics_print_final_screen(int tiempo_juego_s,
 		// Terminado con éxito, aperture entra en escena
 		Lcd_DspAscII8x16HorizontallyCentered(
 				(SCR_YSIZE / 2) + SUDOKU_FONT_HEIGHT * 3, BLACK,
-				(unsigned char *) mensaje_aperture);
+				(unsigned char *) mensaje_aperture_1);
+		Lcd_DspAscII8x16HorizontallyCentered(
+				(SCR_YSIZE / 2) + SUDOKU_FONT_HEIGHT * 4, BLACK,
+				(unsigned char *) mensaje_aperture_2);
 		break;
 	default:
 		// Con errores/Sin terminar
-		Lcd_DspAscII8x16HorizontallyCentered((SCR_YSIZE / 2) + 16 * 3, BLACK,
+		Lcd_DspAscII8x16HorizontallyCentered(
+				(SCR_YSIZE / 2) + SUDOKU_FONT_HEIGHT * 3, BLACK,
 				(unsigned char *) mensaje_fracaso_1);
-		Lcd_DspAscII8x16HorizontallyCentered((SCR_YSIZE / 2) + 16 * 4, BLACK,
+		Lcd_DspAscII8x16HorizontallyCentered(
+				(SCR_YSIZE / 2) + SUDOKU_FONT_HEIGHT * 4, BLACK,
 				(unsigned char *) mensaje_fracaso_2);
 		break;
 	}
@@ -483,8 +486,8 @@ void sudoku_graphics_print_still_alive(int lineNumber) {
 void sudoku_graphics_draw_state(int state, int number) {
 	char valor[2];
 	if (number > 9) {
-		valor[1] = 'A';
-		valor[2] = '\0';
+		valor[0] = 'A';
+		valor[1] = '\0';
 	} else {
 		itoa(number, valor, 10);
 	}
@@ -497,12 +500,22 @@ void sudoku_graphics_draw_state(int state, int number) {
 		Lcd_DspAscII8x16((SUDOKU_NUM_CUADS + 2) * SUDOKU_SQUARE_SIZE,
 				(SUDOKU_FONT_HEIGHT / 2) + (7 * SUDOKU_FONT_HEIGHT), BLACK,
 				mensaje_fila);
+		Lcd_DspAscII8x16(
+				(SUDOKU_NUM_CUADS + 2) * SUDOKU_SQUARE_SIZE
+						+ (strlen(mensaje_fila) + 1) * 8,
+				(SUDOKU_FONT_HEIGHT / 2) + (7 * SUDOKU_FONT_HEIGHT), BLACK,
+				valor);
 		break;
 	case 1:
 		// Esperando columna
 		Lcd_DspAscII8x16((SUDOKU_NUM_CUADS + 2) * SUDOKU_SQUARE_SIZE,
 				(SUDOKU_FONT_HEIGHT / 2) + (7 * SUDOKU_FONT_HEIGHT), BLACK,
 				mensaje_columna);
+		Lcd_DspAscII8x16(
+				(SUDOKU_NUM_CUADS + 2) * SUDOKU_SQUARE_SIZE
+						+ (strlen(mensaje_columna) + 1) * 8,
+				(SUDOKU_FONT_HEIGHT / 2) + (7 * SUDOKU_FONT_HEIGHT), BLACK,
+				valor);
 		break;
 	case 2:
 		// Esperando valor
