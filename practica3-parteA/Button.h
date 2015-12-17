@@ -1,8 +1,11 @@
-/*
- * Button.h
- *
- *  Created on: 12/11/2015
- *      Author: a604409
+/** @file Button.h
+ *  @brief Modulo que gestiona los rebotes de los botones
+ * 
+ * Modulo que se encarga de gestionar los botones y su uso en el
+ * proyecto, inicializarlos y sincronizar el 7 segmentos con el valor
+ * interno del boton.
+ * 
+ * @author Guillermo Robles Gonzalez
  */
 
 #ifndef BUTTON_H_
@@ -38,8 +41,9 @@ void Button_init(int min, int max);
 void action(int n);
 
 /**
- * Ajusta el valor de la cuenta interna del boton, actualizando el display.
- * n ha de pertenecer al rango al cual esta actualmente configurado el boton.
+ * Ajusta el valor de la cuenta interna del boton, actualizando el
+ * display. Ha de pertenecer al rango al cual esta actualmente
+ * configurado el boton.
  *
  * @param[in] n nuevo valor a poner
  */

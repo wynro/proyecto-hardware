@@ -12,6 +12,7 @@
 
 #define BLINK_SYMBOL_TIME 500
 
+
 typedef enum {
 	esperando_fila, esperando_columna, esperando_valor
 } Game_state;

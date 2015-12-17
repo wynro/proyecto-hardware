@@ -9,7 +9,7 @@ edit:
 
 # Generar el pdf de documentacion
 doxy:
-	doxygen Makefile
+	doxygen
 	$(MAKE) -C latex
 	@cp latex/refman.pdf refman.pdf
 	@rm -r latex

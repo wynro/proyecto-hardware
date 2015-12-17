@@ -9,7 +9,7 @@
 #include "44b.h"
 #include "44blib.h"
 #include <stdint.h>
-
+#include "Timer2.h"
 /*--- variables---*/
 uint32_t timer2_num_ms = 0;
 uint32_t timer2_num_s = 0;
@@ -51,8 +51,8 @@ void Timer2_Empezar(void) {
 	rTCON = rTCON | 0x9000;
 }
 
-//Devuelve el tiempo en microsegundos
 uint32_t Timer2_Leer(void) {
+	//Devuelve el tiempo en microsegundos
 	//TCNTO permite ver el valor de la cuenta sin modificar el registro
 	uint32_t aux = (timer2_num_s * 1000000)
 			+ (timer2_num_ms * (65535 / 32) + ((65535 - rTCNTO2 )/32));

@@ -1,9 +1,7 @@
-/*********************************************************************************************
-* Fichero:	LCD.H
-* Autor:	
-* Descrip:	definicion de madro y declaracion de funciones
-* Version:	
-*********************************************************************************************/
+/** @file lcd.h
+ *  @brief Funciones de visualizacion y control LCD
+ *  @version <P6-ARM>
+ */
 
 #ifndef __LCD_H__
 #define __LCD_H__

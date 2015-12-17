@@ -1,8 +1,13 @@
-/*
- * sudoku_graphics.h
+/** 
+ * @file sudoku_graphics.h
+ * @brief Modulo que actua de capa de abstraccion entre el juego y la
+ * pantalla
  *
- *  Created on: 26/11/2015
- *      Author: a604409
+ * Modulo que contiene un conjunto de funciones que interactuan con el
+ * aspecto grafico del sudoku, y que abstrae las operaciones sobre la
+ * pantalla en un conjunto de operaciones de alto nivel
+ * 
+ * @author Guillermo Robles Gonzalez
  */
 
 #ifndef SUDOKU_GRAPHICS_H_
@@ -14,10 +19,10 @@
 #include "def.h"
 
 #define SUDOKU_NUM_CUADS 9
-/**
- * Tenemos el problema de que este numero ha de ser simultaneamente
- * multiplo de 9 y de 2, y 36 era demasiado grande, pero bueno...
- */
+
+// Tenemos el problema de que este numero ha de ser simultaneamente
+// multiplo de 9 y de 2, y 36 era demasiado grande, pero bueno...
+
 #define SUDOKU_SQUARE_SIZE 18
 #define SUDOKU_X0 20
 #define SUDOKU_Y0 20
@@ -28,19 +33,23 @@
 #define ASCII_NUMBER_BASE 48
 
 /**
- * Dibuja la base del sudoku (cuadricula, numeracion de la misma, frase de información)
+ * Dibuja la base del sudoku (cuadricula, numeracion de la misma,
+ * frase de informacion)
  */
 void sudoku_graphics_draw_base();
+
 /**
  * Rellena el sudoku con la informacion de la cuadricula dada
  *
  * @param[in] cuadricula Cuadricula de la que se cojera la informacion
  */
 void sudoku_graphics_fill_from_data(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]);
+
 /**
  * Actualiza el LCD con la informacion del sudoku
  */
 void sudoku_graphics_update_lcd();
+
 /**
  * Imprime la pantalla final, si el numero de errores es 0, se imprimira
  * la pantalla de exito, en caso contrario se imprimira un mensaje de fracaso.
@@ -57,16 +66,16 @@ void sudoku_graphics_print_final_screen(int tiempo_juego_s,
 /**
  * Rellena una casilla con el numero dado
  *
- * @param[in] x Posicion x de la casilla
- * @param[in] y Posicion y de la casilla
- * @param[in] number Numero con el cual rellenarlo
+ * @param[in] x Posicion x de la casilla a rellenar
+ * @param[in] y Posicion y de la casilla a rellenar
+ * @param[in] number Numero con el cual rellenarla
  * @param[in] ucColor Color de letra
  */
 inline void sudoku_graphics_put_number_in_square(INT8 x, INT8 y, INT8 number,
 		INT8U ucColor);
 
 /**
- * Remarca una casilla de forma visible al usuario
+ * Remarca una casilla de forma visible al usuario (Aplicando un enmarcado)
  *
  * @param[in] x Posicion x de la casilla
  * @param[in] y Posicion y de la casilla
@@ -74,7 +83,7 @@ inline void sudoku_graphics_put_number_in_square(INT8 x, INT8 y, INT8 number,
 inline void sudoku_graphics_remark_square(INT8 x, INT8 y);
 
 /**
- * Marca el error dado en la casilla dada
+ * Marca el error dado en la casilla dada (Negando los colores en su interior)
  *
  * @param[in] x Posicion x de la casilla
  * @param[in] y Posicion y de la casilla

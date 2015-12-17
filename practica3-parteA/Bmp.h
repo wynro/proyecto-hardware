@@ -1,9 +1,8 @@
-/*********************************************************************************************
-* Fichero:	BMP.H
-* Autor:		
-* Descrip:	definicion mapas de bits del LCD
-* Version:	
-*********************************************************************************************/
+/** @file Bmp.h
+ *  @brief Definicion mapas de bits del LCD
+ * 
+ * @author 
+ */
 
 #ifndef __BMP_H_
 #define __BMP_H_
@@ -29,17 +28,63 @@ typedef struct BITMAP
 #define DARKGRAY    0xa
 #define TRANSPARENCY 0xff
 
-void CursorInit(void);
-void CursorPush(INT16U x, INT16U y);
-void CursorPop(void);
-
-void BitmapPop(INT16U x, INT16U y, STRU_BITMAP Stru_Bitmap);
+/** 
+ * @brief Display bitmap in virtual buffer
+ * 
+ * @param[in] x X coordinate of the position to draw
+ * @param[in] y Y coordinate of the position to draw
+ * @param[in] Stru_Bitmap Bitmap to draw
+ */
 void BitmapView(INT16U x, INT16U y, STRU_BITMAP Stru_Bitmap);
-void CursorView(INT16U x, INT16U y);
+
+
+
 
 void BitmapViewHorizontallyCentered(INT16U y, STRU_BITMAP Stru_Bitmap);
 void BitmapViewVerticallyCentered(INT16U x, STRU_BITMAP Stru_Bitmap);
 void BitmapViewCentered(STRU_BITMAP Stru_Bitmap);
 
+/** 
+ * @brief Push bitmap data into LCD active buffer
+ * 
+ * @param[in] x X coordinate of the position to draw
+ * @param[in] y Y coordinate of the position to draw
+ * @param[in] Stru_Bitmap Bitmap to draw
+ */
+void BitmapPush(INT16U x, INT16U y, STRU_BITMAP Stru_Bitmap);
 
+/** 
+ * @brief Pop bitmap data into LCD active buffer
+ * 
+ * @param[in] x X coordinate of the position to pop into
+ * @param[in] y Y coordinate of the position to pop into
+ * @param[in] Stru_Bitmap Bitmap to pop
+ */
+void BitmapPop(INT16U x, INT16U y, STRU_BITMAP Stru_Bitmap);
+
+/** 
+ * @brief Cursor init
+ */
+void CursorInit(void);
+
+/** 
+ * @brief Cursor display
+ * 
+ * @param[in] x X coordinate of the position to draw
+ * @param[in] y Y coordinate of the position to draw
+ */
+void CursorView(INT16U x, INT16U y);
+
+/** 
+ * @brief Cursor push
+ * 
+ * @param[in] x X coordinate of the position to push
+ * @param[in] y Y coordinate of the position to push
+ */
+void CursorPush(INT16U x, INT16U y);
+
+/** 
+ * @brief Cursor pop
+ */
+void CursorPop(void);
 #endif /* __BMP_H_ */

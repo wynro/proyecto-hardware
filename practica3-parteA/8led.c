@@ -1,18 +1,10 @@
-/*********************************************************************************************
- * Fichero:	8led.c
- * Autor:
- * Descrip:	Funciones de control del display 8-segmentos
- * Version:
- *********************************************************************************************/
-
-/*--- ficheros de cabecera ---*/
 #include "44b.h"
 #include "44blib.h"
 
-/*--- definicion de macros ---*/
-/* Mapa de bits de cada segmento
- (valor que se debe escribir en el display para que se ilumine el segmento) */
-
+/**
+ * Mapa de bits de cada segmento (valor que se debe escribir en el
+ * display para que se ilumine el segmento)
+ */
 enum {
 	cero = ~0xED,
 	uno = ~0x60,
@@ -34,8 +26,6 @@ enum {
 	size_8led = 17
 };
 
-/*--- variables globales ---*/
-/* tabla de segmentos */
 int Symbol[size_8led] = { cero, uno, dos, tres, cuatro, cinco, seis, siete,
 		ocho, nueve, A, B, C, D, E, F, blank };
 int valor_actual;

@@ -1,8 +1,8 @@
-/*
- * sudoku_2015.h
- *
- *  Created on: 24/11/2015
- *      Author: a604409
+/** @file sudoku_2015.h
+ *  @brief Modulo que contiene funciones relacionadas con el analisis
+ *  de sudokus
+ * 
+ * @author Guillermo Robles Gonzalez
  */
 
 #ifndef SUDOKU_2015_H_
@@ -10,6 +10,9 @@
 #include <inttypes.h>
 
 #define CELDA uint16_t
+/**
+ * @brief Informacion de la cuadricula
+ */
 enum {
 	// Tamaños de la cuadricula
 	// Se utilizan 16 columnas para facilitar la visualización
@@ -25,24 +28,25 @@ enum {
 void init_game(void);
 
 /**
- * Funcion que modifica los posibles candidatos de una celda, eliminando una
- * pista dada
+ * Funcion que modifica los posibles candidatos de una celda,
+ * eliminando una pista dada
  *
- * @param	valor		Pista que se eliminara
- * @param	cuadricula	Cuadricula a modificar
- * @param	fila		Coordenada fila de la casilla a modificar
- * @param	columna		Coordenada columna de la casilla a modificar
+ * @param[in]	valor		Pista que se eliminara
+ * @param[in]	cuadricula	Cuadricula a modificar
+ * @param[in]	fila		Coordenada fila de la casilla a modificar
+ * @param[in]	columna		Coordenada columna de la casilla a modificar
  */
 void celda_cambiar_candidatos(uint8_t valor,
 		CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS], uint8_t fila,
 		uint8_t columna);
 
 /**
- * Funcion que dado una casilla en una cuadricula, actualiza sus candidatos
+ * Funcion que dado una casilla en una cuadricula, actualiza sus
+ * candidatos
  *
- * @param	cuadricula	Cuadricula a modificar
- * @param	fila		Coordenada fila de la casilla a modificar
- * @param	columna		Coordenada columna de la casilla a modificar
+ * @param[in]	cuadricula	Cuadricula a modificar
+ * @param[in]	fila		Coordenada fila de la casilla a modificar
+ * @param[in]	columna		Coordenada columna de la casilla a modificar
  *
  * @return	0 en caso de que la casilla este vacia, !=0 en caso contrario
  */
@@ -54,16 +58,17 @@ int sudoku_candidatos_arm(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS],
  * reajusta los errores como sea necesario, usando como hoja una
  * funcion ARM.
  *
- * @param	cuadricula	Cuadricula a modificar
+ * @param[out]	cuadricula	Cuadricula a modificar
  *
  * @return	Numero de casillas vacias, o -1 en caso de que haya errores
  */
 int sudoku_recalcular(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]);
 
 /**
- * Devuelve un numero mayor de 0 si y solo si la celda esta marcada como error, devuelve 0 en caso contrario
+ * Devuelve un numero mayor de 0 si y solo si la celda esta marcada
+ * como error, devuelve 0 en caso contrario
  *
- * @param 	celda Celda a comprobar
+ * @param[in]	celda Celda a comprobar
  *
  * @return 0 en caso de que la celda sea correcta
  */

@@ -1,5 +1,5 @@
 /*
-0 * sudoku_collection_san.c
+ * sudoku_collection_san.c
  *
  *  Created on: 16/12/2015
  *      Author: a604409
