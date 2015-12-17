@@ -15,7 +15,7 @@
 #include "Timer2.h"
 #include "Bmp.h"
 #include "string.h"
-#include "resources/still-alive-lyrics.h"
+#include "still-alive-lyrics.h"
 #include "sudoku_collection_san.h"
 
 /*--- declaracion de funciones ---*/

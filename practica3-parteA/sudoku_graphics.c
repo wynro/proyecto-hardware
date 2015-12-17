@@ -10,9 +10,9 @@
 #include "44blib.h"
 #include "44b.h"
 #include "lcd.h"
-#include "resources/title-bitmap.h"
-#include "resources/aperture-logo-bitmap.h"
-#include "resources/still-alive-lyrics.h"
+#include "title-bitmap.h"
+#include "aperture-logo-bitmap.h"
+#include "still-alive-lyrics.h"
 #include "Bmp.h"
 
 #define celdaPos0x(x) (SUDOKU_X0 + 1 + ((SUDOKU_SQUARE_SIZE + 1) * (x)))
