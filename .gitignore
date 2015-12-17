@@ -27,3 +27,4 @@ RemoteSystemsTempFiles/
 **/*.aux
 # .lnk
 **/*.lnk
+**/html/*
