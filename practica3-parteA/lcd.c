@@ -473,8 +473,10 @@ void Lcd_DspAscII8x16HorizontallyCentered(INT16U y0, INT8U ForeColor, INT8U * s)
 	Lcd_DspAscII8x16((SCR_XSIZE - (strlen(s) * 8)) / 2, y0, ForeColor, s);
 }
 
-void Lcd_DspAscII8x16HorizontallyCentered_inverted(INT16U y0, INT8U ForeColor, INT8U * s) {
-	Lcd_DspAscII8x16_inverted((SCR_XSIZE - (strlen(s) * 8)) / 2, y0, ForeColor, s);
+void Lcd_DspAscII8x16HorizontallyCentered_inverted(INT16U y0, INT8U ForeColor,
+		INT8U * s) {
+	Lcd_DspAscII8x16_inverted((SCR_XSIZE - (strlen(s) * 8)) / 2, y0, ForeColor,
+			s);
 }
 
 void Lcd_DisplayChar(INT16U usX0, INT16U usY0, INT8U ForeColor, INT8U ucChar) {
@@ -533,6 +535,15 @@ void ReverseLine(INT32U ulHeight, INT32U ulY) {
 	}
 }
 
+/*********************************************************************************************
+ * name:		ReverseSquare()
+ * func:		Reverse display the contents in a specific rectangle
+ * para:		ulX0, ulY0 -- Rectangle uppper left corner
+ *				ulX1, ulY1 -- Rectangle lower right corner
+ * ret:			none
+ * modify:
+ * comment:
+ *********************************************************************************************/
 void ReverseSquare(INT32U ulX0, INT32U ulY0, INT32U ulX1, INT32U ulY1) {
 	int x, y;
 	for (x = ulX0; x < ulX1 + 1; ++x) {
@@ -542,30 +553,49 @@ void ReverseSquare(INT32U ulX0, INT32U ulY0, INT32U ulX1, INT32U ulY1) {
 	}
 }
 
+/*********************************************************************************************
+ * name:		Lcd_Circle()
+ * func:		Draws the outline of a circle
+ * para:		X, Y      -- Circle's center
+ *				radius    -- Circle's radius
+ *				ForeColor -- Outline's color
+ * ret:			none
+ * modify:
+ * comment:
+ *********************************************************************************************/
 void Lcd_Circle(INT8 X, INT8 Y, INT16 radius, INT8U ForeColor) {
 	int x = radius;
 	int y = 0;
 	int d = 1 - x;
-
 	while (y <= x) {
-		LCD_PutPixel(x + X, y + Y, ForeColor); // Octant 1
-		LCD_PutPixel(y + X, x + Y, ForeColor); // Octant 2
-		LCD_PutPixel(-x + X, y + Y, ForeColor); // Octant 4
-		LCD_PutPixel(-y + X, x + Y, ForeColor); // Octant 3
-		LCD_PutPixel(-x + X, -y + Y, ForeColor); // Octant 5
-		LCD_PutPixel(-y + X, -x + Y, ForeColor); // Octant 6
-		LCD_PutPixel(x + X, -y + Y, ForeColor); // Octant 8
-		LCD_PutPixel(y + X, -x + Y, ForeColor); // Octant 7
+		LCD_PutPixel(x + X, y + Y, ForeColor);
+		LCD_PutPixel(y + X, x + Y, ForeColor);
+		LCD_PutPixel(-x + X, y + Y, ForeColor);
+		LCD_PutPixel(-y + X, x + Y, ForeColor);
+		LCD_PutPixel(-x + X, -y + Y, ForeColor);
+		LCD_PutPixel(-y + X, -x + Y, ForeColor);
+		LCD_PutPixel(x + X, -y + Y, ForeColor);
+		LCD_PutPixel(y + X, -x + Y, ForeColor);
 		y++;
 		if (d <= 0) {
-			d += 2 * y + 1; // Change in decision criterion for y -> y+1
+			d += 2 * y + 1;
 		} else {
 			x--;
-			d += 2 * (y - x) + 1;   // Change for y -> y+1, x -> x-1
+			d += 2 * (y - x) + 1;
 		}
 	}
 }
 
+/*********************************************************************************************
+ * name:		Lcd_Circle_Filled()
+ * func:		Draws a circle
+ * para:		X, Y      -- Circle's center
+ *				radius    -- Circle's radius
+ *				ForeColor -- Circle's color
+ * ret:			none
+ * modify:
+ * comment:
+ *********************************************************************************************/
 void Lcd_Circle_Filled(INT8 X, INT8 Y, INT16 radius, INT8U ForeColor) {
 	int i, j;
 	for (i = X - radius; i < X + radius; ++i) {
@@ -593,9 +623,9 @@ void Zdma0Done(void) {
 
 /*********************************************************************************************
  * name:		Lcd_Dma_Trans()
- * func:		dma transport virtual LCD screen to LCD actual screen
+ * func:		dma transport virtual LCD screen to LCD actual screen, blocking function
  * para:		none
- * ret:		none
+ * ret:			none
  * modify:
  * comment:
  *********************************************************************************************/
@@ -628,41 +658,35 @@ void Lcd_Dma_Trans(void) {
 }
 
 /*********************************************************************************************
- * name:		Lcd_Test()
- * func:		LCD test function
+ * name:		Lcd_Dma_Trans_non_block()
+ * func:		dma transport virtual LCD screen to LCD actual screen, non blocking function
  * para:		none
- * ret:		none
+ * ret:			none
  * modify:
  * comment:
  *********************************************************************************************/
-void Lcd_Test(void) {
-	/* initial LCD controller */
-	Lcd_Init();
-	/* clear screen */
-	Lcd_Clr();
-	Lcd_Active_Clr();
+void Lcd_Dma_Trans_non_block(void) {
+	INT8U err;
 
-	/* draw rectangle pattern */
-#ifdef Eng_v // english version
-	Lcd_DspAscII8x16(10,0,DARKGRAY,"Embest S3CEV40 ");
-#else
-//	Lcd_DspHz16(10,0,DARKGRAY,"英蓓特三星实验评估板");
-#endif
-	Lcd_DspAscII8x16(10, 20, BLACK, "Codigo del puesto: ");
-	Lcd_Draw_Box(10, 40, 310, 230, 14);
-	Lcd_Draw_Box(20, 45, 300, 225, 13);
-	Lcd_Draw_Box(30, 50, 290, 220, 12);
-	Lcd_Draw_Box(40, 55, 280, 215, 11);
-	Lcd_Draw_Box(50, 60, 270, 210, 10);
-	Lcd_Draw_Box(60, 65, 260, 205, 9);
-	Lcd_Draw_Box(70, 70, 250, 200, 8);
-	Lcd_Draw_Box(80, 75, 240, 195, 7);
-	Lcd_Draw_Box(90, 80, 230, 190, 6);
-	Lcd_Draw_Box(100, 85, 220, 185, 5);
-	Lcd_Draw_Box(110, 90, 210, 180, 4);
-	Lcd_Draw_Box(120, 95, 200, 175, 3);
-	Lcd_Draw_Box(130, 100, 190, 170, 2);
-	BitmapView(125, 135, Stru_Bitmap_gbMouse);
-	Lcd_Dma_Trans();
+	ucZdma0Done = 1;
+	rNCACHBE1 = (((unsigned) (LCD_ACTIVE_BUFFER) >> 12) << 16)
+			| ((unsigned) (LCD_VIRTUAL_BUFFER) >> 12);
+	rZDISRC0 = (DW << 30) | (1 << 28) | LCD_VIRTUAL_BUFFER; // inc
+	rZDIDES0 = (2 << 30) | (1 << 28) | LCD_ACTIVE_BUFFER; // inc
+	rZDICNT0 = (2 << 28) | (1 << 26) | (3 << 22) | (0 << 20) | (LCD_BUF_SIZE);
+	rZDICNT0 |= (1 << 20);
+	rZDCON0 = 0x1;
+}
 
+/*********************************************************************************************
+ * name:		Lcd_Dma_Trans_wait()
+ * func:		Waits until a DMA finishes
+ * para:		none
+ * ret:			none
+ * modify:
+ * comment:
+ *********************************************************************************************/
+void Lcd_Dma_Trans_wait(void) {
+	while (ucZdma0Done)
+		;		//wait for DMA finish
 }

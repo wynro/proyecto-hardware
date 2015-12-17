@@ -66,4 +66,13 @@ int Button_update_screen();
  * Baja el flag interno indicando que se han realizado acciones
  */
 void Button_low_update_screen();
+
+/**
+ * Reconfigura el rango que maneja el boton, solo seran validos valores en el rango [0,15]
+ *
+ * @param[in] new_min Nuevo minimo
+ * @param[in] new_max Nuevo maximo
+ */
+void Button_reconfigure_range(int new_min, int new_max);
+
 #endif /* BUTTON_H_ */

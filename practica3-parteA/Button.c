@@ -28,22 +28,31 @@ typedef enum {
 	espera_trd // Estado en el cual esperamos a que pase el tiempo de seguridad trd
 } Button_state;
 
-/*--- variables globales ---*/ // Mala idea... <DEV> <--Esto sera un reto para commenTrimmer
-/* count la utilizamos para sacar un número por el 8led.
- Cuando se pulsa un botón sumamos y con el otro restamos. ¡A veces (siempre) hay rebotes!  <DEV>*/
 
 /**
  * Almacena el valor actual de la pantalla
  */
 unsigned int actual = 0;
+/**
+ * Indica si se ha pulsado el boton de pasar a la siguiente pantalla
+ */
 unsigned int _next = 0;
+/**
+ * Indica el minimo valor del rango actual
+ */
 unsigned int _min = 0;
+/**
+ * Indica el maximo valor del rango actual
+ */
 unsigned int _max = 16;
+/**
+ * Indica si ha sido realizada cualquier accion
+ */
 unsigned int update_screen = 0;
 
-unsigned int fila = 0;
-unsigned int columna = 0;
-
+/**
+ * Estado actual del sistema antirrebotes
+ */
 Button_state button_state = reposo;
 
 /**
@@ -56,10 +65,7 @@ void Button_ISR(void) __attribute__((interrupt("IRQ")));
  */
 void Button_Timer_ISR(void) __attribute__((interrupt("IRQ")));
 
-/*--- codigo de funciones ---*/
-/**
- * Funciones de control del temporizador
- */
+
 inline void Timer4_init() {
 	rINTMOD = 0x0; // Configura las lineas como de tipo IRQ
 	rINTCON = 0x1; // Habilita int. vectorizadas y la linea IRQ (FIQ no)
@@ -159,8 +165,8 @@ void Button_ISR(void) {
 }
 
 void action(int n) {
+	// Idealmente, esta funcion se sustituiria por un puntero, para generalizar este modulo
 	update_screen = 1;
-	//D8Led_symbol(16);
 	switch (n) {
 	case 4:
 		actual = (actual + 1) % (_max - _min + 1);
@@ -170,7 +176,7 @@ void action(int n) {
 		_next = 1;
 		break;
 	case 12:
-		//Ambos botones pulsados
+		//Ambos botones pulsados, no hacemos nada
 		break;
 	default:
 		break;
@@ -180,6 +186,7 @@ void action(int n) {
 void Button_Timer_ISR() {
 	switch (button_state) {
 	case reposo:
+		// Nunca deberia llegarse aqui
 		break;
 	case espera_trp:
 		if (cuenta == TRP) {

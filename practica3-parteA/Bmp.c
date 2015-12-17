@@ -82,14 +82,40 @@ void BitmapView(INT16U x, INT16U y, STRU_BITMAP Stru_Bitmap) {
 	}
 }
 
+/*********************************************************************************************
+ * name:		BitmapViewHorizontallyCentered()
+ * func:		display bitmap horizontally centered
+ * para:		y -- pot's Y coordinate
+ *				Stru_Bitmap -- bitmap struct
+ * ret:			none
+ * modify:
+ * comment:
+ *********************************************************************************************/
 void BitmapViewHorizontallyCentered(INT16U y, STRU_BITMAP Stru_Bitmap) {
 	BitmapView((SCR_XSIZE - Stru_Bitmap.usWidth) / 2, y, Stru_Bitmap);
 }
 
+/*********************************************************************************************
+ * name:		BitmapViewVerticallyCentered()
+ * func:		display bitmap vertically centered
+ * para:		x -- pot's X coordinate
+ *				Stru_Bitmap -- bitmap struct
+ * ret:			none
+ * modify:
+ * comment:
+ *********************************************************************************************/
 void BitmapViewVerticallyCentered(INT16U x, STRU_BITMAP Stru_Bitmap) {
 	BitmapView(x, (SCR_YSIZE - Stru_Bitmap.usHeight) / 2, Stru_Bitmap);
 }
 
+/*********************************************************************************************
+ * name:		BitmapViewVerticallyCentered()
+ * func:		display bitmap fully centered on the screen
+ * para:		Stru_Bitmap -- bitmap struct
+ * ret:			none
+ * modify:
+ * comment:
+ *********************************************************************************************/
 void BitmapViewCentered(STRU_BITMAP Stru_Bitmap) {
 	BitmapView((SCR_XSIZE - Stru_Bitmap.usWidth) / 2,
 			(SCR_YSIZE - Stru_Bitmap.usHeight) / 2, Stru_Bitmap);
