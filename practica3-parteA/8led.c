@@ -5,14 +5,13 @@
  * Version:
  *********************************************************************************************/
 
-/*--- ficheros de cabecera ---*/
+
 #include "44b.h"
 #include "44blib.h"
 
-/*--- definicion de macros ---*/
+
 /* Mapa de bits de cada segmento
  (valor que se debe escribir en el display para que se ilumine el segmento) */
-
 enum {
 	cero = ~0xED,
 	uno = ~0x60,
@@ -34,22 +33,18 @@ enum {
 	size_8led = 17
 };
 
-/*--- variables globales ---*/
-/* tabla de segmentos */
+
 int Symbol[size_8led] = { cero, uno, dos, tres, cuatro, cinco, seis, siete,
 		ocho, nueve, A, B, C, D, E, F, blank };
 int valor_actual;
 
 /*--- código de las funciones ---*/
 void D8Led_init(void) {
-	/* Estado inicial del display con todos los segmentos iluminados
-	 (buscar en los ficheros de cabera la direccion implicada) */
 	LED8ADDR = (unsigned char)cero;
 	valor_actual = 0;
 }
 
 void D8Led_symbol(int value) {
-	/* muestra el Symbol[value] en el display (analogo al caso anterior) */
 	if ((value >= 0) && (value < size_8led)) {
 		LED8ADDR = Symbol[value];
 		valor_actual = value;

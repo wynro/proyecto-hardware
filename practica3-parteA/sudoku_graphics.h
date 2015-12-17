@@ -119,4 +119,11 @@ void sudoku_graphics_print_still_alive(int lineNumber);
  */
 void sudoku_graphics_draw_state(int state, int number);
 
+/**
+ * Dibuja el tiempo, tanto el pasado como el de los calculos
+ *
+ * @param[in] time_playing_s Tiempo de juego, en segundos
+ * @param[in] time_calculating_ms Tiempo de calculo, en milisegundos
+ */
+void sudoku_graphics_draw_time(int time_playing_s, int time_calculating_ms);
 #endif /* SUDOKU_GRAPHICS_H_ */

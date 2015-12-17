@@ -96,8 +96,8 @@ extern "C" {
 
 #define LCD_PutPixel(x, y, c) \
 	(*(INT32U *)(LCD_VIRTUAL_BUFFER+ (y) * SCR_XSIZE / 2 + ( (x)) / 8 * 4)) = \
-	(*(INT32U *)(LCD_VIRTUAL_BUFFER+ (y) * SCR_XSIZE / 2 + ( (x)) / 8 * 4)) & \
-	(~(0xf0000000 >> ((( (x))%8)*4))) |((c) << (7 - ( (x))%8) * 4)
+	(((*(INT32U *)(LCD_VIRTUAL_BUFFER+ (y) * SCR_XSIZE / 2 + ( (x)) / 8 * 4)) & \
+	(~(0xf0000000 >> ((( (x))%8)*4))))|((c) << (7 - ( (x))%8) * 4))
 #define LCD_Active_PutPixel(x, y, c) \
 	(*(INT32U *)(LCD_ACTIVE_BUFFER + (y) * SCR_XSIZE / 2 + (319 - (x)) / 8 * 4)) = \
 	(((*(INT32U *)(LCD_ACTIVE_BUFFER + (y) * SCR_XSIZE / 2 + (319 - (x)) / 8 * 4)) & \
