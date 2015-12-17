@@ -25,7 +25,7 @@ void Main(void);
  * comment:
  *********************************************************************************************/
 void Main(void) {
-
+	// RESTORE ES EL COMANDO DE GDB
 	sys_init(); /* Initial 44B0X's Interrupt,Port and UART */
 
 	int i = 1;
