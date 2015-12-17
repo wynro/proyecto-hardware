@@ -19,7 +19,6 @@
 #define ESPERA (10*1000) // ms
 #define PREESCALADO 32 // Na na na na na na na na na na na na na na na na... BATMAN! <DEV>
 unsigned int cuenta = 0;
-unsigned int num_espera = 0;
 unsigned int pressed;
 
 typedef enum {
@@ -155,7 +154,7 @@ void Button_ISR(void) {
 	// Identificar la interrupcion (hay dos pulsadores)
 	pressed = rEXTINTPND;
 	action(pressed);
-	num_espera = 0;
+	cuenta = 0;
 	button_state = espera_trp;
 }
 
@@ -183,11 +182,11 @@ void Button_Timer_ISR() {
 	case reposo:
 		break;
 	case espera_trp:
-		if (num_espera == TRP) {
+		if (cuenta == TRP) {
 			button_state = desactivado;
 			cuenta = 0;
 		} else {
-			num_espera++;
+			cuenta++;
 		}
 		break;
 	case desactivado:
@@ -201,12 +200,12 @@ void Button_Timer_ISR() {
 			}
 		} else {
 			// Pasamos a la espera del final
-			num_espera = 0;
+			cuenta = 0;
 			button_state = espera_trd;
 		}
 		break;
 	case espera_trd:
-		if (num_espera == TRD) {
+		if (cuenta == TRD) {
 			//rEXTINTPND = 0xf;			// borra los bits en EXTINTPND
 			//rI_ISPC |= BIT_EINT4567;	// borra el bit pendiente en INTPND
 			rEXTINTPND = 0xf;			// borra los bits en EXTINTPND
@@ -214,7 +213,7 @@ void Button_Timer_ISR() {
 			rINTMSK &= ~BIT_EINT4567;	// Reactivamos interrupciones
 			button_state = reposo;			// Volvemos a reposo
 		} else {
-			num_espera++;
+			cuenta++;
 		}
 		break;
 	default:
