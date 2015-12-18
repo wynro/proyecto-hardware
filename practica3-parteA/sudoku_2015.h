@@ -114,6 +114,6 @@ inline uint8_t celda_leer_valor(CELDA celda);
  *
  * @param[out] cuadricuala Cuadricula a editar
  */
-void sudoku_vacia_tabla(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]);
+void sudoku_empty_grid(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]);
 
 #endif /* SUDOKU_2015_H_ */

@@ -101,18 +101,15 @@ inline void sudoku_graphics_put_number_in_square(INT8 x, INT8 y, INT8 number,
 }
 
 inline void sudoku_graphics_remark_square(INT8 x, INT8 y) {
-	Lcd_Draw_Box_inverted(SUDOKU_X0 + 1 + ((SUDOKU_SQUARE_SIZE + 1) * x),
-			SUDOKU_Y0 + 1 + ((SUDOKU_SQUARE_SIZE + 1) * y),
-			SUDOKU_X0 + SUDOKU_SQUARE_SIZE + ((SUDOKU_SQUARE_SIZE + 1) * x),
-			SUDOKU_Y0 + SUDOKU_SQUARE_SIZE + ((SUDOKU_SQUARE_SIZE + 1) * y),
-			BLACK);
+	Lcd_Draw_Box_inverted(celdaPos0y(y), celdaPos0x(x),
+			celdaPos0y(y) + SUDOKU_SQUARE_SIZE - 1,
+			celdaPos0x(x) + SUDOKU_SQUARE_SIZE - 1, BLACK);
 }
 
 inline void sudoku_graphics_invert_square(INT8 x, INT8 y) {
-	ReverseSquare(SUDOKU_X0 + 1 + ((SUDOKU_SQUARE_SIZE + 1) * x),
-			SUDOKU_Y0 + 1 + ((SUDOKU_SQUARE_SIZE + 1) * y),
-			SUDOKU_X0 + SUDOKU_SQUARE_SIZE + ((SUDOKU_SQUARE_SIZE + 1) * x),
-			SUDOKU_Y0 + SUDOKU_SQUARE_SIZE + ((SUDOKU_SQUARE_SIZE + 1) * y));
+	ReverseSquare(celdaPos0x(x), celdaPos0y(y),
+			celdaPos0x(x) + SUDOKU_SQUARE_SIZE - 1,
+			celdaPos0y(y) + SUDOKU_SQUARE_SIZE - 1);
 }
 
 inline void sudoku_graphics_mark_error(INT8 x, INT8 y, INT8 error) {
@@ -177,56 +174,58 @@ inline void sudoku_graphics_mark_error(INT8 x, INT8 y, INT8 error) {
 inline void sudoku_graphics_mark_error_in_square(INT8 x, INT8 y, INT8 error) {
 	switch (error) {
 	case 1:
-		ReverseSquare(celdaPos0x(x) + 2, celdaPos0y(y) + 2,
-				celdaPos0x(x) + SUDOKU_SQUARE_SIZE / 3 - 3,
-				celdaPos0y(y) + SUDOKU_SQUARE_SIZE / 3 - 3);
+		ReverseSquare(celdaPos0y(y) + 2, celdaPos0x(x) + 2,
+				celdaPos0y(y) + SUDOKU_SQUARE_SIZE / 3 - 3,
+				celdaPos0x(x) + SUDOKU_SQUARE_SIZE / 3 - 3);
 		break;
 	case 2:
-		ReverseSquare(celdaPos0x(x) + (SUDOKU_SQUARE_SIZE / 3) + 2,
-				celdaPos0y(y) + 2,
-				celdaPos0x(x) + 2 * (SUDOKU_SQUARE_SIZE / 3) - 3,
-				celdaPos0y(y) + SUDOKU_SQUARE_SIZE / 3 - 3);
+		ReverseSquare(celdaPos0y(y) + SUDOKU_SQUARE_SIZE / 3 + 2,
+				celdaPos0x(x) + 2,
+				celdaPos0y(y) + 2 * (SUDOKU_SQUARE_SIZE / 3) - 3,
+				celdaPos0x(x) + SUDOKU_SQUARE_SIZE / 3 - 3);
 		break;
 	case 3:
-		ReverseSquare(celdaPos0x(x) + 2 * (SUDOKU_SQUARE_SIZE / 3) + 2,
-				celdaPos0y(y) + 2, celdaPos0x(x) + SUDOKU_SQUARE_SIZE - 3,
-				celdaPos0y(y) + SUDOKU_SQUARE_SIZE / 3 - 3);
+		ReverseSquare(celdaPos0y(y) + 2 * (SUDOKU_SQUARE_SIZE / 3) + 2,
+				celdaPos0x(x) + 2, celdaPos0y(y) + SUDOKU_SQUARE_SIZE - 3,
+				celdaPos0x(x) + SUDOKU_SQUARE_SIZE / 3 - 3);
 		break;
 	case 4:
-		ReverseSquare(celdaPos0x(x) + 2,
-				celdaPos0y(y) + SUDOKU_SQUARE_SIZE / 3 + 2,
-				celdaPos0x(x) + SUDOKU_SQUARE_SIZE / 3 - 3,
-				celdaPos0y(y) + 2 * (SUDOKU_SQUARE_SIZE / 3) - 3);
+
+		ReverseSquare(celdaPos0y(y) + 2,
+				celdaPos0x(x) + (SUDOKU_SQUARE_SIZE / 3) + 2,
+				celdaPos0y(y) + SUDOKU_SQUARE_SIZE / 3 - 3,
+				celdaPos0x(x) + 2 * (SUDOKU_SQUARE_SIZE / 3) - 3);
 		break;
 	case 5:
-		ReverseSquare(celdaPos0x(x) + (SUDOKU_SQUARE_SIZE / 3) + 2,
-				celdaPos0y(y) + SUDOKU_SQUARE_SIZE / 3 + 2,
-				celdaPos0x(x) + 2 * (SUDOKU_SQUARE_SIZE / 3) - 3,
-				celdaPos0y(y) + 2 * (SUDOKU_SQUARE_SIZE / 3) - 3);
+		ReverseSquare(celdaPos0y(y) + SUDOKU_SQUARE_SIZE / 3 + 2,
+				celdaPos0x(x) + (SUDOKU_SQUARE_SIZE / 3) + 2,
+				celdaPos0y(y) + 2 * (SUDOKU_SQUARE_SIZE / 3) - 3,
+				celdaPos0x(x) + 2 * (SUDOKU_SQUARE_SIZE / 3) - 3);
 		break;
 	case 6:
-		ReverseSquare(celdaPos0x(x) + 2 * (SUDOKU_SQUARE_SIZE / 3) + 2,
-				celdaPos0y(y) + SUDOKU_SQUARE_SIZE / 3 + 2,
-				celdaPos0x(x) + SUDOKU_SQUARE_SIZE - 3,
-				celdaPos0y(y) + 2 * (SUDOKU_SQUARE_SIZE / 3) - 3);
+		ReverseSquare(celdaPos0y(y) + 2 * (SUDOKU_SQUARE_SIZE / 3) + 2,
+				celdaPos0x(x) + (SUDOKU_SQUARE_SIZE / 3) + 2,
+				celdaPos0y(y) + SUDOKU_SQUARE_SIZE - 3,
+				celdaPos0x(x) + 2 * (SUDOKU_SQUARE_SIZE / 3) - 3);
 		break;
 	case 7:
-		ReverseSquare(celdaPos0x(x) + 2,
-				celdaPos0y(y) + 2 * (SUDOKU_SQUARE_SIZE / 3) + 2,
-				celdaPos0x(x) + SUDOKU_SQUARE_SIZE / 3 - 3,
-				celdaPos0y(y) + SUDOKU_SQUARE_SIZE - 3);
+		ReverseSquare(celdaPos0y(y) + 2,
+				celdaPos0x(x) + 2 * (SUDOKU_SQUARE_SIZE / 3) + 2,
+				celdaPos0y(y) + SUDOKU_SQUARE_SIZE / 3 - 3,
+				celdaPos0x(x) + SUDOKU_SQUARE_SIZE - 3);
 		break;
 	case 8:
-		ReverseSquare(celdaPos0x(x) + (SUDOKU_SQUARE_SIZE / 3) + 2,
-				celdaPos0y(y) + 2 * (SUDOKU_SQUARE_SIZE / 3) + 2,
-				celdaPos0x(x) + 2 * (SUDOKU_SQUARE_SIZE / 3) - 3,
-				celdaPos0y(y) + SUDOKU_SQUARE_SIZE - 3);
+
+		ReverseSquare(celdaPos0y(y) + SUDOKU_SQUARE_SIZE / 3 + 2,
+				celdaPos0x(x) + 2 * (SUDOKU_SQUARE_SIZE / 3) + 2,
+				celdaPos0y(y) + 2 * (SUDOKU_SQUARE_SIZE / 3) - 3,
+				celdaPos0x(x) + SUDOKU_SQUARE_SIZE - 3);
 		break;
 	case 9:
-		ReverseSquare(celdaPos0x(x) + 2 * (SUDOKU_SQUARE_SIZE / 3) + 2,
-				celdaPos0y(y) + 2 * (SUDOKU_SQUARE_SIZE / 3) + 2,
-				celdaPos0x(x) + SUDOKU_SQUARE_SIZE - 3,
-				celdaPos0y(y) + SUDOKU_SQUARE_SIZE - 3);
+		ReverseSquare(celdaPos0y(y) + 2 * (SUDOKU_SQUARE_SIZE / 3) + 2,
+				celdaPos0x(x) + 2 * (SUDOKU_SQUARE_SIZE / 3) + 2,
+				celdaPos0y(y) + SUDOKU_SQUARE_SIZE - 3,
+				celdaPos0x(x) + SUDOKU_SQUARE_SIZE - 3);
 		break;
 	default:
 		break;
@@ -248,7 +247,7 @@ void sudoku_graphics_fill_from_data(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]) {
 			} else {
 				// Simplemente ponemos el numero en el cuadrado, y si es error lo marcamos
 				sudoku_graphics_put_number_in_square(i, j, valor,
-						celda_es_pista(cuadricula[j][i]) ? BLACK : DARKGRAY);
+						celda_es_pista(cuadricula[j][i]) ? BLACK : 0xd);
 				if (celda_es_error(cuadricula[j][i])) {
 					sudoku_graphics_invert_square(i, j);
 				}

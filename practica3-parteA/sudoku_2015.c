@@ -71,8 +71,8 @@ void init_game(void) {
 	Timer2_Reiniciar();
 	Timer2_Empezar();
 
-	uint8_t fila = 1;
 	uint8_t columna = 1;
+	uint8_t fila = 1;
 	int valor = 0;
 
 	Game_state estadoJuego = title_screen;
@@ -124,7 +124,7 @@ void init_game(void) {
 				sudoku_graphics_draw_state(1, columna);
 				break;
 			case esperando_valor:
-				sudoku_graphics_draw_state(2, Button_valor_actual());
+				sudoku_graphics_draw_state(2, valor);
 				break;
 			default:
 				break;
@@ -132,7 +132,7 @@ void init_game(void) {
 			// Por el problemilla A
 			if (fila < 10) {
 				sudoku_graphics_remark_square(fila - 1, columna - 1);
-				if (!celda_es_pista(cuadricula[columna - 1][fila - 1])) {
+				if (!celda_es_pista(cuadricula[fila - 1][columna - 1])) {
 					sudoku_graphics_mark_error_in_square(fila - 1, columna - 1,
 							valor);
 				}
@@ -172,8 +172,8 @@ void init_game(void) {
 				tiempo_calculos += (tiempo_fin_calculo - tiempo_ini_calculo);
 				// Reseteamos to-do
 
-				fila = 1;
 				columna = 1;
+				fila = 1;
 				valor = 0;
 				tiempo_juego = 0;
 				tiempo_juego_final = 0;
@@ -226,8 +226,8 @@ void init_game(void) {
 					Button_reconfigure_range(0, 9);
 					estadoJuego = esperando_valor;
 				} else {
-					fila = 1;
 					columna = 1;
+					fila = 1;
 					valor = 0;
 					Button_reconfigure_range(1, 10);
 					estadoJuego = esperando_fila;
@@ -242,7 +242,7 @@ void init_game(void) {
 
 				// Update sudoku
 
-				celda_poner_valor(&(cuadricula[columna - 1][fila - 1]), valor);
+				celda_poner_valor(&(cuadricula[fila - 1][columna - 1]), valor);
 				tiempo_ini_calculo = Timer2_Leer() / 1000;
 				errores = sudoku_recalcular(cuadricula);
 				tiempo_fin_calculo = Timer2_Leer() / 1000;
@@ -320,20 +320,16 @@ int sudoku_recalcular(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]) {
 	return errores ? -1 : celdas_vacias;
 }
 
-void sudoku_vacia_tabla(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]) {
+void sudoku_empty_grid(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]) {
 	int celdas_vacias = 0;
 	int errores = 0;
-	int fila = 0;
-	while (fila < (NUM_REGION * TAM_REGION)) {
-		int columna = 0;
-		while (columna < (NUM_REGION * TAM_REGION)) {
-			// Si NO es pista, la ponemos a 0
+	int fila, columna;
+	for (fila = 0; fila < (NUM_REGION * TAM_REGION); fila++) {
+		for (columna = 0; fila < (NUM_REGION * TAM_REGION); columna++) {
 			if (!celda_es_pista(cuadricula[fila][columna])) {
 				celda_poner_valor(&cuadricula[fila][columna], 0);
 			}
-			columna += 1;
 		}
-		fila += 1;
 	}
 }
 
