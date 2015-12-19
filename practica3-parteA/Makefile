@@ -2,6 +2,8 @@
 # Los fuentes son todo fichero acabados en .c
 SRCS=$(shell ls *.c)
 
+all:
+	@echo "Error, only doxy and doxyclean targets available"
 
 .PHONY: editdoxy doxyclean
 edit:
