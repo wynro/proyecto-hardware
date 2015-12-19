@@ -1,10 +1,7 @@
 /*
- * title-bitmap.h
- *
- *  Created on: 04/12/2015
- *      Author: a604409
+ * @file title-bitmap.h
+ * @brief Archivo de recursos con la imagen del titulo
  */
-
 #ifndef TITLE_BITMAP_H_
 #define TITLE_BITMAP_H_
 
