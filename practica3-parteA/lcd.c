@@ -19,7 +19,8 @@
 #define DW 		  DMA_Byte		//configura  ZDMA0 como media palabras
 /*--- variables externas ---*/
 extern INT8U g_auc_Ascii8x16[];
-extern STRU_BITMAP Stru_Bitmap_gbMouse;
+
+int abs(int Number);
 
 /*--- codigo de la funcion ---*/
 void Lcd_Init(void) {
@@ -480,7 +481,6 @@ void Lcd_DspAscII8x16HorizontallyCentered_inverted(INT16U y0, INT8U ForeColor,
 }
 
 void Lcd_DisplayChar(INT16U usX0, INT16U usY0, INT8U ForeColor, INT8U ucChar) {
-	// TODO: PUES ME HARÉ MI PROPIO LCD; CON CASINOS, Y FURCIAS!
 	INT16 k, x, y, xx;
 	INT32U ulOffset;
 	ulOffset = (INT32U) ucChar * 16;//Here to be changed tomorrow (never changed)
@@ -497,7 +497,6 @@ void Lcd_DisplayChar(INT16U usX0, INT16U usY0, INT8U ForeColor, INT8U ucChar) {
 
 void Lcd_DisplayChar_inverted(INT16U usX0, INT16U usY0, INT8U ForeColor,
 		INT8U ucChar) {
-// TODO: PUES ME HARÉ MI PROPIO LCD; CON CASINOS, Y FURCIAS!
 	INT16 k, x, y, xx;
 	INT32U ulOffset;
 	ulOffset = (INT32U) ucChar * 16;//Here to be changed tomorrow (never changed)
@@ -630,8 +629,6 @@ void Zdma0Done(void) {
  * comment:
  *********************************************************************************************/
 void Lcd_Dma_Trans(void) {
-	INT8U err;
-
 	ucZdma0Done = 1;
 //#define LCD_VIRTUAL_BUFFER	(0xc400000)
 //#define LCD_ACTIVE_BUFFER	(LCD_VIRTUAL_BUFFER+(SCR_XSIZE*SCR_YSIZE/2))	//DMA ON
@@ -666,8 +663,6 @@ void Lcd_Dma_Trans(void) {
  * comment:
  *********************************************************************************************/
 void Lcd_Dma_Trans_non_block(void) {
-	INT8U err;
-
 	ucZdma0Done = 1;
 	rNCACHBE1 = (((unsigned) (LCD_ACTIVE_BUFFER) >> 12) << 16)
 			| ((unsigned) (LCD_VIRTUAL_BUFFER) >> 12);

@@ -107,6 +107,8 @@ extern "C" {
 
 INT8U LCD_GetPixel(INT16U usX, INT16U usY);
 void  Lcd_Clr(void);
+void  Lcd_Init(void);
+void  Lcd_Active_Clr(void);
 void  Lcd_Test(void);
 void  Lcd_Dma_Trans(void);
 void  LcdVirtualToTrue(void);
@@ -134,6 +136,7 @@ void  Lcd_DspAscII6x8(INT16U usX0, INT16U usY0,INT8U ForeColor, INT8U* pucChar);
 void  Lcd_DspAscII8x16(INT16U x0, INT16U y0, INT8U ForeColor, INT8U* s);
 void  Lcd_DspAscII8x16HorizontallyCentered(INT16U y0, INT8U ForeColor, INT8U * s);
 void  Lcd_DspAscII8x16HorizontallyCentered_inverted(INT16U y0, INT8U ForeColor, INT8U * s);
+void  Lcd_DspAscII8x16_inverted(INT16U x0, INT16U y0, INT8U ForeColor, INT8U * s);
 
 
 void  Lcd_DspHz16(INT16U x0, INT16U y0, INT8U ForeColor, INT8U *s);
