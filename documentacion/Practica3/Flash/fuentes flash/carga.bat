@@ -1,0 +1,1 @@
+"C:\Program Files\EclipseARM\openocd-0.7.0\bin\openocd-0.7.0" -f test/arm-fdi-ucm.cfg -c "program backup_flash.bin 0x00000000"

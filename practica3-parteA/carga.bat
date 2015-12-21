@@ -1,0 +1,2 @@
+"C:\Program Files\EclipseARM\sourcery-g++-lite-arm-2011.03\bin\arm-none-eabi-objcopy" -O binary Debug/practica3-parteA.elf Debug/practica3-parteA.bin
+"C:\Program Files\EclipseARM\openocd-0.7.0\bin\openocd-0.7.0" -f test/arm-fdi-ucm.cfg -c "program Debug/practica3-parteA.bin 0x00000000"
