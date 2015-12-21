@@ -8,7 +8,9 @@
 #include "8led.h"
 #include "Button.h"
 #include "sudoku_2015.h"
+#include "Timer2.h"
 #include "sudoku_graphics.h"
+#include "Persistence.h"
 #include "sudoku_collection_san.h"
 #include "still-alive-lyrics.h"
 #include <inttypes.h>
@@ -20,6 +22,7 @@ typedef enum {
 	final_screen,
 	aperture,
 	instructions,
+	record,
 	esperando_fila,
 	esperando_columna,
 	esperando_valor
@@ -63,11 +66,12 @@ void init_game(void) {
 	int tiempo_base_aperture_no_leido = 1;
 	int iterador_aperture = -1;
 	int errores = 1;
+	int last_record;
 	// Lo siento mucho pero no voy a poner 119 estados mas
 	int last_time_aperture = -1;
 
 	Timer2_Inicializar();
-	Button_init(1, 3);
+	Button_init(1, 4);
 	Timer2_Reiniciar();
 	Timer2_Empezar();
 
@@ -80,7 +84,7 @@ void init_game(void) {
 	while (1) {
 		tiempo_juego = Timer2_Leer() / 1000000;
 		// BLOQUE RENDERIZADO
-		Lcd_Clr();
+		sudoku_graphics_clear_screen_buffer();
 		if (estadoJuego == title_screen) {
 			sudoku_graphics_print_title_screen(Button_valor_actual());
 		} else if (estadoJuego == final_screen) {
@@ -88,9 +92,13 @@ void init_game(void) {
 			if (tiempo_final_no_leido) {
 				tiempo_final_no_leido = 0;
 				tiempo_juego_final = tiempo_juego;
+				last_record = Persistence_read_int();
+				if ((tiempo_juego_final < last_record) && (!errores)) {
+					Persistence_save_int(tiempo_juego_final);
+				}
 			}
 			sudoku_graphics_print_final_screen(tiempo_juego_final,
-					tiempo_calculos, errores);
+					tiempo_calculos, last_record, errores);
 		} else if (estadoJuego == aperture) {
 			// Cores and turrets of every stage,
 			// Wouldn't you like to escape this cage?
@@ -111,6 +119,8 @@ void init_game(void) {
 			sudoku_graphics_print_still_alive(iterador_aperture);
 		} else if (estadoJuego == instructions) {
 			sudoku_graphics_print_instructions();
+		} else if (estadoJuego == record) {
+			sudoku_graphics_print_record(Persistence_read_int());
 		} else {
 			// Actualizamos la pantalla de juego
 			sudoku_graphics_draw_base();
@@ -161,7 +171,13 @@ void init_game(void) {
 					// Cuadricula especial
 					sudoku_collection_descomprime(cuadriculaCasiResuelta,
 							cuadricula);
-				} else {
+				} else if (valor_actual == 3) {
+					// Records
+					Button_reconfigure_range(1, 1);
+					estadoJuego = record;
+					break;
+				} else if (valor_actual == 4) {
+					Button_reconfigure_range(1, 1);
 					estadoJuego = instructions;
 					break;
 				}
@@ -185,7 +201,7 @@ void init_game(void) {
 				Button_reconfigure_range(1, 10);
 
 				// Dibujamos la nueva tabla
-				Lcd_Clr();
+				sudoku_graphics_clear_screen_buffer();
 
 				sudoku_graphics_draw_base();
 				sudoku_graphics_fill_from_data(cuadricula);
@@ -221,7 +237,7 @@ void init_game(void) {
 			columna = Button_valor_actual();
 			if (Button_next()) {
 				Button_low_next();
-				if (!celda_es_pista(cuadricula[columna - 1][fila - 1])) {
+				if (!celda_es_pista(cuadricula[fila - 1][columna - 1])) {
 					columna = Button_valor_actual();
 					Button_reconfigure_range(0, 9);
 					estadoJuego = esperando_valor;
@@ -268,7 +284,7 @@ void init_game(void) {
 					Button_reconfigure_range(1, 3);
 					estadoJuego = aperture;
 				} else {
-					Button_reconfigure_range(1, 3);
+					Button_reconfigure_range(1, 4);
 					estadoJuego = title_screen;
 				}
 			}
@@ -276,14 +292,21 @@ void init_game(void) {
 		case aperture:
 			if (Button_next() || iterador_aperture == (STILL_ALIVE_SIZE - 6)) {
 				Button_low_next();
-				Button_reconfigure_range(1, 3);
+				Button_reconfigure_range(1, 4);
 				estadoJuego = title_screen;
 			}
 			break;
 		case instructions:
 			if (Button_next()) {
 				Button_low_next();
-				Button_reconfigure_range(1, 3);
+				Button_reconfigure_range(1, 4);
+				estadoJuego = title_screen;
+			}
+			break;
+		case record:
+			if (Button_next()) {
+				Button_low_next();
+				Button_reconfigure_range(1, 4);
 				estadoJuego = title_screen;
 			}
 			break;
@@ -316,7 +339,8 @@ int sudoku_recalcular(CELDA cuadricula[NUM_FILAS][NUM_COLUMNAS]) {
 		}
 		fila += 1;
 	}
-	//retornar el numero de celdas vacias, siendo negativo si hay errores
+
+//retornar el numero de celdas vacias, siendo negativo si hay errores
 	return errores ? -1 : celdas_vacias;
 }
 
