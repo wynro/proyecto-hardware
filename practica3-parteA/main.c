@@ -9,14 +9,8 @@
 #include "44blib.h"
 #include "44b.h"
 #include "lcd.h"
-#include "sudoku_graphics.h"
 #include "sudoku_2015.h"
-#include "Button.h"
-#include "Timer2.h"
-#include "Bmp.h"
 #include "string.h"
-#include "still-alive-lyrics.h"
-#include "sudoku_collection_san.h"
 
 /*--- declaracion de funciones ---*/
 void Main(void);
