@@ -1,4 +1,4 @@
-/*
+/**
  * @file aperture-logo-bitmap.h
  * @brief Archivo de recursos que contiene el logo de Aperture
  *

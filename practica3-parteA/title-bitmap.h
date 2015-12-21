@@ -1,4 +1,4 @@
-/*
+/**
  * @file title-bitmap.h
  * @brief Archivo de recursos con la imagen del titulo
  */
