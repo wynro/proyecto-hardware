@@ -61,7 +61,7 @@ void sudoku_graphics_update_lcd();
  *
  */
 void sudoku_graphics_print_final_screen(int tiempo_juego_s,
-		int tiempo_calculos_ms, int errores);
+		int tiempo_calculos_ms, int last_record_s, int errores);
 
 /**
  * Rellena una casilla con el numero dado
@@ -98,7 +98,7 @@ inline void sudoku_graphics_mark_error(INT8 x, INT8 y, INT8 error);
  * @param[in] y Posicion y de la casilla
  * @param[in] error Error a remarcar
  */
-void sudoku_graphics_remark_error_in_square(INT8 x, INT8 y, INT8 error);
+void sudoku_graphics_mark_error_in_square(INT8 x, INT8 y, INT8 error);
 
 /**
  * Imprime la pantalla de titulo
@@ -109,6 +109,11 @@ void sudoku_graphics_print_title_screen();
  * Imprime la pantalla de instrucciones
  */
 void sudoku_graphics_print_instructions();
+
+/**
+ * Imprime la pantalla de instrucciones
+ */
+void sudoku_graphics_print_record();
 
 /**
  * Imprime 6 lineas de Still Alive a partir de la linea dada

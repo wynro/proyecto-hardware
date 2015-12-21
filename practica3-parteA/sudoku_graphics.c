@@ -20,15 +20,27 @@
 
 #define DRAW_MESSAGE
 
+// Mensajes de tiempos
 char *time_message = "Tiempos:";
 char *time_playing_short = "Jugando:";
 char *time_calculating_short = "Calc (ms):";
 char *time_playing_message = "Tiempo total de juego: ";
 char *time_calculating_message = "Tiempo total de calculo(ms): ";
+char *time_record_message = "Tiempo total de calculo(ms): ";
+
+// Mensajes de records
+char *got_record_message = "Has superado el record!.";
+char *not_record_message = "No has superado el record anterior.";
+char *last_record_message = "Record anterior: ";
+char *current_record_message = "Record actual: ";
+
+// Mensajes de exito/fracaso
 char *mensaje_aperture_1 = "Resolviste el sudoku con exito!";
 char *mensaje_aperture_2 = "Boton derecho para recibir tu premio";
 char *mensaje_fracaso_1 = "No resolviste el sudoku :(";
 char *mensaje_fracaso_2 = "Pulsa boton derecho para reiniciar.";
+
+// Mensajes interfaz
 char *mensaje_seleccionando = "Seleccione:";
 char *mensaje_fila = "Fila";
 char *mensaje_columna = "Columna";
@@ -46,13 +58,9 @@ char *instructions[INSTRUCTION_LINES] = { "INSTRUCCIONES DE JUEGO: ",
 		"columna de la misma manera.", "Por ultimo debera seleccionar",
 		"el valor deseado.", "", "Pulse boton derecho para volver" };
 //
-//char *instructions[INSTRUCTION_LINES] = { "INSTRUCCIONES",
-//		"El boton derecho actua como start y", "enter.",
-//		"El boton izquierdo permite cambiar la", "seleccion actual.", "",
-//		"Introduzca fila A para salir" };
-#define GAME_TYPES_SIZE 3
-char *game_types_message[GAME_TYPES_SIZE] = { "1: Cuadricula normal",
-		"2: Cuadricula terminada", "3: Instrucciones" };
+#define GAME_TYPES_SIZE 4
+char *game_types_message[GAME_TYPES_SIZE] = { "Cuadricula normal",
+		"Cuadricula terminada", "Record", "Instrucciones" };
 
 void reverse(char str[], int length) {
 	int start = 0;
@@ -261,6 +269,14 @@ void sudoku_graphics_update_lcd() {
 	Lcd_Dma_Trans();
 }
 
+void sudoku_graphics_clear_screen_buffer() {
+	Lcd_Clr();
+}
+
+void sudoku_graphics_clear_screen() {
+	Lcd_Active_Clr();
+}
+
 void sudoku_graphics_draw_base() {
 	int i;
 	for (i = 0; i < SUDOKU_NUM_CUADS + 1; ++i) {
@@ -387,7 +403,8 @@ void sudoku_graphics_draw_time(int time_playing_s, int time_calculating_ms) {
 void sudoku_graphics_print_instructions() {
 	int i;
 	for (i = 0; i < INSTRUCTION_LINES; ++i) {
-		Lcd_DspAscII8x16(20, 16 + 16 * i, BLACK, instructions[i]);
+		Lcd_DspAscII8x16(SUDOKU_X0, SUDOKU_FONT_HEIGHT + SUDOKU_FONT_HEIGHT * i,
+				BLACK, instructions[i]);
 	}
 }
 
@@ -398,7 +415,6 @@ void sudoku_graphics_print_title_screen(int lineSelected) {
 					- Stru_Bitmap_title.usHeight, Stru_Bitmap_title);
 
 	// Line selection
-	int maxLength = 0;
 	for (i = 0; i < GAME_TYPES_SIZE; ++i) {
 		// Comprobamos si toca actualizar la linea mayor
 		if (i == lineSelected - 1) {
@@ -406,6 +422,20 @@ void sudoku_graphics_print_title_screen(int lineSelected) {
 					(SCR_YSIZE / 2) - SUDOKU_FONT_HEIGHT
 							+ SUDOKU_FONT_HEIGHT * i, BLACK,
 					game_types_message[i]);
+			Lcd_DspAscII8x16_inverted(
+					(SCR_XSIZE - (strlen(game_types_message[i]) * 8)) / 2 - 8,
+					(SCR_YSIZE / 2) - SUDOKU_FONT_HEIGHT
+							+ SUDOKU_FONT_HEIGHT * i, BLACK, ' ');
+			Lcd_DspAscII8x16_inverted(
+					(SCR_XSIZE + (strlen(game_types_message[i]) * 8)) / 2,
+					(SCR_YSIZE / 2) - SUDOKU_FONT_HEIGHT
+							+ SUDOKU_FONT_HEIGHT * i, BLACK, ' ');
+
+//			Lcd_DisplayChar_inverted(
+//					(SCR_YSIZE / 2) - SUDOKU_FONT_HEIGHT
+//							+ SUDOKU_FONT_HEIGHT * i,
+//					((SCR_YSIZE - strlen(game_types_message[i] - 1)) / 2) * 8,
+//					BLACK, ' ');
 		} else {
 			Lcd_DspAscII8x16HorizontallyCentered(
 					(SCR_YSIZE / 2) - SUDOKU_FONT_HEIGHT
@@ -422,12 +452,29 @@ void sudoku_graphics_print_title_screen(int lineSelected) {
 			(unsigned char *) title_message);
 }
 
+void sudoku_graphics_print_record(int current_record) {
+	BitmapViewHorizontallyCentered(20, Stru_Bitmap_title);
+	char time_record[7];
+
+	toComplexNotation(current_record, time_record);
+
+	// Record previo
+	int time_playing_x = ((SCR_XSIZE - strlen(current_record_message) * 8
+			- strlen(time_record) * 8)) / 2;
+	Lcd_DspAscII8x16(time_playing_x, (SCR_YSIZE / 2), BLACK,
+			(unsigned char *) current_record_message);
+	Lcd_DspAscII8x16(time_playing_x + strlen(current_record_message) * 8,
+			(SCR_YSIZE / 2), BLACK, (unsigned char *) time_record);
+}
+
 void sudoku_graphics_print_final_screen(int tiempo_juego_s,
-		int tiempo_calculos_ms, int errores) {
+		int tiempo_calculos_ms, int last_record_s, int errores) {
 	char time_playing[7];
 	char time_calculating[7];
+	char time_record[7];
 
 	toComplexNotation(tiempo_juego_s, time_playing);
+	toComplexNotation(last_record_s, time_record);
 	itoa(tiempo_calculos_ms, time_calculating, 10);
 	// 3 posibles pantallas
 	// Titulo
@@ -439,7 +486,8 @@ void sudoku_graphics_print_final_screen(int tiempo_juego_s,
 	Lcd_DspAscII8x16(time_playing_x, (SCR_YSIZE / 2) - SUDOKU_FONT_HEIGHT * 2,
 			BLACK, (unsigned char *) time_playing_message);
 	Lcd_DspAscII8x16(time_playing_x + strlen(time_playing_message) * 8,
-			(SCR_YSIZE / 2) - 32, BLACK, (unsigned char *) time_playing);
+			(SCR_YSIZE / 2) - SUDOKU_FONT_HEIGHT * 2, BLACK,
+			(unsigned char *) time_playing);
 
 	// Tiempo de calculo
 	int time_calculating_x = ((SCR_XSIZE - strlen(time_calculating_message) * 8
@@ -447,25 +495,69 @@ void sudoku_graphics_print_final_screen(int tiempo_juego_s,
 	Lcd_DspAscII8x16(time_calculating_x, (SCR_YSIZE / 2) - SUDOKU_FONT_HEIGHT,
 			BLACK, (unsigned char *) time_calculating_message);
 	Lcd_DspAscII8x16(time_calculating_x + strlen(time_calculating_message) * 8,
-			(SCR_YSIZE / 2) - 16, BLACK, (unsigned char *) time_calculating);
+			(SCR_YSIZE / 2) - SUDOKU_FONT_HEIGHT, BLACK,
+			(unsigned char *) time_calculating);
+
+	int time_record_x;
 
 	switch (errores) {
 	case 0:
 		// Terminado con éxito, aperture entra en escena
-		Lcd_DspAscII8x16HorizontallyCentered(
-				(SCR_YSIZE / 2) + SUDOKU_FONT_HEIGHT * 3, BLACK,
-				(unsigned char *) mensaje_aperture_1);
+		if (tiempo_juego_s < last_record_s) {
+			// Se ha superado el record previo
+			Lcd_DspAscII8x16HorizontallyCentered(
+					(SCR_YSIZE / 2) + SUDOKU_FONT_HEIGHT / 2, BLACK,
+					(unsigned char *) got_record_message);
+
+			time_record_x = ((SCR_XSIZE - strlen(current_record_message) * 8
+					- strlen(time_playing) * 8)) / 2;
+			Lcd_DspAscII8x16(time_record_x,
+					(SCR_YSIZE / 2) + SUDOKU_FONT_HEIGHT
+							+ SUDOKU_FONT_HEIGHT / 2, BLACK,
+					(unsigned char *) current_record_message);
+			Lcd_DspAscII8x16(time_record_x + strlen(current_record_message) * 8,
+					(SCR_YSIZE / 2) + SUDOKU_FONT_HEIGHT
+							+ SUDOKU_FONT_HEIGHT / 2, BLACK,
+					(unsigned char *) time_playing);
+
+			time_record_x = ((SCR_XSIZE - strlen(last_record_message) * 8
+					- strlen(time_record) * 8)) / 2;
+			Lcd_DspAscII8x16(time_record_x,
+					(SCR_YSIZE / 2) + SUDOKU_FONT_HEIGHT * 2
+							+ SUDOKU_FONT_HEIGHT / 2, BLACK,
+					(unsigned char *) last_record_message);
+			Lcd_DspAscII8x16(time_record_x + strlen(last_record_message) * 8,
+					(SCR_YSIZE / 2) + SUDOKU_FONT_HEIGHT * 2
+							+ SUDOKU_FONT_HEIGHT / 2, BLACK,
+					(unsigned char *) time_record);
+		} else {
+			Lcd_DspAscII8x16HorizontallyCentered(
+					(SCR_YSIZE / 2) + SUDOKU_FONT_HEIGHT, BLACK,
+					(unsigned char *) not_record_message);
+			time_record_x = ((SCR_XSIZE - strlen(last_record_message) * 8
+					- strlen(time_record) * 8)) / 2;
+			Lcd_DspAscII8x16(time_record_x,
+					(SCR_YSIZE / 2) + SUDOKU_FONT_HEIGHT * 2, BLACK,
+					(unsigned char *) last_record_message);
+			Lcd_DspAscII8x16(time_record_x + strlen(last_record_message) * 8,
+					(SCR_YSIZE / 2) + SUDOKU_FONT_HEIGHT * 2, BLACK,
+					(unsigned char *) time_record);
+		}
+
 		Lcd_DspAscII8x16HorizontallyCentered(
 				(SCR_YSIZE / 2) + SUDOKU_FONT_HEIGHT * 4, BLACK,
+				(unsigned char *) mensaje_aperture_1);
+		Lcd_DspAscII8x16HorizontallyCentered(
+				(SCR_YSIZE / 2) + SUDOKU_FONT_HEIGHT * 5, BLACK,
 				(unsigned char *) mensaje_aperture_2);
 		break;
 	default:
 		// Con errores/Sin terminar
 		Lcd_DspAscII8x16HorizontallyCentered(
-				(SCR_YSIZE / 2) + SUDOKU_FONT_HEIGHT * 3, BLACK,
+				(SCR_YSIZE / 2) + SUDOKU_FONT_HEIGHT * 4, BLACK,
 				(unsigned char *) mensaje_fracaso_1);
 		Lcd_DspAscII8x16HorizontallyCentered(
-				(SCR_YSIZE / 2) + SUDOKU_FONT_HEIGHT * 4, BLACK,
+				(SCR_YSIZE / 2) + SUDOKU_FONT_HEIGHT * 5, BLACK,
 				(unsigned char *) mensaje_fracaso_2);
 		break;
 	}
