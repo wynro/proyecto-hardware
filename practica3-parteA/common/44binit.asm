@@ -11,8 +11,6 @@
     .include "option.a"
     .include "memcfg.a"
 
-.global	DebugStack
-
 #Memory Area
 #GCS6    8M 16bit(8MB) DRAM/SDRAM(0xc000000-0xc7fffff)
 #APP     RAM=0xc000000~0xc7effff 
@@ -256,10 +254,27 @@ ResetHandler:
     #****************************************************
     #*	Set memory control registers					* 	
     #****************************************************
-    ldr	    r0,=SMRDATA
+    #Este codigo copia el programa a la ROM
+    ldr	    r0,=(SMRDATA-0xc000000)
     ldmia   r0,{r1-r13}
     ldr	    r0,=0x01c80000  	/* BWSCON Address */
     stmia   r0,{r1-r13}
+
+	LDR r0,=0x0
+	LDR r1,=Image_RO_Base
+	LDR r3,=Image_ZI_Limit
+LoopRw:
+    cmp         r1, r3
+	ldrcc       r2, [r0], #4
+	strcc       r2, [r1], #4
+	bcc         LoopRw
+	mov 	r3,#0
+	LDR 	r0, =Image_ZI_Base
+	LDR 	r1, =Image_ZI_Limit
+LoopZI:
+	cmp 	r0,r1
+	strcc 	r3,[r0],#4
+	bcc LoopZI
 
     #;****************************************************
     #;*	Initialize stacks								* 
@@ -466,9 +481,4 @@ SMRDATA:
 .equ	HandleEINT1,	_ISR_STARTADDRESS+4*32
 .equ	HandleEINT0,	_ISR_STARTADDRESS+4*33		/* 0xc1(c7)fff84 */
 
-#################################################################################################################
-
-.data
-.ltorg /*guarantees the alignment*/
-.align 5
-#        END
+		.end
