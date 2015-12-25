@@ -9,14 +9,19 @@
 \usepackage{makeidx}
 \usepackage{wynroTitle}
 \usepackage{pgf}
+
 \usepackage{tikz}
 \usetikzlibrary{arrows,automata,shapes}
+
 \newcommand{\leftstack}[1]{%
 {\begin{tabular}{l} #1\end{tabular}}}
+
 \newcommand{\rightstack}[1]{%
 {\begin{tabular}{r} #1\end{tabular}}}
+
 \newcommand{\centerstack}[1]{%
 {\begin{tabular}{c} #1\end{tabular}}}
+
 \newcommand*{\blankpage}[1]{%
 \vspace*{\fill}
 \begin{center} \textit{#1} \end{center}
@@ -52,18 +57,14 @@ Darío Suárez Gracia\\
 % El resto
 \section{Resumen}
 \label{sec:resumen}
-% Es un apartado fundamental. Es lo primero que se lee y muchas*
-% veces lo único que lee. Es la síntesis de todo el trabajo
-% realizado, qué, cómo y por qué hemos hecho el trabajo. Debe ser
-% auto contenido y debemos esbozar nuestras conclusiones.
-% [*] todas
 El trabajo a desarrollar consiste en 3 partes claramente
 diferenciadas; la primera es el arreglado del problema de los rebotes,
 creando un módulo que nos permita controlar entrada de señales del
-boton ignorando señales espurias. La segunda parte consiste en el
+botón ignorando señales espurias. La segunda parte consiste en el
 aprendizaje del control de la pantalla, con todo el bagaje que la
 misma conlleva. Finalmente, hemos de integrar todos los desarrollos
-previos para crear un sistema de ayuda a la resolución de sudokus.\\
+previos para crear un sistema de ayuda a la resolución de sudokus,
+añadiendo cualquier extra que deseemos.\\
 
 El trabajo fue desarrollado con satisfacción, cumpliendo (casi) todos
 los objetivos marcados (especificados en la sección
@@ -76,18 +77,17 @@ otros de los proyectos o practicas.
 
 \section{Introducción}
 \label{sec:introduccion}
-% Enmarca y sitúa el trabajo a realizar.
 Apoyándonos sobre el trabajo desarrollado en la practica anterior, en
 la cual se probaron distintos algoritmos para comprobar la correctitud
 de sudokus, el desarrollo de esta practica consistió principalmente en
 la eliminación del problema de los rebotes (módulo Button, sección
 \ref{subsec:rebotes}) y la creación de una librería gráfica particular
 (módulo sudoku\_graphics, sección \ref{subsec:graficos}) encargado de
-actuar de Proxy entre el método Main y la librería Lcd, permitiéndonos
+actuar de proxy entre el método Main y la librería Lcd, permitiéndonos
 generalizar el método Main, de tal forma que en la situación en la
 cual se desee llevar este proyecto a otro hardware solo se tendría que
-cambiar el modulo Proxy (sudoku\_graphics), y no será necesario
-modificar la función Main.  Esta propiedad de generalización ha sido
+cambiar el modulo proxy (sudoku\_graphics), y no será necesario
+modificar la función Main. Esta propiedad de generalización ha sido
 uno de los objetivos primarios de este proyecto, intentando siempre
 que sea posible el mover cualquier función generalizable a su lugar
 adecuado (Como ejemplo practico de esto, en el marcaje de errores se
@@ -100,8 +100,8 @@ soportar más operaciones).
 
 En general la realización de la practica fue satisfactoria, a
 excepción de la mayor carga de trabajo por el hecho de realizarlo en
-solitario, sin embargo este trabajo es perfectamente asumible.  Dada
-la envergadura del trabajo, este era una gran oportunidad para probar
+solitario, sin embargo este trabajo es perfectamente asumible. Dada la
+envergadura del trabajo, este era una gran oportunidad para probar
 conjuntos de tecnologías, descritas con más detalle en la sección
 \ref{sec:metodologias-tecnologias}, al igual que un conjunto de
 metodologías de trabajo, descritas en la misma sección.
@@ -122,13 +122,14 @@ Objetivos del profesorado:
       \item Profundizar en la interacción C / Ensamblador.
       \item Ser capaces de depurar el código ensamblador que genera un
         compilador a partir de un lenguaje en alto nivel.q
-      \item Ser capaces de depurar un código con varias fuentes de interrupción activas.
-      \item Gestionar la entrada/salida con dispositivos básicos, asignando
-        valores a los registros internos de la placa desde un programa en C
-        (utilizando las librerías de la placa).
+      \item Ser capaces de depurar un código con varias fuentes de
+        interrupción activas.
+      \item Gestionar la entrada/salida con dispositivos básicos,
+        asignando valores a los registros internos de la placa desde
+        un programa en C (utilizando las librerías de la placa).
       \item Aprender a desarrollar en C las rutinas de tratamiento de
-        interrupción.  Aprender a utilizar los temporizadores internos de la
-        placa y el teclado.
+        interrupción. Aprender a utilizar los temporizadores internos
+        de la placa y el teclado.
     \end{itemize}
   \item Dentro de la segunda parte
     \begin{itemize}
@@ -155,12 +156,16 @@ Objetivos del alumno:
 
 \section{Partes del proyecto}
 \label{sec:partes}
+
 \subsection{Trabajo previo}
 \label{subsec:previous}
+
 El trabajo a realizar requiere un conjunto de funcionalidades previas,
 que pese a no estar explicitamente incluidas en el producto final, nos
-permiten desarrollar adecuadamente las secciones siguientes, ya sea tanto porque ofrecen funcionalidad en la que se basan(como es el caso de los \hyperref[subsubsec:timers]{timers}). Estas
-funcionalidades son:
+permiten desarrollar adecuadamente las secciones siguientes, ya sea
+tanto porque ofrecen funcionalidad en la que se basan(como es el caso
+de los \hyperref[subsubsec:timers]{timers}). Estas funcionalidades
+son:
 \begin{itemize}
   \item Conocimiento del funcionamiento de los timers, y uso de los
     mismos tanto para medidas de tiempo como para programar tareas.
@@ -197,6 +202,7 @@ también los segundos por separado en su propia variable. Tras este
 cambio la nueva libreria permite contar hasta 4294967296 segundos, o
 algo más de 136 años, lo que debería eliminar cualquier posible
 problema de overflow.
+
 \subsubsection{Pila de Debug}
 \label{subsubsec:pila-debug}
 Una pila (lo llamamos pila pero la estructura implementada sería más
@@ -242,7 +248,9 @@ Las excepciones que podemos tratar en el procesador usado son:
     \end{tabular}
   \end{center}
 
-Para reconocer la excepcion en la cual nos encontramos se puede mirar
+
+
+Para reconocer la excepción en la cual nos encontramos se puede mirar
 el modo de procesador, dado que el lanzado de ciertas excepciones
 fuerza el procesador a modos particulares, por lo que mirando el modo
 actual se puede detectar la excepción lanzada, tanto para intentar
@@ -267,7 +275,7 @@ sean (como \texttt{pISR\_SWI}).
 \subsection{Rebotes en los botones}
 \label{subsec:rebotes}
 El problema de los rebotes ha sido uno de los primeros problemas a los
-que tenemos que enfrentarnos en un proyecto de estas caracteristicas,
+que tenemos que enfrentarnos en un proyecto de estas características,
 y uno de los más complejos.
 
 Este problema aparece cuando nos enfrentamos a hardware (botones)
@@ -278,12 +286,12 @@ Un botón real sigue un patrón más cercano a este:
 
 Cuando hablamos de rebotes nos referimos al conjunto de señales
 espurias que da un botón cuando es pulsado o soltado (algunos incluso
-mientras son pulsados). Estos rebotes son un problema grave, dado que
-mientras el usuario cree que ha pulsado el botón una única vez
-(asumiendo como una vez una pulsación y un soltado) el sistema ha
-recibido múltiples pulsaciones, y por tanto reacciona a todos ellos
-(en nuestro caso, el sistema incrementa su contador interno múltiples
-veces).
+mientras son pulsados, o sin ser tocados). Estos rebotes son un
+problema grave, dado que mientras el usuario cree que ha pulsado el
+botón una única vez (asumiendo como una vez una pulsación y un
+soltado) el sistema ha recibido múltiples pulsaciones, y por tanto
+reacciona a todos ellos (en nuestro caso, el sistema incrementa su
+contador interno múltiples veces).
 
 Existen múltiples soluciones a este problema, tanto por hardware como
 por software.
@@ -335,11 +343,12 @@ implementará. Para ello, se genera la siguiente máquina de estados:
 \footnotesize
 \centering
   \begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=5cm,semithick]
-    \tikzstyle{every state}=[fill=red,draw=none, ellipse, text=white]
-    \node[initial,state] (A)                    {reposo};
-    \node[state]         (B) [above right of=A] {espera\_TRP};
-    \node[state]         (C) [below right of=B] {desactivado};
-    \node[state]         (D) [below right of=A] {espera\_TRD};  
+    %% \tikzstyle{every state}=[fill=red,draw=none, ellipse, text=white]
+    \tikzstyle{every state}=[fill={rgb:red,50;green,50;blue,255}, draw=none, ellipse, text=white]
+    \node[initial,state] (A)                    {\textbf{reposo}};
+    \node[state]         (B) [above right of=A] {\textbf{espera\_TRP}};
+    \node[state]         (C) [below right of=B] {\textbf{desactivado}};
+    \node[state]         (D) [below right of=A] {\textbf{espera\_TRD}};
     \path (A) edge              node {\leftstack{PULSA/\\
                                       Desactivar interrupciones\\accion()\\cuenta=0}} (B)
           (B) edge [loop above] node {\leftstack{CLK(10ms) \& cuenta \textless 15/ \\cuenta = 0}} (B)
@@ -392,9 +401,43 @@ créditos, pero no se consideraba que mereciera la pena el añadir otros
 119 estados al espacio de estados actual. Este subestado es mantenido
 por la variable \texttt{iterador\_aperture}. 
 
-La organización de este espacio de estados se muestra en el siguiente
-diagrama de estados:
-%% TODO: añadir diagrama de estados
+La organización de este espacio de estados se muestra en la Figura
+\ref{fig:maquina-estados-juego}
+\begin{figure}
+\footnotesize
+\centering
+  \begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=5cm,semithick]
+    %% \tikzstyle{every state}=[fill=red, draw=none, ellipse, text=white] %
+    \tikzstyle{every state}=[fill={rgb:red,100;green,100;blue,255}, draw=none, ellipse, text=white]
+    \node[state] (A)              {\textbf{title\_screen}};
+    \node[state] (B) [right of=A] {\textbf{instructions}};
+    \node[state] (C) [above of=A] {\textbf{record}};
+    \node[state] (D) [left of=A]  {\textbf{aperture}};
+    \node[state] (E) [below of=A] {\textbf{esperando\_fila}};
+    \node[state] (F) [left of=E]  {\textbf{final\_screen}};
+    \node[state] (G) [below of=E] {\textbf{esperando\_columna}};
+    \node[state] (H) [below of=G] {\textbf{esperando\_valor}};
+
+    \path (A) edge [bend left    ] node {\leftstack{next \&\\v=4}}               (B)
+              edge [bend left    ] node {\leftstack{next \&\\v=3}}               (C)
+              edge [bend left    ] node {\leftstack{next \&\\v=1}}               (E)
+              edge [bend right   ] node {\leftstack{next \&\\v=2}}               (E)
+          (B) edge [bend left    ] node {\leftstack{next}}                       (A)
+          (C) edge [bend left    ] node {\leftstack{next}}                       (A)
+          (D) edge [bend left    ] node {\centerstack{iterador\_aperture=\\111}} (A)
+              edge [             ] node {\leftstack{next}}                       (A)
+          (E) edge [             ] node {\leftstack{next \&\\v=10}}              (F)
+              edge [             ] node {\leftstack{next \&\\v!=10}}             (G)
+          (F) edge [             ] node {\leftstack{next \&\\errores=0}}         (D)
+              edge [             ] node {\leftstack{next \&\\errores!=0}}        (A)
+          (G) edge [             ] node {\leftstack{next}}                       (H)
+          (H) edge [bend right=90] node {\leftstack{next \&\\errores!=0}}        (E)
+              edge [bend left    ] node {\leftstack{next \&\\errores=0}}         (F)
+              ;
+  \end{tikzpicture}
+  \caption{Diagrama de estado del juego de sudoku} 
+  \label{fig:maquina-estados-juego}
+\end{figure}
 
 
 \subsection{Gráficos}
@@ -510,9 +553,12 @@ compilación para sistemas particulares (En nuestro caso el procesador
 ARMv7 de la placa de pruebas)
 
 Como sistema/estandar de documentación en codigo se ha elegido
-\href{http://www.stack.nl/~dimitri/doxygen/}{Doxygen}, aunque por
-falta de tiempo y fuerza de trabajo no ha sido posible documentar
-adecuadamente todos los módulos usados.
+\href{http://www.stack.nl/~dimitri/doxygen/}{Doxygen}, este tipo de
+sistemas permiten la autogeneración de ficheros pdf o páginas html a
+partir de la documentación que un programador pueda escribir en el
+código, aunque por falta de tiempo y fuerza de trabajo no ha sido
+posible documentar adecuadamente todos los módulos usados.
+
 \section{Resultados y características}
 \label{subsec:resultados-caracteristicas}
 El sistema, aparte de las características mandadas por el profesorado,
@@ -554,30 +600,37 @@ dichas caracteristicas aparecen:
     seleccionar la casilla, se usa un cursor algo más pequeño, que se
     superpone al mostrado de los errores, y permite ver rápidamente si
     el número que se va a introducir esta dentro de los candidatos.
+    Aparte de este cursor se añadió una notificación en pantalla que
+    indica en que estado de introducción de datos se encuentra el
+    usuario, y que valor se dispone a introducir.
   \item \textbf{Múltiples cuadriculas:} Se ha añadido todo el sistema
     necesario para la inserción de múltiples cuadrículas. En el
     sistema mostrado se ofrece como ejemplo 10 cuadriculas a resolver,
-    entre las cuales se escoje aleatoriamente al comenzar el juego y
-    una cuadricula de Debug. Uno de los problemas comprobados es el
-    gran tamaño que ocupa una cuadrícula (Actualmente, una ocupa 2304
-    bits, o 288 bytes, que aunque inicialmente parece poco, si se
-    desea introducir 1000 posibles tablas, comenzamos a movernos sobre
-    los 281 KiB). Para gestionar esto, se plantea la posibilidad de
-    utilizar un sencillo algoritmo de compresión, que nos permitiría
-    reducir el espacio ocupado en un factor de 7\footnotemark. Esto
-    introduciría un pequeño coste en el sistema de decodificación de
-    la cuadrícula compresa, pero se considera un coste asumible, dado
-    el valor que tiene el espacio en memoria en una aplicación
-    embebida.
+    entre las cuales se escoje aleatoriamente\footnotemark al comenzar
+    el juego y una cuadricula de Debug. 
 
-    \footnotetext{Exactamente el sistema consistiría en recortar
-      exclusivamente los primeros 4 bits de cada cuadro en la
-      cuadricula de tal forma que un numero ocupe solo 4 bits, de tal
-      forma que cada par de numeros se guarde en un único char, y
-      eliminar el padding de 7 columnas extra introducidas en la
-      practica 1, por lo que una tabla completa ocuparía solo 41
-      bytes, y nuestras 1000 tablas previas se moverían ahora sobre
-      los 40 KiB, lo cual es una mejora importante}
+   \footnotetext{Dado la simplicidad del sistema, el sistema de
+     aleatoriedad elegido consiste en tomar el tiempo actual (en
+     \textgreek{m}segundos) y realizar el módulo 10 para obtener un
+     número aleatorio en el rango [0-9]. En caso de que se necesitara
+     algun sistema más complejo, se podría considerar un sistema de
+     generación de aleatoriedad más complejo como
+     \href{https://en.wikipedia.org/wiki/Mersenne_Twister}{Mersenne
+       Twister}}
+
+    Uno de los problemas comprobados es el gran tamaño que ocupa una
+    cuadrícula (Actualmente, una ocupa 2304 bits, o 288 bytes, que
+    aunque inicialmente parece poco, si se desea introducir 1000
+    posibles tablas, comenzamos a movernos sobre los 281 KiB). Para
+    gestionar esto, se plantea la posibilidad de utilizar un sencillo
+    algoritmo de compresión, que nos permitiría reducir el espacio
+    ocupado en un factor de 7\footnotemark. Esto introduciría un
+    pequeño coste en el sistema de decodificación de la cuadrícula
+    compresa, pero se considera un coste asumible, dado el valor que
+    tiene el espacio en memoria en una aplicación embebida.
+
+    \footnotetext{El algoritmo usado se describe en el Anexo
+      \ref{subsec:algoritmo-compresion}}
     
     La otra posibilidad para ofrecer la posibilidad de usar distintas
     tablas en cada partida es la generación procedural de las mismas,
@@ -598,6 +651,15 @@ dichas caracteristicas aparecen:
     cambiar de cuadro, provocando la sensación visual de movimiento.
     Este sistema es relativamente sencillo, y podría expandirse para
     la gestión de annimaciones bastante más complejas.
+  \item \textbf{Sonidos:} Aunque no se haya llegado a añadir al
+    sistema final, se han realizado un conjunto de experimentos con el
+    sistema de sonido que ofrece el hardware usado, dichos
+    experimentos se describen en profundidad en el Anexo
+    \ref{subsec:musica}
+  \item \textbf{Persistencia:} Un sistema de persistencia permitiría,
+    por ejemplo, guardar partidas a medias o guardar records. Se ha
+    desarrollado un sistema de persistencia se expande en el Anexo
+    \ref{subsec:persistencia}
 \end{itemize}
 
 Se descartaron las posibles mejoras ofrecidas por el profesorado,
@@ -658,7 +720,14 @@ de los objetivos propuestos.
       modo de interacción no era demasiado adecuado, dado que con el
       tamaño de cuadrícula usado, una tarea tan trivial como
       seleccionar una casilla se podía convertir en una tarea
-      frustrante.
+      frustrante. Algunos de los problemas visualizados en la pantalla
+      tactil son la falta de precisión, y la no
+      linealidad\footnotemark[1] de las coordenadas que daba, que
+      dificultaban la tarea de interpretar los toques.
+
+      \footnotetext[1]{Resultados ofrecidos por las investigaciones de
+        los compañeros David Nicuesa Aranda y Alberto Álvarez Aldea}
+
     \item El puerto serie fue descartado porque no parecía un modo
       adecuado de interactuar con un sistema de estas características
       (Sin embargo, se puede notar como un sistema así permitiría, por
@@ -676,11 +745,95 @@ de los objetivos propuestos.
   \item Manuales de consulta ofrecidos por el profesorado
   \item Proyectos de la placa ofrecidos por el profesorado
   \item \url{http://www.eng.utah.edu/~cs5780/debouncing.pdf}
-  \item \url{http://infocenter.arm.com/help/index.jsp} (Especialmente el
-    manual de referencia de ARM7)
+  \item \url{https://en.wikipedia.org/wiki/Mersenne_Twister}
+  \item \url{https://en.wikipedia.org/wiki/Sudoku}
+  \item \url{http://infocenter.arm.com/help/index.jsp} (Especialmente
+    el manual de referencia de ARM7)
     % Little semicolono
     % that makes me not compile this,
     % where are you missing?
   \item \url{http://www.sudoku-solutions.com/}
+  \item \url{http://sudoku.taskfour.de/}
 \end{itemize}
+
+\section{Anexos}
+\label{sec:anexos}
+En estos anexos se extienden todas las investigaciones que se han
+realizado durante la realización de la practica, esperando que puedan
+ser útiles a otros compañeros que deseen continuarlas.
+
+\subsection{Musica}
+\label{subsec:musica}
+DMA -> FIFO, archivos gigantescos, cambiar velocidad
+
+\subsection{Persistencia}
+\label{subsec:persistencia}
+rALM
+
+
+\subsection{Algoritmo de compresión}
+\label{subsec:algoritmo-compresion}
+
+El sistema de compresión usado se basa en 3 factores:
+\begin{itemize}
+  \item No es necesario almacenar el padding que utilizabamos en las
+    primeras practicas para poder usar cómodamente los visores de
+    memoria del debugger.
+  \item No es necesario almacenar que casillas son candidatos, podemos
+    indicar las casillas vacias con un 0.
+  \item No es necesario guardar los candidatos de una casilla, dado
+    que podemos recalcularlos con relativa facilidad.
+\end{itemize}
+
+Es decir, del formato usado para almacenar una casilla en 16 bits
+(expresado en la figura \ref{fig:formato-casilla}), se pasa a un
+formato que ocupa únicamente 4 bits por casilla, y no requiere
+padding, descrito en la figura \ref{fig:formato-casilla-compreso}
+
+\begin{figure}
+  \begin{center}
+    \begin{tabular}{ | p{2cm} | p{2cm} | p{2cm} | p{2cm} | p{4cm} |} \hline
+      4 bits & 1 bit    & 1 bit    & 1 bit    & 9 bits     \\\hline
+      Valor  & Es pista & Sin usar & Es error & Candidatos \\\hline
+    \end{tabular}
+  \end{center}
+  \textbf{Valor:} Indica el número contenido en la casilla, está en el
+  rango [0,9], con el valor 0 en caso de que la casilla esté vacía.\\
+  \textbf{Es pista:} Indica si la casilla es pista inicial. Será pista
+  si este bit vale 1.\\
+  \textbf{Es error:} Indica si el valor en la casilla no cumple las
+  normas del sudoku. La casilla es erronea si este bit vale 1.\\
+  \textbf{Candidatos:} Indica que numeros encajan en la casilla. El
+  bit 0 indica si el 1 es candidato, el bit 1 indica si el 2 es
+  candidato...\\ \\
+
+  Las casillas se guardan en memoria como una lista de medias palabras
+  del formato arriba indicado, con 7 medias palabras de padding, de
+  tal forma que cada línea del sudoku ocupa 256 bytes en memoria, y el
+  sudoku entero ocupa 9 líneas, o 2304 bytes.
+  \caption{Formato de las casillas del sudoku en memoria}
+  \label{fig:formato-casilla}
+\end{figure}
+
+\begin{figure}
+  \begin{center}
+    \begin{tabular}{ | p{4cm} | p{4cm} | } \hline
+      4 bits           & 4 bits          \\\hline
+      Valor casilla 1  & Valor casilla 2 \\\hline
+    \end{tabular}
+  \end{center}
+  \textbf{Valor casilla 1:} Primeros 4 bits de la primera casilla. Está en el rango [0-9], siendo 0 si la casilla es vacia.\\
+  \textbf{Valor casilla 2:} Primeros 4 bits de la primera casilla. Está en el rango [0-9], siendo 0 si la casilla es vacia.
+  \caption{Formato de las casillas compresas}
+  \label{fig:formato-casilla-compreso}
+\end{figure}
+
+consistiría en recortar exclusivamente los primeros 4 bits de cada
+cuadro en la cuadricula de tal forma que un numero ocupe solo 4 bits,
+de tal forma que cada par de numeros se guarde en un único char, y
+eliminar el padding de 7 columnas extra introducidas en la practica 1,
+por lo que una tabla completa ocuparía solo 41 bytes, y nuestras 1000
+tablas previas se moverían ahora sobre los 40 KiB, lo cual es una
+mejora importante.
+
 \end{document}
