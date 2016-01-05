@@ -23,6 +23,8 @@ RemoteSystemsTempFiles/
 **/*.idx
 **/*.out
 **/*.toc
+**/*.bbl
+**/*.blg
 **/memoria/*.log
 **/*.aux
 # .lnk
