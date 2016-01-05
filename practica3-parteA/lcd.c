@@ -17,12 +17,37 @@
 #define DMA_HW    (1)
 #define DMA_Word  (2)
 #define DW 		  DMA_Byte		//configura  ZDMA0 como media palabras
-/*--- variables externas ---*/
+/*--- variables/funciones externas ---*/
 extern INT8U g_auc_Ascii8x16[];
 
 int abs(int Number);
+void  Zdma0Done(void) __attribute__ ((interrupt ("IRQ")));
 
-/*--- codigo de la funcion ---*/
+/*********************************************************************************************
+ * name:		Lcd_GetPixel()
+ * func:		Get appointed point's color value
+ * para:		usX,usY -- pot's X-Y coordinate
+ * ret:		pot's color value
+ * modify:
+ * comment:
+ *********************************************************************************************/
+INT8U LCD_GetPixel(INT16U usX, INT16U usY) {
+	INT8U ucColor;
+
+	ucColor = *((INT8U*) (LCD_VIRTUAL_BUFFER + usY * SCR_XSIZE / 2 + usX / 8 * 4
+			+ 3 - (usX % 8) / 2));
+	ucColor = (ucColor >> ((1 - (usX % 2)) * 4)) & 0x0f;
+	return ucColor;
+}
+
+/*********************************************************************************************
+ * name:		Lcd_Init()
+ * func:		initialize LCD system
+ * para:		none
+ * ret:		none
+ * modify:
+ * comment:
+ *********************************************************************************************/
 void Lcd_Init(void) {
 	rDITHMODE = 0x1223a;
 	rDP1_2 = 0x5a5a;
@@ -72,24 +97,6 @@ void Lcd_Active_Clr(void) {
 }
 
 /*********************************************************************************************
- * name:		Lcd_GetPixel()
- * func:		Get appointed point's color value
- * para:		usX,usY -- pot's X-Y coordinate
- * ret:		pot's color value
- * modify:
- * comment:
- *********************************************************************************************/
-
-INT8U LCD_GetPixel(INT16U usX, INT16U usY) {
-	INT8U ucColor;
-
-	ucColor = *((INT8U*) (LCD_VIRTUAL_BUFFER + usY * SCR_XSIZE / 2 + usX / 8 * 4
-			+ 3 - (usX % 8) / 2));
-	ucColor = (ucColor >> ((1 - (usX % 2)) * 4)) & 0x0f;
-	return ucColor;
-}
-
-/*********************************************************************************************
  * name:		Lcd_Active_Clr()
  * func:		clear virtual screen
  * para:		none
@@ -109,7 +116,7 @@ void Lcd_Clr(void) {
 /*********************************************************************************************
  * name:		LcdClrRect()
  * func:		fill appointed area with appointed color
- * para:		usLeft,usTop,usRight,usBottom -- area's rectangle acme coordinate
+ * para:		usLeft,usTop,usRight,usBottom -- area's rectangle coordinate
  *			ucColor -- appointed color value
  * ret:		none
  * modify:
@@ -614,7 +621,7 @@ void Lcd_Circle_Filled(INT8 X, INT8 Y, INT16 radius, INT8U ForeColor) {
  * modify:
  * comment:
  *********************************************************************************************/
-static INT8U ucZdma0Done = 1; //When DMA is finish,ucZdma0Done is cleared to Zero
+static INT8U ucZdma0Done = 1; //When DMA finishes, ucZdma0Done is cleared to Zero
 void Zdma0Done(void) {
 	rI_ISPC = BIT_ZDMA0;	    //clear pending
 	ucZdma0Done = 0;
