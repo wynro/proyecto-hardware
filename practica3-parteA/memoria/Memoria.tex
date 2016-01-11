@@ -4,7 +4,7 @@
 \usepackage[right=2cm,left=3cm,top=2cm,bottom=2cm,headsep=0cm,footskip=0.5cm]{geometry}
 \usepackage[pdftex]{graphicx}
 \usepackage{color}
-\usepackage{hyperref}
+\PassOptionsToPackage{hyphens}{url}\usepackage{hyperref}
 \usepackage[hypcap]{caption}
 \usepackage{makeidx}
 \usepackage{wynroTitle}
@@ -28,6 +28,16 @@
   \begin{center} \textit{#1} \end{center}
   \vspace{\fill}
   \clearpage}
+
+\newcommand*{\iref}[2]{
+  \hyperref[#1]{#2
+  \ref*{#1}}
+  }
+
+\newcommand*{\firef}[3]{
+  \hyperref[#1]{#2
+  \ref*{#1} #3}
+  }
 
 \makeindex
 \pagenumbering{arabic}
@@ -59,37 +69,37 @@
 
 \section{Resumen}
 \label{sec:resumen}
-\textcolor{red}{
-  Es un apartado fundamental. Es lo primero que se lee y muchas veces lo
-  único que lee. Es la síntesis de todo el trabajo realizado, qué, cómo
-  y por qué hemos hecho el trabajo . Debe ser auto contenido debemos
-  esbozar nuestras conclusiones.\\
-}
+%% \textcolor{red}{
+%%   Es un apartado fundamental. Es lo primero que se lee y muchas veces lo
+%%   único que lee. Es la síntesis de todo el trabajo realizado, qué, cómo
+%%   y por qué hemos hecho el trabajo . Debe ser auto contenido debemos
+%%   esbozar nuestras conclusiones.\\
+%% }
 
-El presente document es la documentación asociada al trabajo realizado
+El presente documento es la documentación asociada al trabajo realizado
 en la asignatura de Proyecto Hardware ofrecida en la Universidad de
 Zaragoza en el año 2015. El trabajo realizado consiste en el diseño e
 implementación de un sistema de ayuda a la resolución de sudokus, que
 ayude al usuario tanto proporcionando pistas como detectando posibles
 errores, y de esta forma mejore la experiencia jugable.\\
 
-Para la consecución del trabajo, este fué dividido en 3 partes
+Para la consecución del trabajo, este fue dividido en 3 partes
 claramente diferenciadas, esta división se hace tanto por motivos
 organizativos (posibilidad de delegar trabajo) como por la separación
 lógica existente entre las partes.
 
 La primera parte consiste en la comprensión e implementación de un
 conjunto de sistemas simples, entre los que aparece un sistema de
-gestion de timers, un gestor de excepciones y una pila de
-depuración. Estos sistemas no aparecen explicitamente en el trabajo
+gestión de timers, un gestor de excepciones y una pila de
+depuración. Estos sistemas no aparecen explícitamente en el trabajo
 final (a excepción de los timers), sin embargo, permiten suavizar el
 proceso de desarrollo y acercarnos a la placa con proyectos simples y
 accesibles.
 
 La segunda parte consiste en el trabajo en el problema de los rebotes
-(descrito con más detalle en la sección \ref{subsec:rebotes}) lo
-cual ya conforma un proyecto de mayor complejidad, que fuerza a
-utilizar lo desarrollado en el apartado previo.
+(descrito con más detalle en la \iref{subsec:rebotes}{sección} lo cual
+ya conforma un proyecto de mayor complejidad, que fuerza a utilizar lo
+desarrollado en el apartado previo.
 
 La tercera parte consiste en el uso de la pantalla de la placa, que
 ofrece una forma de comunicarse con el usuario de manera accesible a
@@ -100,7 +110,7 @@ las primeras prácticas) se combinan para crear el trabajo deseado.
 
 \section{Introducción}
 \label{sec:introduccion}
-\textcolor{red}{Enmarca y sitúa el trabajo a realizar}
+%% \textcolor{red}{Enmarca y sitúa el trabajo a realizar}
 
 Como ya se ha descrito, el presente trabajo se enmarca dentro de la
 asignatura de Proyecto Hardware, por lo tanto, es importante notar que
@@ -127,12 +137,12 @@ excepción de algunos cambios que hubo que realizar en los mismos.
 
 \section{Objetivos}
 \label{sec:objetivos}
-\textcolor{red}{
-  Explica qué se quiere conseguir
-}
+%% \textcolor{red}{
+%%   Explica qué se quiere conseguir
+%% }
 
 Los objetivos se organizan en 2 conjuntos, los objetivos propuestos
-por el profesorado, y un conjunto de objetivos autopropuestos por el
+por el profesorado, y un conjunto de objetivos auto propuestos por el
 alumno.
 
 Objetivos del profesorado:
@@ -172,17 +182,17 @@ Objetivos del alumno:
   generalización de funciones y funcionalidades.
 \item Organizado del código adecuada, uso de archivos de cabeceras,
   separación del sistema en los módulos adecuados.
-\item Uso de un sistema de documentado en código estandar (Doxygen)
+\item Uso de un sistema de documentado en código estándar (Doxygen)
 \item Uso de un sistema de control de versiones (Git)
 \end{itemize}
 
 Como ya se ha destacado, los objetivos del profesorado están
 principalmente orientados al aspecto pedagógico. Dentro de los
-objetivos del alumno destacan el uso de git y Doxygen como sistemas de
+objetivos del alumno destacan el uso de Git y Doxygen como sistemas de
 control de versiones y sistema de generación de documentación
-automatizadao respectivamente. Esta decisión se ha tomado con el
+automatizado respectivamente. Esta decisión se ha tomado con el
 objetivo de aprovechar la extensión del proyecto para aprender y
-practicar ciertas herramientas y tecnicas de gestión de proyectos algo
+practicar ciertas herramientas y técnicas de gestión de proyectos algo
 complejas, poco adecuadas para usarse con las prácticas típicas de 2
 semanas de duración.
 
@@ -194,7 +204,9 @@ Como entorno de desarrollo se ha utilizado Eclipse en un entorno
 Windows, dado que era el ofrecido por el profesorado, con la ToolChain
 GNU, que nos permitía la compilación cruzada para sistemas
 particulares (en nuestro caso el procesador ARMv7 de la placa de
-pruebas)
+pruebas). Para la carga y debug se ha utilizado el debugger GDB,
+usando el estándar JTAG para la comunicación con la placa mediante el
+programa OpenOCD.
 
 Para la realización del presente documento se ha seleccionado el
 sistema de maquetación y control tipográfico \TeX, con ayuda del
@@ -205,10 +217,10 @@ características especialmente orientadas al desarrollo de documentos
 de índole técnica o científica, como el presente (principalmente, la
 integración de sistemas de generación de diagramas, como tikz).
 
-Se ha escogido git como sistema de gestión de versiones dado que
+Se ha escogido Git como sistema de gestión de versiones dado que
 ofrece capacidades de trabajo distribuido y gran soporte al trabajo en
 equipo, dado que inicialmente el proyecto se aproximaba como un
-trabajo en grupo, pese a que se finalizó en solitario. Los otros VCS
+trabajo en grupo, pese a que se finalizó en solitario. Los otros CVS
 considerados (principalmente SVN, Mercurial y Fossil) o no daban
 tanto soporte para el trabajo en equipo, o no eran tan conocidos por
 el equipo de desarrollo (y se tuvo problemas para encontrar
@@ -231,35 +243,35 @@ de un tiempo aparte en el cual se crean y realizan commits
 organizados, sin la creación de branches auxiliares, a excepción de en
 algún caso en el que se produjo discordancias entre versiones.
 
-Como sistema/estandar de documentación en codigo se ha elegido
+Como sistema de documentación en código se ha elegido
 \href{http://www.stack.nl/~dimitri/doxygen/}{Doxygen}, este tipo de
 sistemas permiten la auto-generación de ficheros pdf o páginas html a
 partir de la documentación que un programador pueda escribir en el
 código, aunque por falta de tiempo y fuerza de trabajo no ha sido
-posible documentar adecuadamente todos los módulos usados.
+posible documentar con la profundidad deseada todos los módulos
+usados.
 
 El uso de Doxygen esta relacionado con el objetivo marcado de
-organización de codigo adecuada, dado que, por ejemplo, se han
+organización de código adecuada, dado que, por ejemplo, se han
 realizado ciertas extensiones en el módulo \texttt{lcd} ofrecido por
 el profesorado, de tal forma que sería posible el dar el pdf generado
-por la herramienta y la libreria a un alumno del curso siguiente, y
+por la herramienta y la librería a un alumno del curso siguiente, y
 este podría trabajar con la librería extendida sin necesidad de
 conocer su funcionamiento interno.
 
 \section{Metodología}
 \label{sec:metodologias}
-\textcolor{red}{
-  Describe los pasos realizados para llegar hasta los
-  resultados. Todas aquellas decisiones de diseño tomadas en el proceso
-  deben incluirse.En la asignatura de Proyecto Hardwarese debe explicar
-  en este apartado el esquema del proyecto (ficheros y funciones que lo
-  componen), número total de líneas de código y horas de dedicación. Así
-  cómo el código desarrollado comentado.
-}
+%% \textcolor{red}{ Describe los pasos realizados para llegar hasta
+%%   los resultados. Todas aquellas decisiones de diseño tomadas en el
+%%   proceso deben incluirse.En la asignatura de Proyecto Hardware se
+%%   debe explicar en este apartado el esquema del proyecto (ficheros
+%%   y funciones que lo componen), número total de líneas de código y
+%%   horas de dedicación. Así cómo el código desarrollado comentado.
+%%   }
 
 Para la organización de tareas a alto nivel, se ha utilizado un modelo
 orientado a objetivos, de tal forma que cada objetivo propuesto se
-dividía en un conjunto de subobjetivos, repitiendo el proceso de
+dividía en un conjunto de sub objetivos, repitiendo el proceso de
 manera recursiva hasta llegar a tareas que se consideraban asumibles
 por sí solas, las cuales eran asignadas una prioridad, y a
 continuación eran añadidas al conjunto de tareas para hacer.
@@ -279,9 +291,9 @@ excepción de algunos módulos que almacena los BitMap usados y algunas
 de las cadenas de texto largas, para separar los datos del código.
 
 Cada módulo del sistema esta formado de un fichero de cabecera y un
-fichero fuente, a excepción del módulo sudoku\_2015, que también
-incluye el fichero sudoku\_candidatos.asm, el cual implementa algunas
-funciones de alta carga de procesado en ensamblador.
+fichero fuente, a excepción del módulo \texttt{sudoku\_2015}, que
+también incluye el fichero sudoku\_candidatos.asm, el cual implementa
+algunas funciones de alta carga de procesado en ensamblador.
 
 \begin{figure}
   \footnotesize
@@ -321,26 +333,26 @@ funciones de alta carga de procesado en ensamblador.
   \label{fig:dependencias}
 \end{figure}
 
-El diagrama de dependecias de los módulos aparece representado en la
-%% \href[fig:dependencias]{Figura \ref{fig:dependencias}}, como se
-puede apreciar se cumple bastante bien el bojetivo de organización
-establecido, observandose como por ejemplo el modulo \texttt{lcd}
-queda completamente oculto por \texttt{sudoku\_graphics}, que actua
-como proxy.
+El diagrama de dependencias de los módulos aparece representado en la
+\iref{fig:dependencias}{Figura}, como se puede apreciar se cumple
+bastante bien el objetivo de organización establecido, observándose
+como por ejemplo el modulo \texttt{lcd} queda completamente oculto por
+\texttt{sudoku\_graphics}, que actúa como proxy.
 
 En la organización en módulos existen 2 casos que se consideran poco
-deseados. Estos son el triángulo button, 8led, sudoku\_2015 y el
-triángulo sudoku\_graphics, still-alive-lyrics, sudoku\_2015. Estos
-triángulos muestran que, por ejemplo, el módulo button no oculta
-completamente el uso del módulo 8led. Dado que la solución de estos
-problemas implicaría un cambio bastante amplio en la organización de módulos, se 
+deseados. Estos son el triángulo \texttt{button}, \texttt{8led},
+\texttt{sudoku\_2015} y el triángulo \texttt{sudoku\_graphics},
+\texttt{still-alive-lyrics}, \texttt{sudoku\_2015}. Estos triángulos
+muestran que, por ejemplo, el módulo \texttt{button} no oculta
+completamente el uso del módulo \texttt{8led}. Dado que la solución de
+estos problemas implicaría un cambio bastante amplio en la
+organización de módulos, se ha decidido no solucionar esos problemas.
 
 Para el comentario se ha elegido comentar únicamente la función
 \texttt{init\_game()}, la cual gestiona el juego en si, dado que se
 considera que el resto de funciones (como las de dibujado de ciertas
 pantallas) son comprensibles por si mismas. El comentario de la
-función aparece en el \hyperref[subsec:init-game]{Anexo
-  \ref*{subsec:init-game}}
+función aparece en el \iref{subsec:init-game}{Anexo}
 
 \section{Partes del proyecto}
 \label{sec:partes}
@@ -349,7 +361,7 @@ función aparece en el \hyperref[subsec:init-game]{Anexo
 \label{subsec:previous}
 
 El trabajo a realizar requiere un conjunto de funcionalidades previas,
-que pese a no estar siempre explicitamente incluidas en el producto
+que pese a no estar siempre explícitamente incluidas en el producto
 final, nos permiten desarrollar adecuadamente las secciones
 siguientes, ya sea tanto porque ofrecen funcionalidad en la que se
 basan(como es el caso de los \hyperref[subsubsec:timers]{timers}),
@@ -360,11 +372,11 @@ funcionalidades son:
   \item Conocimiento del funcionamiento de los timers, y uso de los
     mismos tanto para medidas de tiempo como para programar tareas.
   \item Implementado de una sencilla pila de debug, que nos permite
-    almacenar estampillas temporales e informacion deseada, y nos
+    almacenar estampillas temporales e información deseada, y nos
     simplifica por ejemplo medir cual es el tiempo que duran los
     rebotes, o comprobar el tiempo que se tarda en finalizar un DMA
   \item Manejo de excepciones, tanto para informar al programador como
-    para eventualmente resolveralas y recuperarnos de las mismas.
+    para eventualmente resolverlas y recuperarnos de las mismas.
 \end{itemize}
 
 \subsubsection{Timers}
@@ -378,18 +390,18 @@ para el control de los tiempos en los cuales ignoramos entradas como
 para medir los periodos de autorrepetición. Basado en el proyecto dado
 (un sencillo programa que parpadea alternativamente 2 leds) se pudo
 generalizar una simple librería de tiempos que cumplía las
-caracteristicas necesitadas. El timer usado es el 2, lo cual deja
+características necesitadas. El timer usado es el 2, lo cual deja
 también el 3 inutilizable, o, al menos, con la misma configuración
 (forma de onda).
 
 La unidad de medida inicial elegida fueron los \textgreek{m}segundos,
-que posteriormente fué cambiado a milisegundos, dado que en la medida
+que posteriormente fue cambiado a milisegundos, dado que en la medida
 de tiempos de juego (que pueden llegar a las horas) ocurrían problemas
 de overflow. Sin embargo, esto podía producir problemas, dado que gran
-cantidad de las funciones, por ello se modifico la libreria Timer2
+cantidad de las funciones, por ello se modifico la librería Timer2
 para guardar no solo el número de \textgreek{m}segundos pasados, sino
 también los segundos por separado en su propia variable. Tras este
-cambio la nueva libreria permite contar hasta 4294967296 segundos, o
+cambio la nueva librería permite contar hasta 4294967296 segundos, o
 algo más de 136 años, lo que debería eliminar cualquier posible
 problema de overflow dentro del proyecto a tratar.
 
@@ -528,7 +540,7 @@ deseada.
 
 Habiendo elegido el algoritmo, es necesario decidir como se
 implementará. Para ello, se genera la máquina de estados detallada en
-la figura \ref{fig:maquina-estados-boton}
+la \iref{fig:maquina-estados-boton}{figura}
 
 \begin{figure}
 \footnotesize
@@ -563,8 +575,8 @@ de pulsado (indicada en el diagrama con PULSA) y la interrupción de
 reloj interna (ofrecida por el Timer4, con una frecuencia de 10ms,
 indicada como CLK(10ms)).
 
-Como se describe en la Figura \ref{fig:maquina-estados-boton}.\\
-No se ha encontrado ningún problema destacable en el implementado, a
+Como se describe en la \iref{fig:maquina-estados-boton}{figura}.\\ No
+se ha encontrado ningún problema destacable en el implementado, a
 excepción quizás de la determinación de los valores TRP y TRD (ciclos
 de 10ms de espera en pulsado y en soltado, respectivamente). Para la
 determinación de los mismos se ha usado la pila de Debug ya comentada,
@@ -578,7 +590,7 @@ situaciones en las cuales el usuario pulse los botones a gran
 velocidad (situaciones que, de todas formas, no tienen razón para
 aparecer en el sistema desarrollado).
 
-\subsection{Interaccion y Ejecución del sistema}
+\subsection{Interacción y Ejecución del sistema}
 \label{subsec:interaction-ejecucion}
 La interacción se realiza principalmente a través de los 2 botones de
 la placa. Por comodidad, el juego se ha separado en un conjunto de
@@ -588,14 +600,14 @@ menús o pantallas, cada uno con una función asociada en
 \texttt{sudoku}. Cada menú tiene asociado un estado, a excepción del
 menú \texttt{sudoku}, que contiene 3 estados
 (\texttt{esperando\_fila}, \texttt{esperando\_columna},
-\texttt{esperando\_valor}). El menú \texttt{aperture} contiene a su
+\texttt{esperando\_valor}). El menú\newline\texttt{aperture} contiene a su
 vez 119 subestados, que consisten en las distintas líneas de los
 créditos, pero no se consideraba que mereciera la pena el añadir otros
 119 estados al espacio de estados actual. Este subestado es mantenido
 por la variable \texttt{iterador\_aperture}.
 
-La organización de este espacio de estados se muestra en la Figura
-\ref{fig:maquina-estados-juego}
+La organización de este espacio de estados se muestra en la
+\iref{fig:maquina-estados-juego}{figura}
 
 \begin{figure}
 \footnotesize
@@ -631,18 +643,21 @@ La organización de este espacio de estados se muestra en la Figura
               edge [bend left    ] node {\leftstack{next \&\\errores=0}}         (F)
               ;
   \end{tikzpicture}
-  \caption{Diagrama de estado del juego de sudoku} 
+  \caption{Diagrama de estado del juego de sudoku\\Dada su
+    complejidad, se ha decidido no expandir las acciones realizadas en
+    cada estado}
   \label{fig:maquina-estados-juego}
 \end{figure}
 
 \subsection{Gráficos}
 \label{subsec:graficos}
 Para la gestión de los gráficos se ha intentado desplazar todo el
-sistema al módulo sudoku\_graphics, que se encarga de gestionar toda
-la comunicación con la pantalla, ofreciendo una interfaz de alto nivel
-(con funciones como sudoku\_graphics\_fill\_from\_data(cuadricula),
-que rellena la pantalla con los numeros de la cuadrícula pasada). Este
-modelo de abstracción nos permitiría reutilizar el codigo de la
+sistema al módulo \texttt{sudoku\_graphics}, que se encarga de
+gestionar toda la comunicación con la pantalla, ofreciendo una
+interfaz de alto nivel (con funciones como
+\texttt{sudoku\_graphics\_fill\_from\_data(cuadri}-\texttt{cula)},
+que rellena la pantalla con los números de la cuadrícula pasada). Este
+modelo de abstracción nos permitiría reutilizar el código de la
 función Main en caso de desear llevar un sistema similar.
 
 En cualquiera de los casos en los que ha sido posible, se ha utilizado
@@ -655,11 +670,11 @@ pantalla no es tan grande como pudiera, dado que para poder adaptarse
 correctamente, las medidas han de cumplir ciertas propiedades (este
 problema se describe con más detalle en el propio fichero fuente
 \texttt{sudoku\_graphics.h}). También ocurre que algunas funciones se
-complican más de lo estrictamente necesario, pero ambos aaspectos son
+complican más de lo estrictamente necesario, pero ambos aspectos son
 aceptados.
 
-La actualización de los graficos es uno de los temas que mas
-complicaciones ha traido, mas exactamente la decisión del momento de
+La actualización de los gráficos es uno de los temas que mas
+complicaciones ha traído, mas exactamente la decisión del momento de
 actualización de la pantalla.
 
 En el proyecto inicialmente mandado, solo existían 2 posibles fuentes
@@ -693,19 +708,19 @@ encarga de actualizar la vista, consistente en la pantalla, siguiendo
 la información del modelo, que se reparte entre el modulo botón y el
 segundo bloque de la función \texttt{init\_game()} (esto es contrario
 a la filosofía de encapsulamiento, y provoca que, por ejemplo, el
-modulo Boton no sea todo lo general que pudiera, esto se comenta con
-más profundidad en la sección \ref{subsec:mejora}). Los beneficios de
-usar un modelo como este son inmediatos, dado que nos permite manejar
-con comodidad múltiples fuentes de información (botones, sudoku,
-tiempo...) y múltiples presentaciones de la información (pantalla,
-cuadricula...), y mantenerlos sincronizados sin problemas.
+modulo button no sea todo lo general que pudiera, esto se comenta con
+más profundidad en la \iref{subsec:mejora}{sección}). Los beneficios
+de usar un modelo como este son inmediatos, dado que nos permite
+manejar con comodidad múltiples fuentes de información (botones,
+sudoku, tiempo...) y múltiples presentaciones de la información
+(pantalla, cuadricula...), y mantenerlos sincronizados sin problemas.
 
 
 \section{Resultados}
 \label{sec:resultados}
-\textcolor{red}{
-  Hay que presentar los resultados, explicarlos y analizarlos.
-}
+%% \textcolor{red}{
+%%   Hay que presentar los resultados, explicarlos y analizarlos.
+%% }
 
 Dado que se escogió un desarrollo basado en objetivos, los resultados
 serán analizados de la misma forma.
@@ -725,17 +740,17 @@ Objetivos del profesorado:
     consiguió terminar.
   \item \textbf{Profundizar en la interacción C / Ensamblador:}\\ Esto
     apareció principalmente en las llamadas mutuas entre funciones C y
-    ensamblador. Al principio fué un poco costoso gestionar
+    ensamblador. Al principio fue un poco costoso gestionar
     adecuadamente los marcos de pila, y comprobar que todas las
     funciones de tratamiento de rutina estaban marcadas como
-    \texttt{\_\_attribute\_\_((interrupt("IRQ")))}. Como decisión de
+    \texttt{\_\_attribute\_\_((interrupt(``IRQ'')))}. Como decisión de
     diseño basada en la legibilidad, se ha mantenido siempre separado
     el código en C y ensamblador. Un ejemplo de esta situación es en
     el tratamiento de excepciones, en el cual se había de mirar el
     modo en el que nos encontrábamos, y en vez de usar sentencias
     \texttt{asm} de gcc para incrustar el ensamblador necesario en el
     archivo fuente en C, este ensamblador se mueve a su propio fichero
-    fuente. Esta decisión también fué tomada con el objetivo de
+    fuente. Esta decisión también fue tomada con el objetivo de
     obtener fuentes en C lo más portables posible.
   \item \textbf{Ser capaces de depurar el código ensamblador generado
     por un compilador:}\\ En general no se tuvo que profundizar
@@ -745,7 +760,7 @@ Objetivos del profesorado:
     alumno durante las primeras practicas. Por ejemplo, el código
     generado por el compilador (en -W0, es decir, el menor nivel de
     optimizado) guarda los contadores de bucles en memoria, y no
-    utiliza post/preindexado. Al igual que con los contadores, el
+    utiliza post/pre indexado. Al igual que con los contadores, el
     compilador tiene tendencia a evitar guardar variables en
     registros. En las comprobaciones también se comprobó el código
     generado al poner la opción -W3, que fuerza el máximo optimizado
@@ -754,7 +769,7 @@ Objetivos del profesorado:
     otras optimizaciones, como desenrollar bucles.
   \item \textbf{Ser capaces de depurar un código con varias fuentes de
     interrupción activas:}\\ Gracias al desarrollo de la pila de Debug
-    (Sección \ref{subsubsec:pila-debug}) no se tuvieron problemas al
+    (\ref{subsubsec:pila-debug}{sección}) no se tuvieron problemas al
     gestionar las distintas fuentes de interrupción, dado que la pila
     nos permitía reconstruir los sucesos ordenadamente en el tiempo, e
     identificar rápidamente las fuentes que provocan ciertas
@@ -767,14 +782,14 @@ Objetivos del profesorado:
     de interrupciones.
   \item \textbf{Gestionar la entrada/salida con dispositivos básicos,
     asignando valores a los registros internos de la placa desde
-    C:}\\ Gracias a las librerias de desarrollo de la placa, fué
-    sencillo el uso de los perifericos.
+    C:}\\ Gracias a las librerías de desarrollo de la placa, fue
+    sencillo el uso de los periféricos.
   \item \textbf{Aprender a desarrollar en C las rutinas de tratamiento
     de interrupción:}\\ Aparte del adecuado uso de alguno de los
-    atributos del compilador usado
-    (\texttt{\_\_attribute\_\_((interrupt("IRQ")))}) y el evitar las
-    rutinas de interrupción demasiado grandes, no se tuvo ningún
-    problema durante la consecución de este objetivo.
+    atributos del compilador usado (\texttt{\_\_attri-}
+    \texttt{bute\_\_((interrupt(``IRQ'')))}) y el evitar las rutinas
+    de interrupción demasiado grandes, no se tuvo ningún problema
+    durante la consecución de este objetivo.
   \end{itemize}
 \item Dentro de la segunda parte:
   \begin{itemize}
@@ -807,17 +822,17 @@ Objetivos del alumno:
   cabeceras, separación del sistema en los módulos adecuados:} La
   organización final se considera suficientemente adecuada para el
   nivel al que se está. Todo módulo tiene asociado su correspondiente
-  fichero de cabecera, que ademas contiene la documentación, por lo
+  fichero de cabecera, que además contiene la documentación, por lo
   que ese aspecto se considera adecuado. La separación del sistema es
-  la adecuada, a excepción de los problemas ya mencionados en
-  \ref{sec:metodologias}.
-\item \textbf{Uso de un sistema de documentado en código estandar
+  la adecuada, a excepción de los problemas ya mencionados en la
+  \ref{sec:metodologias}{sección}.
+\item \textbf{Uso de un sistema de documentado en código estándar
   (Doxygen):}\\ Se han comentado mediante este sistema todos los
   ficheros de cabecera del proyecto, por lo que se considera que se ha
   cumplido
 \item \textbf{Uso de un sistema de control de versiones (Git):}\\ En
   general, se considera cumplido. El problema de no tener Git en los
-  ordenadores del laboratorio forzó un flujo de trabajo no estandar,
+  ordenadores del laboratorio forzó un flujo de trabajo no estándar,
   pero en general se obtuvo la experiencia con VCS deseada.
 \end{itemize}
 
@@ -829,13 +844,13 @@ considera que mejora la experiencia del jugador.
 
 \section{Conclusiones}
 \label{sec:conclusiones}
-\textcolor{red}{ Es lo último que se lee, por tanto es una sección muy
-  importante que se debe utilizar para remarcar los mensajes que
-  queremos que el lector reciba. Por ejemplo, si estamos evaluando un
-  producto podemos enfatizar sus puntos fuertes y sus puntos débiles,
-  y señalar posibilidades de mejora. }
+%% \textcolor{red}{ Es lo último que se lee, por tanto es una sección muy
+%%   importante que se debe utilizar para remarcar los mensajes que
+%%   queremos que el lector reciba. Por ejemplo, si estamos evaluando un
+%%   producto podemos enfatizar sus puntos fuertes y sus puntos débiles,
+%%   y señalar posibilidades de mejora. }
 
-Las conclusiones se centra nprincipalmente en el aspecto pedagógico
+Las conclusiones se centra principalmente en el aspecto pedagógico
 del trabajo.\\ En general, se han cumplido los objetivos propuestos, y
 dada la longitud temporal y la complejidad del mismo, ha ofrecido la
 posibilidad de enfrentarse a problemas y utilizar herramientas
@@ -846,27 +861,27 @@ ha obtenido un producto adecuado.
 \label{subsec:mejora}
 %% Y ahora, me pasaré 15 minutos de autocrítica
 \begin{itemize}
-  \item El módulo Boton no es suficientemente general, dado que esta
+  \item El módulo Button no es suficientemente general, dado que esta
     integrado tanto el control del 7 segmentos como algunas variables
     de control (next, update...). Esto se podría arreglar haciendo que
     en el constructor el botón reciba 2 punteros a función, que serán
     las que llamará cuando sea pulsado alguno de los botones; además
-    de un conjunto de parámetros (si el botón tiene autorepetición,
+    de un conjunto de parámetros (si el botón tiene auto repetición,
     tiempo de repetición...). No se ha realizado dado que se considera
     que complicaría el trabajo innecesariamente.
   \item Muchas de las funciones creadas para tratar textos, tanto
     fijos como en movimiento, podrían ser refactorizadas a su propio
-    módulo TextUtils con dependecia de Lcd, persiguiendo el ya
+    módulo TextUtils con dependencia de Lcd, persiguiendo el ya
     mencionado objetivo de una correcta organización del código. No se
     ha realizado por falta de fuerza de trabajo.
   \item No se han añadido efectos de sonido al proyecto por falta de
     fuerza de trabajo. Sin embargo, todo el desarrollo que se ha
-    realizado se describe en la Sección \ref{subsec:musica}
-  \item Las animaciones de los creditos son bastante crudas, y tienen
+    realizado se describe en la \iref{subsec:musica}{sección}
+  \item Las animaciones de los créditos son bastante crudas, y tienen
     posibilidad de mejorar. Una opción sería añadir suavizado,
     provocando que los créditos se muevan más lentamente. No se ha
     realizado por falta de tiempo.
-  \item Actualmente, el sistema de records únicamente guarda el menor
+  \item Actualmente, el sistema de récords únicamente guarda el menor
     tiempo de juego con éxito. Se considera que mejoraría bastante
     introduciendo un sistema de puntuación (algo tan sencillo como una
     media ponderada del numero de errores durante la partida con el
@@ -1292,7 +1307,7 @@ Hz, eliminando la cabecera. El archivo puede ser cargado en memoria
 RAM para pruebas mediante el comando restore de GDB, que permite el
 mover archivos binarios del sistema de archivos del ordenador a la
 memoria RAM de la placa. La zona recomendada es a partir de la
-dirección 0x0C310000, justo detras del buffer real de la pantalla. El
+dirección 0x0C310000, justo detrás del buffer real de la pantalla. El
 comando exacto sería
 
 \texttt{restore \textit{fichero} binary 0x0C310000 \textit{start}} 
@@ -1311,8 +1326,9 @@ hexadecimal antes de cargarlo en la placa. Existen espacios en blanco
 al final del fichero que lo permiten. No se ha probado a realizar el
 DMA directamente desde la ROM, pero no hay razón para pensar que
 podría dar problemas. En caso de que surjan problemas, es necesario
-modificar el archivo 44b\_init para que mueva el fichero de la ROM a
-una zona de la RAM válida (por ejemplo, la ya descrita 0x0C310000).
+modificar el archivo \texttt{44b\_init} para que mueva el fichero de
+la ROM a una zona de la RAM válida (por ejemplo, la ya descrita
+0x0C310000).
 
 Uno de los problemas que surgen al utilizar este sistema es la
 altísima velocidad de DMA, que es tan rápida que distorsiona el
@@ -1340,11 +1356,11 @@ a unos 12 segundos, los cuales ocuparían aproximadamente 1092949
 bytes, o algo más de 1 MB (sin contar cabeceras de ficheros, que no
 han de ser pasados a la placa).
 
-Para la reproducción de los ficheros se ha usado el modulo iis\_wav
-incluido en los proyectos de ejemplos, del cual tuvo que adaptarse la
-función \texttt{void Playwave(int times)} para que recibiera la
-dirección del fichero en la memoria de la placa y la longitud del
-mismo.
+Para la reproducción de los ficheros se ha usado el modulo
+\texttt{iis\_wav} incluido en los proyectos de ejemplos, del cual tuvo
+que adaptarse la función \texttt{void Playwave(int times)} para que
+recibiera la dirección del fichero en la memoria de la placa y la
+longitud del mismo.
 
 El otro gran problema que aparece es que el contador del DMA es de 20
 bits, lo cual equivale a un contador máximo de 1048576 bytes, lo cual
@@ -1357,7 +1373,7 @@ previo, de tal forma que se puedan reproducir con suavidad.
 El último problema encontrado es que la función \texttt{Playwave} es
 bloqueante, lo cual significa que no se puede realizar ninguna acción
 mientras se reproduce sonido, para arreglar eso hemos de separar el
-siguiente fragmento de codigo de \texttt{Playwave}:
+siguiente fragmento de código de \texttt{Playwave}:
 \lstset{language=C}
 \begin{lstlisting}[frame=single]
 while (iDMADone == 0)
@@ -1379,8 +1395,8 @@ en ciertas aplicaciones.
 Tanto la complejidad del manejo de sonido como los amplios
 requerimientos de espacio que usa lo hacen inadecuado para la adición
 de una banda sonora completa al juego, sin embargo, si puede usarse
-para añadir pequeños efectos de sonido0 (como una
-\hyperref{https://www.youtube.com/watch?v=-YCN-a0NsNk}{fanfarria} de
+para añadir pequeños efectos de sonido (como una
+\href{https://www.youtube.com/watch?v=-YCN-a0NsNk}{fanfarria} de
 victoria) que mejoren la experiencia del jugador.
 
 \subsection{Persistencia}
@@ -1399,23 +1415,35 @@ no existían ejemplos de su uso en los proyectos ofrecidos por el
 profesorado. Por ello, se decidió investigar otros métodos. Muchos
 periféricos contienen registros reales, que no forman parte de la RAM,
 y por tanto no son volátiles, sin embargo la mayoría son reseteados a
-valores especiales al reiniciar la placa. Esta sobreescritura es por
-hardware, y por tanto imposible de evitar. Sin embargo, existen
-algunos registros que no están afectados por este reseteo. Un ejemplo
-de los mismos es los registros del RTC (Real Time Clock) interno, que
-permanecen alimentados por la pila integrada en la placa, y no se
-borran al apagar. En un principio se consideró la posibilidad de
-almacenar información directamente sobre el RTC, dado que el proyecto
-no lo requiere para nada, y por tanto no se usa. Sin embargo, no se
-pudo averiguar como desactivarlo, ya que el sistema interno forzaba su
-incremento. Sin embargo, existen otros registros del RTC que no son
+valores especiales al reiniciar la placa, generalmente a valores
+0. Esta sobre escritura es por hardware, y por tanto imposible de
+evitar. Sin embargo, existen algunos registros que no están afectados
+por este reseteo. Un ejemplo de los mismos es los registros del RTC
+(Real Time Clock) interno, que permanecen alimentados por la pila
+integrada en la placa, y no se borran al apagar.
+
+En un principio se consideró la posibilidad de almacenar información
+directamente sobre el RTC interno, dado que el proyecto no lo requiere
+para nada, y por tanto no se usa. Sin embargo, no se pudo averiguar
+como desactivarlo, y sin desactivarlo el hardware lo auto incrementaba
+constantemente. 
+
+Sin embargo, existen otros registros del RTC que no son
 auto-incrementados, y estos son los registros de alarma. Estos
 registros son usados para programar alarmas, de tal forma que el
 sistema llame a una función en un momento programado. Estos registros
 son \texttt{rALMYEAR}, \texttt{rALMMON}, \texttt{rALMDAY},
-\texttt{rALMHOUR}, \texttt{rALMMIN}, \texttt{rALMSEC}; cada uno de
-ellos de 8 bits, de los cuales el más significativo aparecía como no
-utilizado\footnotemark.
+\texttt{rALMHOUR}, \texttt{rALMMIN}, \texttt{rALMSEC}.
+
+Esto nos proporciona un total de 48 bits con los que trabajar, en los
+cuales podemos almacenar la información deseada, es importante notar
+como en el manual se indica que de cada registro de 8 bits, el más
+significativo aparecía como no utilizado\footnotemark; por lo que
+realmente sólo se tiene 42 bits para usar. Como ejemplo de su uso, en
+el proyecto desarrollado se utilizan para almacenar un entero que
+consiste en el menor tiempo obtenido a lo largo de todas las
+partidas.\\
+
 
 \footnotetext{Para comprobar si dicho bit existía realmente, se
   realizaron ciclos de 30 lecturas y escrituras, a una velocidad de
@@ -1426,18 +1454,13 @@ utilizado\footnotemark.
   alguna operación interna, y cambien de manera inesperada. El modulo
   \texttt{Persistence} actual no toma en cuenta esta posibilidad.}
 
-Esto nos proporciona un total de 48 bits con los que trabajar, en los
-cuales podemos almacenar la información deseada. Como ejemplo de su
-uso, en el sudoku se utilizan para almacenar un entero que consiste en
-el menor tiempo obtenido a lo largo de todas las partidas.\\
-
 En el sistema actual se utiliza un entero de 4 bytes para almacenar el
 menor tiempo, es decir, permitimos partidas de hasta 4294967296
 segundos, lo cual equivalen a 1193046 horas o 136 años, una duración
 inviable. Una posible mejora sería el usar un short (de media palabra,
 16 bits) para almacenar el mejor tiempo, esto nos daría unas partidas
 de un máximo de 18 horas, lo cual es bastante más normal. Además, esto
-tendría el efecto secundarío de permitirnos guardar hasta 3 records, y
+tendría el efecto secundario de permitirnos guardar hasta 3 récords, y
 no solo uno.
 
 El módulo \texttt{Persistence} actual permite acceso indexado a nivel
@@ -1448,7 +1471,7 @@ C. Este sistema es suficiente para el desarrollo realizado. Sin
 embargo, aparte de su reducido espacio, tiene los problemas ya
 mencionados.
 
-\subsection{Multiples cuadrículas}
+\subsection{Múltiples cuadrículas}
 \label{subsec:multiples-cuadriculas}
 Una de las mayores mejoras realizadas al sistema es la inclusión de la
 capacidad de gestionar múltiples tablas, lo cual permitía proporcionar
@@ -1461,12 +1484,12 @@ especialmente complejos, la placa tenía problemas para su ejecución,
 dado el elevado coste computacional. Dentro de la generación de
 sudokus, también se plantea la posible solución de la generación de
 sudokus mediante transformaciones sobre una cuadrícula ya validada. Un
-ejemplo de dichas tranformaciones serían rotaciones de la cuadrícula,
+ejemplo de dichas transformaciones serían rotaciones de la cuadrícula,
 intercambios de columnas dentro de la misma subcuadrícula (igualmente
 aplicables a filas), o intercambios de los bloques de 3 columnas
 pertenecientes a una subcuadrícula (también aplicables a filas). Esto
 nos permitiría tener un conjunto base de cuadrículas y aplicarles
-transformaciones para obtener nuevas subcuadrículas que demos al
+transformaciones para obtener nuevas subcuadrículas para ofrecer al
 usuario. Esta posibilidad no ha sido implementada por falta de tiempo.
 
 El camino medio que se eligió fue el guardar cierto número de
@@ -1479,22 +1502,22 @@ de espacio ni variar el código desarrollado en las primeras prácticas.
 
 El sistema de compresión usado se basa en 3 factores:
 \begin{itemize}
-  \item No es necesario almacenar el padding que utilizabamos en las
+  \item No es necesario almacenar el padding que utilizábamos en las
     primeras practicas para poder usar cómodamente los visores de
     memoria del debugger.
   \item No es necesario almacenar que casillas son candidatos, podemos
-    indicar las casillas vacias con un 0.
+    indicar las casillas vacías con un 0.
   \item No es necesario guardar los candidatos de una casilla, dado
     que podemos recalcularlos con relativa facilidad y bajo coste
     temporal.
 \end{itemize}
 
 Gracias al mismo del formato usado originalmente para almacenar una
-casilla en 16 bits y un sudoku en 2304 bits (expresado en la figura
-\ref{fig:formato-casilla}), se pasa a un formato que ocupa únicamente
-4 bits por casilla, no requiere padding y sólo ocupa 328 bits, una
-reduccion por un factor de 7, descrito en la figura
-\ref{fig:formato-casilla-compreso}
+casilla en 16 bits y un sudoku en 2304 bits (expresado en la
+\iref{fig:formato-casilla}{figura}), se pasa a un formato que ocupa
+únicamente 4 bits por casilla, no requiere padding y sólo ocupa 328
+bits, una reducción por un factor de 7, descrito en la
+\iref{fig:formato-casilla-compreso}{figura})
 
 \begin{figure}
   \begin{center}
@@ -1508,8 +1531,8 @@ reduccion por un factor de 7, descrito en la figura
   \textbf{Es pista:} Indica si la casilla es pista inicial. Será pista
   si este bit vale 1.\\
   \textbf{Es error:} Indica si el valor en la casilla no cumple las
-  normas del sudoku. La casilla es erronea si este bit vale 1.\\
-  \textbf{Candidatos:} Indica que numeros encajan en la casilla. El
+  normas del sudoku. La casilla es errónea si este bit vale 1.\\
+  \textbf{Candidatos:} Indica que números encajan en la casilla. El
   bit 0 indica si el 1 es candidato, el bit 1 indica si el 2 es
   candidato...\\
   Las casillas se guardan en memoria como una lista de medias palabras
@@ -1529,9 +1552,9 @@ reduccion por un factor de 7, descrito en la figura
   \end{center}
   \textbf{Valor casilla 1:} Primeros 4 bits de la primera
   casilla. Está en el rango [0-9], siendo 0 si la casilla es
-  vacia. \\ 
+  vacía. \\ 
   \textbf{Valor casilla 2:} Primeros 4 bits de la primera
-  casilla. Está en el rango [0-9], siendo 0 si la casilla es vacia.
+  casilla. Está en el rango [0-9], siendo 0 si la casilla es vacía.
   \caption{Formato de las casillas compresas}
   \label{fig:formato-casilla-compreso}
 \end{figure}
@@ -1546,7 +1569,7 @@ reduccion por un factor de 7, descrito en la figura
   \item \url{https://en.wikipedia.org/wiki/Sudoku}
   \item \url{http://infocenter.arm.com/help/index.jsp} (especialmente
     el manual de referencia de ARM7)
-    % Little semicolono
+    % Little semicolon
     % that makes me not compile this,
     % where are you missing?
   \item \url{http://www.sudoku-solutions.com/}
