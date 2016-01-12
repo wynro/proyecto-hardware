@@ -40,7 +40,6 @@
   }
 
 \makeindex
-\pagenumbering{arabic}
 
 \logo{logoUZ.png}
 \subject{Proyecto Hardware\\Trabajo de la asignatura}
@@ -59,12 +58,16 @@
 \shorthandoff{>}
 \shorthandoff{<}
 % Primera pagina (titulo)
+\thispagestyle{empty}
 \maketitle
 %% Don't ask, don't say
+\thispagestyle{empty}
 \blankpage{Pagina intencionalmente en blanco.}
 % Tercera pagina (indice)
+\thispagestyle{empty}
 \tableofcontents
 \clearpage
+\pagenumbering{arabic}
 % El resto
 
 \section{Resumen}
